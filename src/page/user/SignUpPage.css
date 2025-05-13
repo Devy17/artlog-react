@@ -1,0 +1,131 @@
+/* SignUpPage.css */
+
+.signup-container {
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .signup-container h2 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #333;
+    font-size: 28px;
+    font-weight: 600;
+  }
+  
+  .signup-form .form-group {
+    margin-bottom: 18px;
+  }
+  
+  .signup-form label {
+    display: block;
+    margin-bottom: 6px;
+    color: #555;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .signup-form input,
+  .signup-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+  }
+  
+  .signup-form input:focus,
+  .signup-form select:focus {
+    border-color: #5c9ded;
+    outline: none;
+  }
+  
+  .input-with-button {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .input-with-button input {
+    flex: 1;
+  }
+  
+  .check-duplication-button {
+    padding: 10px 14px;
+    font-size: 13px;
+    background-color: #eee;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+  }
+  
+  .check-duplication-button:hover {
+    background-color: #ddd;
+  }
+  
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #5c9ded;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    margin-top: 12px;
+  }
+  
+  .submit-button:hover {
+    background-color: #417bdc;
+  }
+  
+  @media (max-width: 500px) {
+    .signup-container {
+      margin: 20px 16px;
+      padding: 20px;
+    }
+  
+    .input-with-button {
+      flex-direction: column;
+    }
+  
+    .check-duplication-button {
+      width: 100%;
+    }
+  }
+  /* 전체 화면 기준으로 중앙 정렬 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6f8;
+  }
+  
+  /* 이 부분 추가 */
+  .signup-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* 화면 전체 높이 */
+    background-color: #f4f6f8;
+  }
+  
+  .signup-container {
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+  
