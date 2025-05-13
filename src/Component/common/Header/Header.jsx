@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./Header.module.scss";
 import { FaBars, FaSearch, FaTimes } from "react-icons/fa"; // FaTimes 추가
 import { Link, useNavigate } from "react-router-dom";
-import HeaderSearchModal from "./HeaderSearchModal";
+import HeaderSearchModal from "./HeaderSearch";
 
 function Header({ openLoginModal, isLoggedIn, onLogout, openSearchModal }) {
   const navigate = useNavigate();

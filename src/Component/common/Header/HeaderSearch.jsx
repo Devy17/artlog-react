@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./HeaderSearchModal.module.scss";
+import styles from "./HeaderSearch.module.scss";
 import {FaSearch} from 'react-icons/fa';
 
 const HeaderSearch = ({ isOpen, onClose }) => {
