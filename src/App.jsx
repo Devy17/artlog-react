@@ -1,6 +1,6 @@
 import AppRouter from './router/AppRouter';
-import Header from './Component/common/Header';
-import Footer from './Component/common/Footer';
+import Header from './Component/common/Header/Header';
+import Footer from './Component/common/Footer/Footer';
 
 function App() {
   return (
