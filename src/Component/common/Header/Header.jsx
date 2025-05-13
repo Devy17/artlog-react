@@ -1,7 +1,118 @@
-import React from 'react';
+import React, { useState } from "react";
+import styles from "./Header.module.scss";
+import { FaBars, FaSearch, FaTimes } from "react-icons/fa"; // FaTimes 추가
+import { Link, useNavigate } from "react-router-dom";
+import HeaderSearchModal from "./HeaderSearchModal";
 
-const Header = () => {
-  return <div>Header</div>;
-};
+function Header({ openLoginModal, isLoggedIn, onLogout, openSearchModal }) {
+  const navigate = useNavigate();
+  const [openModalName, setOpenModalName] = useState(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색 모달 상태 추가
+
+  const logoImageUrl =
+    "https://sdmntprwestus3.oaiusercontent.com/files/00000000-6840-61fd-a3de-5417a740d6d2/raw?se=2025-05-09T07%3A24%3A18Z&sp=r&sv=2024-08-04&sr=b&scid=00000000-0000-0000-0000-000000000000&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-08T21%3A43%3A53Z&ske=2025-05-09T21%3A43%3A53Z&sks=b&skv=2024-08-04&sig=A5eRh3cNm1%2BY3fYX8xZwjsgFKvVY4j9eHuI%2B/3GULVs%3D";
+
+  // 모달 열기
+  const openModal = (modalName) => {
+    setOpenModalName(modalName);
+    setIsSearchOpen(true); // 검색 모달을 열 때 isSearchOpen 상태 true로 설정
+  };
+
+  // 모달 닫기
+  const closeModal = () => {
+    setOpenModalName(null);
+    setIsSearchOpen(false); // 모달 닫을 때 isSearchOpen 상태 false로 설정
+  };
+
+  // 검색 버튼 클릭 시
+  const toggleSearchModal = () => {
+    if (isSearchOpen) {
+      closeModal(); // 모달을 닫는 기능
+    } else {
+      openModal("search"); // 모달을 여는 기능
+    }
+    setIsSearchOpen(!isSearchOpen); // 아이콘 상태 반전
+  };
+
+  return (
+    <>
+      <header id="header" className={`${styles.header} ${styles.main}`}>
+        <div className={styles.header_wrap}>
+          <div className={styles.header_bottom}>
+            <div className={styles.cont_inner}>
+              {/* 전체 메뉴 열기 버튼 */}
+              <button
+                type="button"
+                className={styles.btn_menu}
+                aria-label="전체 메뉴 열기"
+              >
+                <FaBars />
+              </button>
+
+              {/* 로고 영역 (메인 페이지 링크) */}
+              <strong className={styles.logo}>
+                <Link to="/">
+                  <img src={logoImageUrl} alt="아트로그 사이트 로고" />
+                </Link>
+              </strong>
+
+              {/* 네비게이션 메뉴 */}
+              <nav className={styles.header_navi}>
+                <ul>
+                  <li>
+                    <Link to="/exhibitions">전시 정보</Link>
+                  </li>
+                  <li>
+                    <Link to="/reviews">리뷰</Link>
+                  </li>
+                  {isLoggedIn && (
+                    <li>
+                      <Link to="/mypage">마이페이지</Link>
+                    </li>
+                  )}
+                </ul>
+              </nav>
+
+              {/* 유틸리티 영역 */}
+              <div className={styles.header_util}>
+                <div className={styles.auth_links}>
+                  {isLoggedIn ? (
+                    <button onClick={onLogout} type="button">
+                      LOGOUT
+                    </button>
+                  ) : (
+                    <>
+                      <button onClick={openLoginModal} type="button">
+                        LOGIN
+                      </button>
+                      <span className={styles.divider}>|</span>
+                      <Link to="/signup">SIGNUP</Link>
+                    </>
+                  )}
+                </div>
+
+                {/* 검색 버튼 */}
+                <button
+                  onClick={toggleSearchModal} // 검색 모달을 여는/닫는 함수
+                  type="button"
+                  className={styles.btn_search}
+                  aria-label="검색"
+                >
+                  {isSearchOpen ? <FaTimes /> : <FaSearch />} {/* 아이콘 변경 */}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* HeaderSearchModal 모달 */}
+      <HeaderSearchModal
+        isOpen={openModalName === "search"}
+        onClose={closeModal}
+      />
+    </>
+  );
+}
 
 export default Header;
