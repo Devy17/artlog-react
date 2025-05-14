@@ -57,7 +57,7 @@ const InsertHintModal_FindID = ({ onClose }) => {
       const data = await res.json();
 
       if (res.status === 200) {
-        localStorage.setItem('foundUserId', data.result.userId);
+        localStorage.setItem('foundUserId', data.result);
         setModalType('showID');
       } else {
         setError(data.statusMessage || '정답이 일치하지 않습니다.');
