@@ -12,6 +12,8 @@ const ModalController = ({ modalType, setModalType }) => {
 
   return (
     <>
+      {modalType === 'login' && <SignInPage onClose={closeModal} />}
+
       {modalType === 'findID' && <FindMyIDModal onClose={closeModal} />}
       {modalType === 'findPW' && <FindMyPWModal onClose={closeModal} />}
       {modalType === 'insertHint_findID' && (
