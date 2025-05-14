@@ -4,13 +4,17 @@ import AuthContext from '../../content/UserContext';
 import axios from 'axios';
 import { API_BASE_URL, USER } from '../../Axios/host-config';
 import styles from './SignInPage.module.scss';
+import ModalContext from '../../Modal/ModalContext';
 
-const SignInPage = () => {
+const SignInPage = ({ onClose }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
-
   const navigate = useNavigate();
   const { onLogin } = useContext(AuthContext);
+  const { setModalType } = useContext(ModalContext);
+
+  const handleFindID = () => setModalType('findID');
+  const handleFindPW = () => setModalType('findPW');
 
   const doLogin = async () => {
     const loginData = {
@@ -29,10 +33,17 @@ const SignInPage = () => {
     }
   };
 
+  // SignInPage.jsx
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <h2 className={styles.title}>로그인</h2>
+    <div className={styles.overlay}>
+      <div className={styles.modal}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>로그인</h2>
+          <button type='button' className={styles.closeBtn} onClick={onClose}>
+            ✕
+          </button>
+        </div>
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -60,6 +71,24 @@ const SignInPage = () => {
               required
             />
           </div>
+
+          <div className={styles.helperGroup}>
+            <button
+              type='button'
+              className={styles.helperBtn}
+              onClick={handleFindID}
+            >
+              아이디 찾기
+            </button>
+            <button
+              type='button'
+              className={styles.helperBtn}
+              onClick={handleFindPW}
+            >
+              비밀번호 찾기
+            </button>
+          </div>
+
           <div className={styles.buttonGroup}>
             <button type='submit' className={styles.primaryBtn}>
               로그인

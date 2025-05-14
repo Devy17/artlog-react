@@ -1,0 +1,103 @@
+.dual_visual {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 70vh;
+  overflow: hidden;
+
+  .visual_row {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  .visual_box,
+  .visual_box_empty {
+    flex: 1;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #0D1B2AFF;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    transition: background-color 0.4s ease;
+  }
+
+  .title {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    text-align: center;
+  }
+
+  .visual_box:hover .overlay {
+    background-color: rgba(202, 202, 202, 0.4);
+  }
+
+  .visual_box:hover .title {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .color0:hover .overlay {
+    background-color: rgba(255, 192, 203, 0.8); // 핑크
+  }
+
+  .color1:hover .overlay {
+    background-color: rgba(135, 206, 250, 0.8); // 파랑
+  }
+
+  .color2:hover .overlay {
+    background-color: rgba(255, 165, 0, 0.8); // 주황
+  }
+
+  .color3:hover .overlay {
+    background-color: rgba(255, 255, 0, 0.8); // 노랑
+  }
+
+  .btn_move {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background-color: rgba(50, 50, 50, 0.1);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    svg {
+      color: white;
+      font-size: 20px;
+    }
+
+    &:hover {
+      background-color: rgba(50, 50, 50, 0.9);
+    }
+  }
+
+  .btn_prev {
+    left: 20px;
+  }
+
+  .btn_next {
+    right: 20px;
+  }
+}
