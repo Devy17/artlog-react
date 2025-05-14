@@ -1,22 +1,36 @@
 import React, { useContext, useState } from 'react';
-import AuthContext from '../../content/UserContext';
+import AuthContext from '../../context/UserContext';
 import axios from 'axios';
 import { API_BASE_URL, USER } from '../../Axios/host-config';
 import styles from './SignInPage.module.scss';
 import ModalContext from '../../Modal/ModalContext';
+import { useNavigate } from 'react-router-dom';
 
 const SignInPage = ({ onClose }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const navigate = useNavigate();
   const { onLogin } = useContext(AuthContext);
   const { setModalType } = useContext(ModalContext);
 
-  const handleFindID = () => setModalType('findID');
-  const handleFindPW = () => setModalType('findPW');
+  const handleFindID = () => {
+    onClose();
+    setTimeout(() => setModalType('findID'), 0);
+  };
+
+  const handleFindPW = () => {
+    onClose();
+    setTimeout(() => setModalType('findPW'), 0);
+  };
 
   const doLogin = async () => {
+    if (!userId.trim() || !password.trim()) {
+      setErrorMessage('아이디와 비밀번호를 모두 입력해주세요.');
+      return;
+    }
+
     const loginData = {
       userId,
       password,
@@ -28,7 +42,7 @@ const SignInPage = ({ onClose }) => {
       onClose();
     } catch (e) {
       console.error(e);
-      setErrorMessage('로그인 실패입니다. 아이디 또는 비밀번호를 확인하세요!');
+      setErrorMessage('아이디 또는 비밀번호가 올바르지 않습니다.');
     }
   };
 
@@ -56,7 +70,6 @@ const SignInPage = ({ onClose }) => {
               id='userId'
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              required
             />
           </div>
 
@@ -67,7 +80,6 @@ const SignInPage = ({ onClose }) => {
               id='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
             />
           </div>
 
@@ -97,7 +109,10 @@ const SignInPage = ({ onClose }) => {
             <button
               type='button'
               className={styles.secondaryBtn}
-              onClick={() => setModalType('signUp')}
+              onClick={() => {
+                onClose();
+                navigate('/signUp');
+              }}
             >
               회원가입
             </button>
