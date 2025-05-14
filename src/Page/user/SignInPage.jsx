@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react'; // useEffect 추가
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/UserContext';
 import axios from 'axios';
@@ -10,8 +10,15 @@ const SignInPage = ({ onClose }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const { onLogin } = useContext(AuthContext);
+  const { onLogin, isLoggedIn } = useContext(AuthContext); // isLoggedIn 추가
   const { setModalType } = useContext(ModalContext);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      alert('이미 로그인된 상태입니다.');
+      navigate('/', { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleFindID = () => setModalType('findID');
   const handleFindPW = () => setModalType('findPW');

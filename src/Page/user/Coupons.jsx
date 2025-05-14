@@ -45,7 +45,6 @@ const Coupons = () => {
       const res = await axiosInstance.get(
         `${API_BASE_URL}${COUPON}/findByUserKey/${userKey}`,
       );
-      console.log(res);
       setCouponList(res.data.result); // 바로 데이터를 설정
     } catch (e) {
       console.log(e);
@@ -84,8 +83,8 @@ const Coupons = () => {
             <h2>쿠폰 조회</h2>
             <div className={styles.coupon_list}>
               <ul>
-                {couponList.map((coupon) => (
-                  <li key={coupon.id}>
+                {couponList.map((coupon, index) => (
+                  <li key={index}>
                     <h3>{coupon.couponTitle}</h3>
                     <p className={styles.serialNumber}>{coupon.serialNumber}</p>
                     <p className={styles.data}>
