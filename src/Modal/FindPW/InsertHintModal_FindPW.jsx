@@ -55,7 +55,7 @@ const InsertHintModal_FindPW = ({ onClose }) => {
       const data = await res.json();
 
       if (res.status === 200 && data.statusCode === 200) {
-        localStorage.setItem('verifiedResetId', data.result); // id 저장
+        localStorage.setItem('pwResetUserId', data.result); // id 저장
         setModalType('resetPW'); // 비밀번호 재설정 모달로 이동
       } else {
         setError(data.statusMessage || '정답이 일치하지 않습니다.');
