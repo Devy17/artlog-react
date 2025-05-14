@@ -1,35 +1,35 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from "../../context/UserContext";
+import AuthContext from '../../context/UserContext'; // Correct path if different
 import { API_BASE_URL, USER } from '../../Axios/host-config';
 import styles from './SignUpPage.module.scss'; // SCSS 모듈 임포트
 import axios from "axios"; // axios 임포트
 
 const SignUpPage = () => {
-    // 백엔드 UserInsertReqDto 구조에 맞춰 상태 정의
+    // ... (existing states for userId, userName, email, phone, hintKey, hintValue)
     const [userId, setUserId] = useState('');
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [hintKey, setHintKey] = useState(''); // Integer 값을 담을 것이지만 초기값은 비워둡니다.
+    const [hintKey, setHintKey] = useState('');
     const [hintValue, setHintValue] = useState('');
 
+    // ... (existing states for password, passwordCheck, passwordError)
     const [password, setPassword] = useState('');
     const [passwordCheck, setPasswordCheck] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
-    // 힌트 키 목록 상태 (API 호출로 받아온 { code, desc } 객체 배열)
-    const [hintKeysList, setHintKeysList] = useState([]);
-
-    const navigate = useNavigate();
-    // AuthContext는 default export이므로 useContext에 직접 전달
-    const { isLoggedIn } = useContext(AuthContext);
-
+    // ✅ 아이디 중복 확인 상태 추가
     const [isUserIdAvailable, setIsUserIdAvailable] = useState(false); // 현재 아이디가 사용 가능한지 여부
     const [isUserIdChecked, setIsUserIdChecked] = useState(false);   // 현재 아이디에 대해 중복 확인을 완료했는지 여부
 
+    // ... (existing state for hintKeysList)
+    const [hintKeysList, setHintKeysList] = useState([]);
 
-    // 이미 로그인된 경우 회원가입 페이지 접근 시 메인 페이지로 리다이렉트
+    const navigate = useNavigate();
+    const { isLoggedIn } = useContext(AuthContext); // Assuming correct path for AuthContext
+
+    // ... (useEffect for isLoggedIn check - same as before)
     useEffect(() => {
         if (isLoggedIn) {
             alert('이미 로그인된 상태입니다.');
@@ -37,27 +37,19 @@ const SignUpPage = () => {
         }
     }, [isLoggedIn, navigate]);
 
-
-    // ✅ 힌트 키 목록 가져오기 (GET /user/hintKeys) - axios 사용
+    // ... (useEffect for fetchHintKeys - same as before, using axios)
     useEffect(() => {
         const fetchHintKeys = async () => {
-            // 회원가입 페이지에서는 인증 토큰이 필요 없을 것으로 예상하여 토큰 체크를 제거합니다.
             try {
-                // axios.get 사용
                 const response = await axios.get(`${API_BASE_URL}${USER}/hintKeys`);
-
-                // Axios는 2xx 응답이 아니면 에러를 던지므로, 여기서는 2xx 응답 상태.
-                // 백엔드 CommonResDto의 statusCode를 확인합니다.
                 if (response.data && response.data.statusCode === 200) {
                     const hints = response.data.result;
-                    setHintKeysList(Array.isArray(hints) ? hints : []); // 배열인지 확인 후 상태 업데이트
+                    setHintKeysList(Array.isArray(hints) ? hints : []);
                 } else {
-                    // 백엔드 2xx 응답이나 비즈니스 로직 오류 (statusCode != 200)
                     console.error("힌트 키 가져오기 실패 - 백엔드 오류:", response.data.statusCode, response.data.statusMessage);
                     alert(`힌트 키 목록을 가져오는데 실패했습니다: ${response.data.statusMessage || '알 수 없는 오류'}`);
                 }
             } catch (error) {
-                // Axios가 잡은 오류 (4xx, 5xx, 네트워크 오류 등)
                 console.error("Error fetching hint keys:", error);
                 if (error.response) {
                     console.error("Hint keys fetch failed - HTTP Response:", error.response.status, error.response.data);
@@ -69,44 +61,58 @@ const SignUpPage = () => {
             }
         };
         fetchHintKeys();
+    }, []);
 
-    }, []); // 의존성 배열 비어있음
+    // ✅ 아이디 입력 필드 변경 핸들러 (중복 확인 상태 초기화 포함)
+    const handleUserIdChange = (e) => {
+        setUserId(e.target.value);
+        // ✅ 아이디 값이 변경되면 중복 확인 상태를 초기화합니다.
+        setIsUserIdChecked(false);
+        setIsUserIdAvailable(false);
+    };
 
-    // ✅ 아이디 중복 확인 핸들러 - axios 사용
+    // ✅ 아이디 중복 확인 핸들러 (axios 사용 및 상태 업데이트)
     const checkUserIdDuplicate = async () => {
-        // 아이디 입력 여부 클라이언트 유효성 검사
         if (!userId.trim()) {
             alert("아이디를 입력해주세요.");
+            // ✅ 입력값이 없으면 상태 초기화
+            setIsUserIdChecked(false);
+            setIsUserIdAvailable(false);
             return;
         }
 
+        // ✅ 중복 확인 시작 시 상태 초기화
+        setIsUserIdChecked(false);
+        setIsUserIdAvailable(false);
+
         try {
-            // axios.get 사용 (URL에 아이디 포함)
-            // TODO: 백엔드 중복 확인 엔드포인트 URL을 정확히 확인하세요. /checkId/{userId} 형태 예상
             const response = await axios.get(`${API_BASE_URL}${USER}/checkId/${userId}`);
 
-            // Axios는 2xx 응답이 아니면 에러를 던집니다.
             if (response.data && response.data.statusCode === 200) {
-                // 백엔드 응답 결과 (result 필드) 확인 (boolean 값 예상: false=사용 가능, true=중복)
-                if (response.data.result === false) {
-                    setIsUserIdChecked(true);
+                // ✅ 중복 확인 성공 시 상태 업데이트
+                setIsUserIdChecked(true);
+                if (response.data.result === false) { // Assuming false = available
+                    setIsUserIdAvailable(true);
                     alert(`'${userId}'는 사용 가능한 아이디입니다.`);
-                } else {
+                } else { // Assuming true = unavailable/duplicate
+                    setIsUserIdAvailable(false);
                     alert(`'${userId}'는 이미 사용 중인 아이디입니다.`);
                 }
             } else {
-                // 백엔드 2xx 응답이나 비즈니스 로직 오류
+                // ✅ 백엔드 2xx 응답이나 비즈니스 로직 오류 시 상태 초기화 (오류로 간주)
                 setIsUserIdChecked(false); // 체크 실패
                 setIsUserIdAvailable(false); // 사용 불가능으로 간주
                 console.error("중복 확인 실패 - 백엔드 오류:", response.data.statusCode, response.data.statusMessage);
                 alert(`중복 확인 중 오류가 발생했습니다: ${response.data.statusMessage || '알 수 없는 오류'}`);
             }
-        } catch (error) { // Axios가 잡은 오류는 err 대신 error 변수명을 주로 사용
-            // Axios가 잡은 오류 (4xx, 5xx, 네트워크)
+        } catch (error) {
+            // ✅ Axios 오류 발생 시 상태 초기화 (오류로 간주)
+            setIsUserIdChecked(false); // 체크 실패
+            setIsUserIdAvailable(false); // 사용 불가능으로 간주
+
             console.error("중복 확인 요청 실패:", error);
             if (error.response) {
                 console.error("Duplicate check failed - HTTP Response:", error.response.status, error.response.data);
-                // 400 Bad Request 등 백엔드 유효성 검사 실패 시 오류 메시지
                 const backendErrorMessage = error.response.data && error.response.data.statusMessage ? error.response.data.statusMessage : '서버 오류';
                 alert(`중복 확인 중 오류가 발생했습니다: ${backendErrorMessage} (상태: ${error.response.status})`);
             } else {
@@ -114,62 +120,50 @@ const SignUpPage = () => {
             }
         }
     };
-     // ✅ 아이디 입력 필드 변경 핸들러 (중복 확인 상태 초기화 포함)
-     const handleUserIdChange = (e) => {
-        setUserId(e.target.value);
-        // ✅ 아이디 값이 변경되면 중복 확인 상태를 초기화합니다.
-        setIsUserIdChecked(false);
-        setIsUserIdAvailable(false);
-    };
 
-
-    // 비밀번호 유효성 검사 핸들러
+    // ... (handlePasswordChange, handlePasswordCheckChange - same as before)
     const handlePasswordChange = (e) => {
         const value = e.target.value;
         setPassword(value);
-
         if (value.length < 8) {
             setPasswordError('비밀번호는 최소 8자 이상이어야 합니다.');
-        } else if (passwordCheck && value !== passwordCheck) { // 비밀번호 확인 입력이 있을 때만 체크
+        } else if (passwordCheck && value !== passwordCheck) {
             setPasswordError('비밀번호가 일치하지 않습니다.');
         } else {
-            setPasswordError(''); // 유효성 통과
+            setPasswordError('');
         }
     };
 
-    // 비밀번호 확인 핸들러
     const handlePasswordCheckChange = (e) => {
         const value = e.target.value;
         setPasswordCheck(value);
-
-        if (password.length >= 8 && password !== value) { // 비밀번호가 8자 이상이고 일치하지 않을 때
+        if (password.length >= 8 && password !== value) {
             setPasswordError('비밀번호가 일치하지 않습니다.');
-        } else if (password.length < 8) { // 비밀번호 길이가 8자 미만이면 비밀번호 에러 메시지 유지
+        } else if (password.length < 8) {
             setPasswordError('비밀번호는 최소 8자 이상이어야 합니다.');
         }
         else {
-            setPasswordError(''); // 유효성 통과
+            setPasswordError('');
         }
     };
 
 
-    // ✅ 회원가입 폼 제출 핸들러 - axios 사용
+    // ✅ 회원가입 폼 제출 핸들러 - 중복 확인 상태 체크 추가
     const signup = async (e) => {
         e.preventDefault(); // 폼 기본 제출 동작 방지
 
+        // ✅ 아이디 중복 확인 상태 체크 추가
         if (!isUserIdChecked) {
             alert("아이디 중복 확인을 먼저 해주세요.");
             return;
         }
-
         if (!isUserIdAvailable) {
             alert("사용할 수 없는 아이디입니다. 다른 아이디를 선택하거나 중복 확인을 다시 해주세요.");
             return;
         }
 
-        // ✅ 클라이언트 측 유효성 검사
+        // ✅ 기존 클라이언트 측 유효성 검사
         if (!userId.trim()) { alert('아이디를 입력해주세요.'); return; }
-        // TODO: 아이디 중복 확인을 했는지 여부 상태를 추가하고 여기서 확인하는 로직 필요
         if (!userName.trim()) { alert('이름을 입력해주세요.'); return; }
         if (password.length < 8) { alert('비밀번호는 최소 8자 이상이어야 합니다.'); return; }
         if (password !== passwordCheck) { alert('비밀번호가 일치하지 않습니다.'); return; }
@@ -177,8 +171,8 @@ const SignUpPage = () => {
         if (!phoneRegex.test(phone)) { alert("전화번호 형식을 확인해주세요. 예: 010-1234-5678"); return; }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) { alert("이메일 형식을 확인해주세요."); return; }
-        if (!hintKey) { alert("힌트 질문을 선택해주세요."); return; } // 힌트 키가 선택되지 않았는지 확인 ('0'도 유효한 코드일 수 있으므로 !hintKey 보다는 hintKey === '' 체크가 더 안전할 수 있습니다. 백엔드 명세 확인 필요)
-        if (!hintValue.trim()) { alert("힌트 답변을 입력해주세요."); return; } // 힌트 답변이 비어있지 않은지 확인
+        if (!hintKey) { alert("힌트 질문을 선택해주세요."); return; }
+        if (!hintValue.trim()) { alert("힌트 답변을 입력해주세요."); return; }
 
         // 백엔드 UserInsertReqDto에 맞춰 데이터 객체 생성
         const registData = {
@@ -193,32 +187,23 @@ const SignUpPage = () => {
         console.log("회원가입 데이터:", registData); // 디버깅 로그
 
         try {
-            // axios.post 사용 (registData는 JSON으로 자동 직렬화)
-            // TODO: 백엔드 회원가입 엔드포인트 URL을 정확히 확인하세요. /insert 형태 예상
             const response = await axios.post(`${API_BASE_URL}${USER}/insert`, registData);
 
-            // Axios는 2xx 응답이 아니면 에러를 던집니다.
-            // 백엔드 CommonResDto의 statusCode를 확인합니다.
-            if (response.data && response.data.statusCode === 201) { // 백엔드 성공 상태 코드 (201 Created 예상)
-                alert(`${response.data.result}님 환영합니다! 회원가입이 완료되었습니다.`); // 응답 결과 메시지 표시 예상
+            if (response.data && response.data.statusCode === 201) {
+                alert(`${response.data.result}님 환영합니다! 회원가입이 완료되었습니다.`);
                 navigate('/login'); // 로그인 페이지로 이동
             } else {
-                // 백엔드 2xx 응답이나 비즈니스 로직 오류 (statusCode != 201)
                 console.error("Signup failed - Backend error:", response.data.statusCode, response.data.statusMessage);
                 alert(`회원가입 중 오류가 발생했습니다: ${response.data.statusMessage || '알 수 없는 오류'}`);
             }
 
         } catch (error) {
-            // Axios가 잡은 오류 (4xx, 5xx, 네트워크 오류 등)
             console.error("Error during signup:", error);
             if (error.response) {
-                // 서버가 응답을 보낸 경우 (HTTP 상태 코드 확인)
                 console.error("Signup failed - HTTP Response:", error.response.status, error.response.data);
-                // 백엔드에서 보낸 오류 메시지 또는 기본 메시지 표시 (예: 400, 409 등)
                 const backendErrorMessage = error.response.data && error.response.data.statusMessage ? error.response.data.statusMessage : '서버 오류';
-                alert(`회원가입 실패: ${backendErrorMessage}`);
+                alert(`회원가입 실패: ${backendErrorMessage} (상태: ${error.response.status})`);
             } else {
-                // 응답 없음 또는 요청 설정 오류
                 alert('회원가입 요청 중 네트워크 오류가 발생했습니다. 백엔드 서버 상태를 확인해주세요.');
             }
         }
@@ -241,19 +226,23 @@ const SignUpPage = () => {
                                 type="text"
                                 id="userId"
                                 value={userId}
-                                onChange={(e) => setUserId(e.target.value)}
-                                
+                                onChange={handleUserIdChange} // ✅ 변경된 핸들러 사용
                                 required
                             />
                             <button
-                                type="button" // 폼 제출을 막기 위해 button 타입을 'button'으로 명시
+                                type="button" // 폼 제출 방지
                                 className={styles['check-duplication-button']}
-                                onClick={checkUserIdDuplicate}
+                                onClick={checkUserIdDuplicate} // ✅ 중복 확인 핸들러 사용
                             >
-                                중복   
-                                확인
+                                중복 확인 
                             </button>
                         </div>
+
+                         {isUserIdChecked && (
+                            isUserIdAvailable ?
+                            <p style={{ color: 'green', fontSize: '0.85em', marginTop: '5px' }}>사용 가능한 아이디입니다.</p> :
+                            <p style={{ color: 'red', fontSize: '0.85em', marginTop: '5px' }}>이미 사용 중인 아이디입니다.</p>
+                         )}
                     </div>
 
                     {/* 이름 필드 */}
@@ -294,21 +283,21 @@ const SignUpPage = () => {
 
                     {/* 비밀번호 확인 필드 및 오류 메시지 */}
                     <div className={styles['form-group']}>
-                        <input // 라벨 없음 (Placeholder 사용)
+                        <input
                             type="password"
                             placeholder="비밀번호 확인"
                             value={passwordCheck}
                             onChange={handlePasswordCheckChange}
                             required
                         />
-                        {passwordError && <p className={styles['password-error']}>{passwordError}</p>} {/* SCSS 클래스 적용 */}
+                        {passwordError && <p className={styles['password-error']}>{passwordError}</p>}
                     </div>
 
                     {/* 전화번호 필드 */}
                     <div className={styles['form-group']}>
                         <label htmlFor="phone">전화번호</label>
                         <input
-                            type="tel" // 전화번호 타입
+                            type="tel"
                             id="phone"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
@@ -320,22 +309,17 @@ const SignUpPage = () => {
                     <div className={styles['form-group']}>
                         <label htmlFor="hintKey">힌트 질문</label>
                         <select
-                            id="hintKey" // label의 htmlFor와 연결
-                            value={hintKey} // 상태 변수 연결
-                            // 선택된 value (code, string으로 받아짐)를 parseInt로 정수 변환하여 상태에 저장
-                            // value가 ''일 경우 parseInt하면 NaN이 되므로, 빈 문자열 그대로 저장하거나 다른 기본값 설정 필요
-                            onChange={(e) => setHintKey(e.target.value === '' ? '' : e.target.value)}
+                            id="hintKey"
+                            value={hintKey}
+                            onChange={(e) => setHintKey(e.target.value)} // ✅ parseInt 제거 (select value는 항상 문자열)
                             required
                         >
-                            <option value="">선택하세요</option> {/* 기본 옵션 */}
-                            {/* 힌트 키 목록이 로딩되지 않았거나 비어있을 때 */}
+                            <option value="">선택하세요</option>
                             {hintKeysList.length === 0 ? (
                                 <option value="" disabled>질문 목록 로딩 중 또는 없음</option>
                             ) : (
-                                // 힌트 키 목록을 순회하며 option 렌더링
                                 hintKeysList.map((hint) => (
-                                    // option의 value에 code (Integer) 사용, 사용자에게 보여줄 텍스트는 desc
-                                    <option key={hint.code} value={hint.code}>
+                                    <option key={hint.code} value={hint.code}> {/* value는 code (숫자) */}
                                         {hint.desc}
                                     </option>
                                 ))
