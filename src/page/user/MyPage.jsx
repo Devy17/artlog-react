@@ -12,14 +12,7 @@ const MyPage = () => {
   const loggedInUserId = localStorage.getItem("USER_ID");
 
   // 사용자 정보를 담을 상태 (API 응답 데이터 및 폼 입력 값)
-  const [userInfo, setUserInfo] = useState({
-    userId: "", // 로그인 ID (UI 표시용)
-    userName: "", // 이름 (UI 표시용)
-    phone: "", // 전화번호 (수정 가능)
-    email: "", // 이메일 (수정 가능)
-    hintKey: "", // 힌트 질문 코드 (수정 가능)
-    hintValue: "", // 힌트 답변 (수정 가능)
-  });
+  const [userInfo, setUserInfo] = useState([]);
 
   // 힌트 질문 목록 상태 (select 옵션용)
   const [hintKeysList, setHintKeysList] = useState([]); // { code: int, desc: string } 객체 배열 예상
@@ -27,7 +20,39 @@ const MyPage = () => {
   // 수정 모드 상태
   const [editMode, setEditMode] = useState(false);
 
- 
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const token = localStorage.getItem("ACCESS_TOKEN");
+      if (!token) return;
+      try {
+          const res = await axios.get(`${API_BASE_URL}${USER}/mypage/${loggedInUserId}`, {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+          });
+          if (res.status === 200) {
+              const { userId, userName, phone, email, hintKey, hintValue } = res.data.result;
+              setUserInfo({
+                  userId,
+                  userName,
+                  phone,
+                  email,
+                  hintKey,
+                  hintValue,
+              });
+          } else {
+              console.error("회원 정보 가져오기 실패:", res.data);
+
+          }
+          if(res.statusCode === 200) {
+              return console.log("회원 정보 가져오기 성공:", res.data);
+          }
+      } catch (error) {
+          console.error("회원 정보 가져오기 실패:", error);
+      }
+    }
+    getUserInfo();
+  }, []);
 
   // ✅ 힌트 질문 목록 가져오기 (GET /user/hintKeys)
   const fetchHintKeys = async () => {
@@ -250,11 +275,11 @@ const MyPage = () => {
          <div className={styles.form}> {/* 기존 폼 클래스 재사용 또는 변경 */}
            <div className={styles.formItem}>
              <label htmlFor="userId">아이디</label>
-             <input id="userId" type="text" name="userId" value={userInfo.userId} disabled readOnly />
+             <p id="userId" type="text">{userInfo.userId}</p>
            </div>
            <div className={styles.formItem}>
              <label htmlFor="userName">이름</label>
-             <input id="userName" type="text" name="userName" value={userInfo.userName} disabled readOnly onChange={handleChange} />
+             <p id="userName" type="text" >{userInfo.userName}</p>
            </div>
          </div>
        </div>
