@@ -8,6 +8,7 @@ import MyPage from '../page/user/MyPage';
 
 import UpdatePwPage from '../page/user/UpdatePasswordPage';
 import MyOrdersPage from '../Page/user/MyOrdersPage';
+import Coupons from '../Page/user/Coupons';
 
 const AppRouter = () => {
   return (
@@ -21,8 +22,14 @@ const AppRouter = () => {
       <Route path='/login' element={<SignInPage />} />
       <Route path='/signup' element={<SignUpPage />} />
       <Route path='/mypage' element={<PrivateRouter element={<MyPage />} />} />
-      <Route path='/updatePwPage' element={<PrivateRouter element={<UpdatePwPage />} />} />
-      <Route path='/myOrdersPage' element={<PrivateRouter element={<MyOrdersPage />} />} />
+      <Route
+        path='/updatePwPage'
+        element={<PrivateRouter element={<UpdatePwPage />} />}
+      />
+      <Route
+        path='/myOrdersPage'
+        element={<PrivateRouter element={<MyOrdersPage />} />}
+      />
       <Route
         path='/coupons'
         element={<PrivateRouter element={<Coupons />} />}
