@@ -51,18 +51,18 @@ const MyOrdersPage = () => {
                 if (response.data.statusMessage) {
                     console.log("주문 목록 가져오기 성공:", response.data.statusMessage);
                 }
-
-            }
-            else if (response.status === 404 && response.data && response.data.statusCode === 404) {
-                console.log("주문 목록 가져오기 (404 - 주문 없음):", response.data.statusMessage || "주문한 콘텐츠가 없습니다.");
-                setOrderList([]);
-                setError(null);
+               
             }
             else {
                 const backendStatusCode = response.data ? response.data.statusCode : 'N/A';
                 const backendStatusMessage = (response.data && response.data.statusMessage) ? response.data.statusMessage : '예상치 못한 백엔드 오류';
                 const httpStatus = response.status;
-
+                if (httpStatus === 404) {
+                    console.log("주문 목록 가져오기 (404 - 주문 없음):", response.data.statusMessage || "주문한 콘텐츠가 없습니다.");
+                    setOrderList([]);
+                    setError(null);
+                }
+             
                 console.error("주문 목록 가져오기 실패 - 백엔드 오류 응답:", httpStatus, backendStatusCode, backendStatusMessage, response.data);
                 setError(`주문 목록 가져오기 실패: ${backendStatusMessage} (상태: ${httpStatus}, 코드: ${backendStatusCode})`);
                 setOrderList([]);
@@ -72,6 +72,8 @@ const MyOrdersPage = () => {
             console.error("Error fetching orders:", err);
             if (err.response) {
                 const httpStatus = err.response.status;
+                console.error("주문 목록 가져오기 실패 - 백엔드 오류 응답:", httpStatus, backendStatusCode, backendStatusMessage, response.data);
+
                 console.error("주문 목록 가져오기 실패 - HTTP 응답 상세:", httpStatus, err.response.data);
                 const backendErrorMessage = (err.response.data && err.response.data.statusMessage) ? err.response.data.statusMessage : '서버 통신 오류';
                 const backendStatusCodeInBody = (err.response.data && err.response.data.statusCode !== undefined) ? err.response.data.statusCode : 'N/A';
@@ -84,6 +86,8 @@ const MyOrdersPage = () => {
                 }
                 else {
                     setError(`주문 목록 가져오기 실패: ${backendErrorMessage} (상태: ${httpStatus}, 코드: ${backendStatusCodeInBody})`);
+                    console.error("주문 목록 가져오기 실패 - 백엔드 오류 응답:", httpStatus, backendStatusCode, backendStatusMessage, response.data);
+
                 }
             } else {
                 setError('네트워크 오류로 주문 목록을 가져올 수 없습니다.');
