@@ -9,7 +9,7 @@ const MyPage = () => {
   const navigate = useNavigate(); 
   const authCtx = useContext(AuthContext); 
 
-  const loggedInUserId = localStorage.getItem("USER_ID"); // TODO: 실제 로컬 스토리지 키 이름 확인/변경
+  const loggedInUserId = localStorage.getItem("USER_ID");
 
   // 사용자 정보를 담을 상태 (API 응답 데이터 및 폼 입력 값)
   const [userInfo, setUserInfo] = useState({
@@ -94,6 +94,29 @@ const MyPage = () => {
       authCtx.onLogout(); navigate("/login"); return;
     }
 
+        // 전화번호 유효성 검사 (010-XXXX-XXXX)
+        const phoneRegex = /^010-\d{4}-\d{4}$/;
+        if (!phoneRegex.test(userInfo.phone)) {
+          alert("전화번호 형식을 확인해주세요. 예: 010-1234-5678");
+          return;
+        }
+          // 이메일 유효성 검사
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(userInfo.email)) {
+            alert("이메일 형식을 확인해주세요.");
+            return;
+        }
+         // 힌트 질문 선택 여부 검사
+        if (!userInfo.hintKey) {
+            alert("힌트 질문을 선택해주세요.");
+            return;
+        }
+         // 힌트 답변 입력 여부 검사
+        if (!userInfo.hintValue.trim()) {
+            alert("힌트 답변을 입력해주세요.");
+            return;
+        }
+
     // UserUpdateReqDto에 맞춰 payload 구성 (hintKey, hintValue, email, phone)
     const payload = {
       hintKey: parseInt(userInfo.hintKey), // 힌트 키 파싱
@@ -120,7 +143,8 @@ const MyPage = () => {
     } catch (error) {
       console.error("Failed to save info:", error);
       if (error.response) {
-        alert(`정보 저장을 실패 했습니다. Status: ${error.response.status}. ${error.response.data && error.response.data.statusMessage ? error.response.data.statusMessage : ''}`);
+        alert("정보를 입력하세요.");
+        console.error(`정보 저장을 실패 했습니다. Status: ${error.response.status}. ${error.response.data && error.response.data.statusMessage ? error.response.data.statusMessage : ''}`);
         if (error.response.status === 401 || error.response.status === 403) {
           authCtx.onLogout(); navigate("/login");
         }
