@@ -115,47 +115,47 @@ const UpdatePasswordPage = () => {
         <h2>비밀번호 변경</h2>
     
         <form onSubmit={handlePasswordUpdate}>
-          <div>
-            <label htmlFor="current-password">현재 비밀번호</label>
-            <input
-              id="current-password"
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              required
-            />
-          </div>
-    
-          <div>
-            <label htmlFor="new-password">새 비밀번호</label>
-            <input
-              id="new-password"
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
-          </div>
-    
-          <div>
-            <label htmlFor="confirm-password">비밀번호 확인</label>
-            <input
-              id="confirm-password"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
-    
-          <button type="submit" className={styles["submit-btn"]}>
-            비밀번호 변경하기
-          </button>
-    
-          {errorMessage && (
-            <p className={styles["error-message"]}>{errorMessage}</p>
-          )}
-        </form>
+  <div className={styles["form-group"]}>
+    <label htmlFor="current-password">현재 비밀번호</label>
+    <input
+      id="current-password"
+      type="password"
+      value={currentPassword}
+      onChange={(e) => setCurrentPassword(e.target.value)}
+      required
+    />
+  </div>
+
+  <div className={styles["form-group"]}>
+    <label htmlFor="new-password">새 비밀번호</label>
+    <input
+      id="new-password"
+      type="password"
+      value={newPassword}
+      onChange={(e) => setNewPassword(e.target.value)}
+      required
+    />
+  </div>
+
+  <div className={styles["form-group"]}>
+    <label htmlFor="confirm-password">비밀번호 확인</label>
+    <input
+      id="confirm-password"
+      type="password"
+      value={confirmPassword}
+      onChange={(e) => setConfirmPassword(e.target.value)}
+      required
+    />
+  </div>
+
+  <button type="submit" className={styles["submit-btn"]}>
+    비밀번호 변경하기
+  </button>
+
+  {errorMessage && (
+    <p className={styles["error-message"]}>{errorMessage}</p>
+  )}
+</form>
       </div>
     );
 };

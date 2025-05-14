@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/UserContext'; // Correct path if different
 import { API_BASE_URL, USER } from '../../Axios/host-config';
-import styles from './SignUpPage.module.scss'; // SCSS 모듈 임포트
+import styles from './SignUpPage.module.scss';
 import axios from "axios"; // axios 임포트
 
 const SignUpPage = () => {
