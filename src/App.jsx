@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import AppRouter from './router/AppRouter';
-import { AuthContextProvider } from './content/UserContext';
 import Header from './Component/common/Header/Header';
 import Footer from './Component/common/Footer/Footer';
 import ModalContext from './Modal/ModalContext';
 import ModalController from './Modal/ModalController';
+import { AuthContextProvider } from './context/UserContext';
 
 function App() {
   const [modalType, setModalType] = useState(null);

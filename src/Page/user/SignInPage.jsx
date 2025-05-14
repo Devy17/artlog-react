@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../../content/UserContext';
+import AuthContext from '../../context/UserContext';
 import axios from 'axios';
 import { API_BASE_URL, USER } from '../../Axios/host-config';
 import styles from './SignInPage.module.scss';
