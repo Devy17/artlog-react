@@ -278,8 +278,8 @@ const MyOrdersPage = () => {
                              onChange={handleSortChange} // 변경 시 핸들러 호출
                          >
                              {/* ✅ 옵션 값과 라벨 명확하게 변경 */}
-                             <option value="registDate_desc">예매일: 최신순</option>
-                             <option value="registDate_asc">예매일: 오래된순</option>
+                             <option value="registDate_desc">예매일: 먼 훗날 순</option>
+                             <option value="registDate_asc">예매일: 가까운 순</option>
                              <option value="totalPrice_desc">가격: 높은순</option>
                              <option value="totalPrice_asc">가격: 낮은순</option>
                              {/* TODO: 다른 정렬 기준 옵션 추가 시 value와 label 정의 */}
