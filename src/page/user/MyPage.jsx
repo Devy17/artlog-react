@@ -235,7 +235,6 @@ const MyPage = () => {
         >비밀번호 변경</button>
         <button className={styles.navButton}>나의 리뷰</button>
         <button className={styles.navButton}
-         onClick={() => navigate('/UserCouponPage')}
         >쿠폰 조회 및 등록</button>
         <button className={styles.navButton}
         onClick={() => navigate('/myOrdersPage')}>
