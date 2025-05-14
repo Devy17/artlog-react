@@ -1,0 +1,164 @@
+/* src/pages/SignUpPage.module.scss */
+
+// --- 페이지 전체 컨테이너 스타일 ---
+// 화면 중앙에 내용을 배치하는 Wrapper
+.signup-page-wrapper {
+  display: flex;
+  justify-content: center; // 가로 방향 중앙 정렬
+  align-items: center; // 세로 방향 중앙 정렬 (Wrapper 높이가 충분할 경우)
+  min-height: 100vh; // 최소 높이를 뷰포트 높이 전체로 설정하여 세로 중앙 정렬 효과
+  background-color: #f4f7f6; // 배경색
+  padding: 20px; // 페이지 가장자리 패딩
+  box-sizing: border-box; // 패딩과 테두리가 요소 크기에 포함되도록 설정
+}
+
+// --- 회원가입 폼 컨테이너 스타일 ---
+// 실제 폼 내용 전체를 감싸는 상자
+.signup-container {
+  background-color: #fff; // 흰색 배경
+  padding: 40px; // 내부 패딩
+  border-radius: 8px; // 둥근 모서리
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // 은은한 그림자 효과
+  width: 100%; // 반응형 너비
+  max-width: 500px; // 최대 너비
+  text-align: center; // 제목 등 텍스트 중앙 정렬
+}
+
+// --- 폼 제목 스타일 ---
+.signup-container h2 {
+  margin-bottom: 30px; // 제목 아래 여백
+  color: #333; // 글씨 색상
+}
+
+// --- 폼 레이아웃 스타일 ---
+// 모든 폼 그룹을 세로로 쌓고 간격 설정
+.signup-form {
+  display: flex;
+  flex-direction: column; // 자식 요소(폼 그룹) 세로 배치
+  gap: 20px; // 폼 그룹 사이 간격
+}
+
+// ✅ '중복 확인' 버튼의 너비를 변수로 정의합니다. (버튼 스타일링에 사용)
+$check-button-width: 100px; // 예시 값, 필요에 따라 조정
+
+
+// --- 각 폼 그룹 스타일 ---
+// 라벨과 입력 필드 또는 그룹을 세로로 쌓고 왼쪽 정렬합니다.
+.form-group {
+  display: flex;
+  flex-direction: column; // 라벨, 입력 요소/그룹 세로 배치
+  align-items: flex-start; // 왼쪽 정렬
+  width: 100%; // 폼 그룹은 부모(.signup-form) 너비 100% 사용
+
+  label {
+    margin-bottom: 8px; // 라벨 아래 여백
+    font-weight: bold;
+    color: #555;
+    font-size: 0.9em;
+  }
+
+  // ✅ .form-group의 직계 자식인 대부분의 입력 필드와 select 박스 스타일
+  // (User ID 입력 필드처럼 .input-with-button 안에 있는 경우는 제외)
+  // ✅ 너비를 100%로 설정하여 폼 그룹 전체 너비를 사용하게 합니다.
+  > input[type="text"],
+  > input[type="email"],
+  > input[type="password"],
+  > input[type="tel"],
+  > select {
+    width: 100%; // ✅ 너비를 100%로 설정하여 폼 그룹 전체 너비를 채웁니다.
+    padding: 12px 15px; // 내부 패딩
+    border: 1px solid #ccc; // 테두리
+    border-radius: 4px; // 둥근 모서리
+    box-sizing: border-box; // 패딩, 테두리 포함 크기
+    font-size: 1em;
+
+    &:focus { // 포커스 시 스타일
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+    }
+  }
+
+  // --- 아이디 입력 필드와 중복 확인 버튼 그룹 스타일 ---
+  // .form-group 안에 있는 .input-with-button 클래스를 가진 div에 적용
+  .input-with-button {
+    display: flex; // 자식 요소(input, button)를 가로 방향으로 배치
+    width: 100%; // 이 컨테이너도 부모(.form-group)의 너비 100% 사용
+
+    input { // User ID 입력 필드 (.input-with-button의 자식)
+      flex-grow: 1; // ✅ 남은 공간을 모두 차지하도록 합니다.
+      // 이 입력 필드의 너비는 (부모(.input-with-button)의 너비 - 버튼의 너비)가 됩니다.
+      // 다른 입력 필드는 폼 그룹의 100% 너비이고, 이 그룹도 폼 그룹의 100% 너비이므로 전체적인 가로 정렬이 맞습니다.
+      padding: 12px 15px; // 내부 패딩 유지
+      border: 1px solid #ccc; // 테두리 유지
+      border-radius: 4px; // 모서리 둥글게 유지
+      box-sizing: border-box; // box-sizing: border-box 유지
+      font-size: 1em;
+      &:focus { /* ... */ }
+      border-top-right-radius: 0; // 버튼과 연결되는 오른쪽 모서리는 둥글게 하지 않음
+      border-bottom-right-radius: 0;
+      margin-right: -1px; // 테두리 겹침 방지
+    }
+
+    .check-duplication-button {
+      flex-shrink: 0; // ✅ 너비가 줄어들지 않도록 고정합니다.
+      width: $check-button-width; // ✅ 변수로 정의된 고정 너비를 적용합니다.
+      padding: 12px 15px; // ✅ 입력 필드와 동일한 수직 패딩을 사용하여 높이를 맞춥니다.
+      background-color: #007bff; // 배경색 (파란색)
+      color: white; // 글씨색
+      border: 1px solid #007bff; // 테두리 색상
+      border-radius: 4px; // 모서리 둥글게
+      box-sizing: border-box; // box-sizing: border-box 유지
+      cursor: pointer; // 마우스 커서 모양
+      font-size: 1em;
+      transition: background-color 0.2s ease; // 배경색 애니메이션
+      border-top-left-radius: 0; // 입력 필드와 연결되는 왼쪽 모서리는 둥글게 하지 않음
+      border-bottom-left-radius: 0;
+
+      &:hover { // 마우스 오버 시 스타일
+        background-color: #0056b3; // 더 진한 파란색
+        border-color: #004085;
+      }
+      &:active { // 클릭 시 스타일
+        background-color: #003569; // 가장 진한 파란색
+        border-color: #002752;
+      }
+    }
+  }
+     // 비밀번호 확인 입력 필드는 .form-group의 직계 자식이므로 위의 스타일 규칙이 적용됩니다.
+} // .form-group 끝
+
+
+// --- 비밀번호 오류 메시지 스타일 ---
+// .form-group 안에 있는 p 태그에 적용
+.password-error {
+  color: red; // 빨간색 글씨
+  font-size: 0.85em; // 작은 글씨 크기
+  margin-top: 5px; // 위 여백
+  margin-bottom: 0; // 아래 여백 없음
+  width: 100%; // 너비 설정 (정렬에 도움)
+  text-align: left; // 왼쪽 정렬
+}
+
+
+// --- 제출 버튼 스타일 ---
+.submit-button {
+  width: 100%; // 버튼 너비를 폼 전체 너비로 설정합니다.
+  padding: 15px; // 내부 패딩
+  background-color: #28a745; // 녹색 배경
+  color: white; // 글씨색
+  border: none; // 테두리 없음
+  border-radius: 4px; // 둥근 모서리
+  cursor: pointer; // 마우스 커서 모양
+  font-size: 1.1em; // 글씨 크기
+  font-weight: bold; // 글씨 두껍게
+  transition: background-color 0.2s ease; // 배경색 애니메이션
+  margin-top: 10px; // 위쪽 여백
+
+  &:hover { // 마우스 오버 시
+    background-color: #218838; // 더 진한 녹색
+  }
+  &:active { // 클릭 시
+    background-color: #1e7e34; // 가장 진한 녹색
+  }
+}

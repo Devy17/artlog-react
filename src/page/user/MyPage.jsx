@@ -288,12 +288,13 @@ const MyPage = () => {
       {/* 하단 액션 버튼 그룹 (저장, 회원 탈퇴) */}
       {/* Flexbox를 사용하여 자식 요소(버튼들)를 양쪽 끝으로 배치하는 CSS 필요 */}
       <div className={styles.bottomButtonContainer}>
+
+        <button onClick={handleDelete} className={styles.deleteButton}>회원 탈퇴</button>
         {editMode ? (
           <button onClick={handleSave} className={styles.saveButton}>저장</button>
         ) : (
           <button onClick={() => setEditMode(true)} className={styles.editButton}>수정</button>
         )}
-        <button onClick={handleDelete} className={styles.deleteButton}>회원 탈퇴</button>
       </div>
 
     </div>
