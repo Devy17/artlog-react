@@ -1,0 +1,183 @@
+/* src/pages/MyOrdersPage.module.scss */
+
+.my-orders-page-wrapper {
+    padding: 20px;
+    background-color: #f8f8f8;
+    min-height: 100vh;
+}
+
+.orders-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.orders-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-item {
+    border: 1px solid #eee;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px 20px;
+
+    p {
+        margin: 0;
+        font-size: 0.95em;
+        color: #555;
+        strong {
+            color: #333;
+        }
+    }
+}
+
+.order-status {
+    margin-top: 10px;
+    font-weight: bold;
+    span {
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        color: #fff;
+
+        &.active {
+             background-color: #28a745;
+        }
+        &.cancelled {
+            background-color: #dc3545;
+        }
+    }
+}
+
+.button-group {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    button {
+        padding: 10px 15px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: background-color 0.3s ease, opacity 0.3s ease;
+
+        &:hover:not(:disabled) {
+            background-color: #f0f0f0;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    .cancel-button {
+         border-color: #dc3545;
+         color: #dc3545;
+         &:hover:not(:disabled) {
+             background-color: #dc3545;
+             color: #fff;
+         }
+    }
+
+     .write-review-button {
+          border-color: #007bff;
+          color: #007bff;
+          &:hover:not(:disabled) {
+             background-color: #007bff;
+             color: #fff;
+         }
+     }
+
+     .manage-review-button {
+         border-color: #6c757d;
+         color: #6c757d;
+          &:hover:not(:disabled) {
+             background-color: #6c757d;
+             color: #fff;
+         }
+     }
+}
+
+.info-message {
+    text-align: center;
+    color: #666;
+    margin-top: 20px;
+    font-style: italic;
+}
+
+.error-message {
+    text-align: center;
+    color: #dc3545;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* ✅ 검색/정렬 UI 스타일링 */
+.filter-sort-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center; // 세로 중앙 정렬
+
+    .search-box {
+        input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9em;
+            outline: none;
+
+            &:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            }
+        }
+    }
+
+    .sort-box {
+         select {
+             padding: 8px 12px;
+             border: 1px solid #ccc;
+             border-radius: 4px;
+             background-color: #f0f0f0;
+             cursor: pointer;
+             font-size: 0.9em;
+             outline: none;
+
+             &:focus {
+                 border-color: #007bff;
+                 box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+             }
+         }
+    }
+}

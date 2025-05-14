@@ -237,7 +237,9 @@ const MyPage = () => {
         <button className={styles.navButton}
          onClick={() => navigate('/UserCouponPage')}
         >쿠폰 조회 및 등록</button>
-        <button className={styles.navButton}>콘텐츠 조회 및 취소</button>
+        <button className={styles.navButton}
+        onClick={() => navigate('/myOrdersPage')}>
+          콘텐츠 조회 및 취소</button>
       </div>
 
       {/* 회원 정보 수정 섹션 (수정 가능 필드) */}
