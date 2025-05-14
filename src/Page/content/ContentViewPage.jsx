@@ -4,6 +4,7 @@ import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API, API_BASE_URL } from '../../Axios/host-config';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import ContentDetailPage from './ContentDetailPage';
+import styles from './ContentViewPage.module.scss';
 
 const ContentViewPage = () => {
   const [apiData, setApiData] = useState([]);
