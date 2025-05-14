@@ -24,6 +24,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 35px;
 }
 
 .title {
@@ -36,23 +37,24 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
+  margin-top: -50px;
 }
 
 .body {
-  margin-top: 0px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1px;
   position: relative;
-  top: 20px;
+  top: 10px;
 }
 
 .question {
   font-size: 35px;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   line-height: 1;
 }
 
@@ -60,7 +62,7 @@
   font-size: 20px;
   color: #555;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   line-height: 1.4;
 }
 
@@ -124,6 +126,6 @@
 .error {
   font-size: 16px;
   color: red;
-  margin-top: -50px;
+  margin-top: -20px;
   text-align: center;
 }

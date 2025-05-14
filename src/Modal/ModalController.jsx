@@ -1,11 +1,11 @@
 import React from 'react';
+import SignInPage from '../Page/user/SignInPage'; // ✅ 추가
 import FindMyIDModal from './FindID/FindMyIDModal';
 import FindMyPWModal from './FindPW/FindMyPWModal';
 import InsertHintModal_FindID from './FindID/InsertHintModal_FindID';
 import InsertHintModal_FindPW from './FindPW/InsertHintModal_FindPW';
 import ShowIDModal from './FindID/ShowIDModal';
 import NewPWModal from './FindPW/NewPWModal';
-// 필요에 따라 다른 모달도 import
 
 const ModalController = ({ modalType, setModalType }) => {
   const closeModal = () => setModalType(null);
@@ -13,7 +13,6 @@ const ModalController = ({ modalType, setModalType }) => {
   return (
     <>
       {modalType === 'login' && <SignInPage onClose={closeModal} />}
-
       {modalType === 'findID' && <FindMyIDModal onClose={closeModal} />}
       {modalType === 'findPW' && <FindMyPWModal onClose={closeModal} />}
       {modalType === 'insertHint_findID' && (
@@ -24,8 +23,6 @@ const ModalController = ({ modalType, setModalType }) => {
       )}
       {modalType === 'showID' && <ShowIDModal onClose={closeModal} />}
       {modalType === 'resetPW' && <NewPWModal onClose={closeModal} />}
-
-      {/* 다른 모달도 필요하면 여기에 추가 */}
     </>
   );
 };

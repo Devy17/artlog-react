@@ -1,29 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react'; // useEffect 추가
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
 import AuthContext from '../../context/UserContext';
 import axios from 'axios';
 import { API_BASE_URL, USER } from '../../Axios/host-config';
 import styles from './SignInPage.module.scss';
 import ModalContext from '../../Modal/ModalContext';
+import { useNavigate } from 'react-router-dom';
 
 const SignInPage = ({ onClose }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
   const navigate = useNavigate();
-  const { onLogin, isLoggedIn } = useContext(AuthContext); // isLoggedIn 추가
+  const { onLogin } = useContext(AuthContext);
   const { setModalType } = useContext(ModalContext);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      alert('이미 로그인된 상태입니다.');
-      navigate('/', { replace: true });
-    }
-  }, [isLoggedIn, navigate]);
+  const handleFindID = () => {
+    onClose();
+    setTimeout(() => setModalType('findID'), 0);
+  };
 
-  const handleFindID = () => setModalType('findID');
-  const handleFindPW = () => setModalType('findPW');
+  const handleFindPW = () => {
+    onClose();
+    setTimeout(() => setModalType('findPW'), 0);
+  };
 
   const doLogin = async () => {
+    if (!userId.trim() || !password.trim()) {
+      setErrorMessage('아이디와 비밀번호를 모두 입력해주세요.');
+      return;
+    }
+
     const loginData = {
       userId,
       password,
@@ -31,16 +38,14 @@ const SignInPage = ({ onClose }) => {
 
     try {
       const res = await axios.post(`${API_BASE_URL}${USER}/login`, loginData);
-      alert('로그인 성공!');
       onLogin(res.data.result);
-      navigate('/');
+      onClose();
     } catch (e) {
       console.error(e);
-      alert('로그인 실패입니다. 아이디 또는 비밀번호를 확인하세요!');
+      setErrorMessage('아이디 또는 비밀번호가 올바르지 않습니다.');
     }
   };
 
-  // SignInPage.jsx
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -65,9 +70,9 @@ const SignInPage = ({ onClose }) => {
               id='userId'
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              required
             />
           </div>
+
           <div className={styles.formGroup}>
             <label htmlFor='password'>비밀번호</label>
             <input
@@ -75,9 +80,10 @@ const SignInPage = ({ onClose }) => {
               id='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
             />
           </div>
+
+          {errorMessage && <p className={styles.errorMsg}>{errorMessage}</p>}
 
           <div className={styles.helperGroup}>
             <button
@@ -103,7 +109,10 @@ const SignInPage = ({ onClose }) => {
             <button
               type='button'
               className={styles.secondaryBtn}
-              onClick={() => navigate('/signUp')}
+              onClick={() => {
+                onClose();
+                navigate('/signUp');
+              }}
             >
               회원가입
             </button>
