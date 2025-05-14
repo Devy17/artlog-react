@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import styles from './Coupons.module.scss';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/UserContext';
-import axiosInstance from 'axios';
 import { API_BASE_URL, USER, COUPON } from '../../Axios/host-config';
 import { handleAxiosError } from '../../Axios/HandleAxiosError';
+import axiosInstance from '../../Axios/AxiosBackConfig';
 
 const Coupons = () => {
   const [serialNumber, setSerialNumber] = useState('');
@@ -25,11 +25,11 @@ const Coupons = () => {
       await axiosInstance.post(
         `${API_BASE_URL}${USER}/couponInsert`,
         couponData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`,
-          },
-        },
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`,
+        //   },
+        // },
       );
       alert('쿠폰이 등록되었습니다.');
       setSerialNumber('');

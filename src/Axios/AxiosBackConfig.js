@@ -18,9 +18,7 @@ axiosInstance.interceptors.request.use(
     console.log('1');
     if (token) {
       console.log('2');
-      config.withCredentials = true;
       config.headers.Authorization = `Bearer ${token}`;
-      config.withCredentials = true;
     }
     return config;
   },
