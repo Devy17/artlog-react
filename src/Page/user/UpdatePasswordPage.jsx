@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../../content/UserContext'; // 경로 확인
+import AuthContext from '../../context/UserContext'; // 경로 확인
 import axios from 'axios';
 import { API_BASE_URL, USER } from '../../Axios/host-config';
 import styles from './UpdatePasswordPage.module.scss'; 

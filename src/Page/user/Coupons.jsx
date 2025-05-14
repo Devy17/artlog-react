@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './Coupons.module.scss';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../../content/UserContext';
+import AuthContext from '../../context/UserContext';
 import axiosInstance from 'axios';
 import { API_BASE_URL, USER, COUPON } from '../../Axios/host-config';
 import { handleAxiosError } from '../../Axios/HandleAxiosError';
