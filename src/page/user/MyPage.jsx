@@ -384,9 +384,6 @@ const MyPage = () => {
             수정
           </button>
         )}
-        <button onClick={handleDelete} className={styles.deleteButton}>
-          회원 탈퇴
-        </button>
       </div>
     </div>
   );
