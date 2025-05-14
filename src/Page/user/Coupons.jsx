@@ -57,65 +57,71 @@ const Coupons = () => {
 
   return (
     <>
-        {/* ✅ styles.wrap 적용 */}
-        <div className={styles.wrap}>
-            {/* ✅ styles.coupon_insert 적용 */}
-            <div className={styles.coupon_insert}>
-                 {/* ✅ styles.coupon_inner 적용 */}
-                 <div className={styles.coupon_inner}>
-                    <h2>쿠폰등록</h2>
-                    {/* ✅ styles.coupon_input 적용 */}
-                    <div className={styles.coupon_input}>
-                        {/* ✅ styles.tit 적용 */}
-                        <p className={styles.tit}>쿠폰 번호 등록</p>
-                        {/* ✅ styles.coupon_form 적용 */}
-                        <div className={styles.coupon_form}>
-                            <form onSubmit={couponInsert}>
-                                <input
-                                    type='text'
-                                    name='serialNumber'
-                                    value={serialNumber}
-                                    onChange={(e) => setSerialNumber(e.target.value)}
-                                />
-                                {/* ✅ styles.submit 적용 */}
-                                <button type='submit' className={styles.submit}>
-                                    등록하기
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+      {/* ✅ styles.wrap 적용 */}
+      <div className={styles.wrap}>
+        {/* ✅ styles.coupon_insert 적용 */}
+        <div className={styles.coupon_insert}>
+          {/* ✅ styles.coupon_inner 적용 */}
+          <div className={styles.coupon_inner}>
+            <h2>쿠폰등록</h2>
+            {/* ✅ styles.coupon_input 적용 */}
+            <div className={styles.coupon_input}>
+              {/* ✅ styles.tit 적용 */}
+              <p className={styles.tit}>쿠폰 번호 등록</p>
+              {/* ✅ styles.coupon_form 적용 */}
+              <div className={styles.coupon_form}>
+                <form onSubmit={couponInsert}>
+                  <input
+                    type='text'
+                    name='serialNumber'
+                    value={serialNumber}
+                    onChange={(e) => setSerialNumber(e.target.value)}
+                  />
+                  {/* ✅ styles.submit 적용 */}
+                  <button type='submit' className={styles.submit}>
+                    등록하기
+                  </button>
+                </form>
+              </div>
             </div>
-
-            {/* ✅ styles.coupon_find_all 적용 */}
-            <div className={styles.coupon_find_all}>
-                {/* ✅ styles.coupon_inner 적용 */}
-                <div className={styles.coupon_inner}>
-                    <h2>쿠폰 조회</h2>
-                    {/* ✅ styles.coupon_list 적용 */}
-                    <div className={styles.coupon_list}>
-                         {/* 목록 없음 메시지 */}
-                         {couponList.length === 0 ? (
-                             <p className={styles['no-coupon-message']}>등록된 쿠폰이 없습니다.</p>
-                         ) : (
-                             <ul>
-                                 {couponList.map((coupon) => (
-                                      <li key={coupon.id || coupon.serialNumber}>
-                                           <h3>{coupon.couponTitle}</h3>
-                                           <p className={styles.serialNumber}>{coupon.serialNumber}</p>
-                                           <p className={styles.data}>
-                                               {coupon.expiredDate ? new Date(coupon.expiredDate).toLocaleDateString() : '무기한'}
-                                           </p>
-                                       </li>
-                                   ))}
-                               </ul>
-                           )}
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+
+        {/* ✅ styles.coupon_find_all 적용 */}
+        <div className={styles.coupon_find_all}>
+          {/* ✅ styles.coupon_inner 적용 */}
+          <div className={styles.coupon_inner}>
+            <h2>쿠폰 조회</h2>
+            {/* ✅ styles.coupon_list 적용 */}
+            <div className={styles.coupon_list}>
+              {/* 목록 없음 메시지 */}
+              {couponList.length === 0 ? (
+                <p className={styles['no-coupon-message']}>
+                  등록된 쿠폰이 없습니다.
+                </p>
+              ) : (
+                <ul>
+                  {couponList.map((coupon, index) => (
+                    <li key={index}>
+                      <h3>{coupon.couponTitle}</h3>
+                      <p className={styles.serialNumber}>
+                        {coupon.serialNumber}
+                      </p>
+                      <p className={styles.data}>
+                        {coupon.expiredDate
+                          ? new Date(coupon.expiredDate).toLocaleDateString()
+                          : '무기한'}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </>
-);
+  );
 };
 
 export default Coupons;
