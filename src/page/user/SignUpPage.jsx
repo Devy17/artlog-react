@@ -42,7 +42,7 @@ const SignUpPage = () => {
 
                 const data = await res.json();
 
-               
+               console.log("Hint keys response:", data); // 응답 데이터 로깅
                 if (res.status === 200 && data.statusCode === 200) {
                     
                     setHintKeysList(data.result);

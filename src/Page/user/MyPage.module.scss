@@ -1,0 +1,154 @@
+.mypage {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  font-family: 'Pretendard', sans-serif;
+  color: #333;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+/* 🔹 상단 네비게이션 버튼 */
+.topButtonGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+
+.navButton {
+  padding: 10px 16px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #e6e6e6;
+    border-color: #999;
+  }
+}
+
+/* 🔹 섹션 구분 */
+.editableInfoSection,
+.readOnlyInfoSection {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background-color: #fafafa;
+}
+
+.sectionTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formItem {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #444;
+  }
+
+  input,
+  select {
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+
+    &:disabled {
+      background-color: #f9f9f9;
+      color: #999;
+    }
+
+    &:focus {
+      border-color: #0077ff;
+      outline: none;
+      background-color: #fff;
+    }
+  }
+}
+
+/* 🔹 하단 버튼 그룹 */
+.bottomButtonContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.editButton,
+.saveButton {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #0077ff;
+  color: white;
+
+  &:hover {
+    background-color: #005fcc;
+  }
+}
+
+.saveButton {
+  background-color: #4caf50;
+
+  &:hover {
+    background-color: #3e9442;
+  }
+}
+
+.deleteButton {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #f44336;
+  color: white;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #d32f2f;
+  }
+}
