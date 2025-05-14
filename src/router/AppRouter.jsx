@@ -5,6 +5,7 @@ import SignUpPage from '../page/user/SignUpPage';
 import PrivateRouter from './PrivateRouter';
 import SignInPage from '../Page/user/SignInPage';
 import MyPage from '../page/user/MyPage';
+import Coupons from '../Page/user/Coupons';
 
 const AppRouter = () => {
   return (
@@ -18,6 +19,10 @@ const AppRouter = () => {
       <Route path='/login' element={<SignInPage />} />
       <Route path='/signup' element={<SignUpPage />} />
       <Route path='/mypage' element={<PrivateRouter element={<MyPage />} />} />
+      <Route
+        path='/coupons'
+        element={<PrivateRouter element={<Coupons />} />}
+      />
     </Routes>
   );
 };

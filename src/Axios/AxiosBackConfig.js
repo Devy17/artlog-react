@@ -14,7 +14,10 @@ axiosInstance.interceptors.request.use(
   (config) => {
     // 요청 보내기 전에 항상 처리해야 할 내용을 콜백으로 전달.
     const token = localStorage.getItem('ACCESS_TOKEN');
+    console.log('1');
     if (token) {
+      console.log('2');
+      config.withCredentials = true;
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
