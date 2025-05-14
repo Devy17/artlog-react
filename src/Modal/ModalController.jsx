@@ -6,6 +6,7 @@ import InsertHintModal_FindID from './FindID/InsertHintModal_FindID';
 import InsertHintModal_FindPW from './FindPW/InsertHintModal_FindPW';
 import ShowIDModal from './FindID/ShowIDModal';
 import NewPWModal from './FindPW/NewPWModal';
+import MyPage from '../Page/user/MyPage';
 
 const ModalController = ({ modalType, setModalType }) => {
   const closeModal = () => setModalType(null);
@@ -23,6 +24,8 @@ const ModalController = ({ modalType, setModalType }) => {
       )}
       {modalType === 'showID' && <ShowIDModal onClose={closeModal} />}
       {modalType === 'resetPW' && <NewPWModal onClose={closeModal} />}
+
+      {modalType === 'mypage' && <MyPage onClose={closeModal} />}
     </>
   );
 };
