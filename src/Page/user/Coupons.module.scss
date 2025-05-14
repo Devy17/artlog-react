@@ -1,0 +1,39 @@
+.wrap {
+  border: 1px solid red;
+  margin-top: 60px;
+
+  .coupon_insert {
+    border: 1px solid blue;
+    width: 1024px;
+    height: 300px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .coupon_find_all {
+    border: 1px solid green;
+    width: 1024px;
+    height: 300px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .coupon_inner {
+      width: 100%;
+
+      ul {
+        border: 1px solid red;
+        display: flex;
+        justify-content: space-evenly;
+
+        li {
+          border: 1px solid blue;
+          width: 48%;
+        }
+      }
+    }
+  }
+}
