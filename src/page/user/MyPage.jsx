@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
+
 import styles from './MyPage.module.scss'; // CSS 모듈 스타일 임포트
+
 import axios from 'axios'; // axios 라이브러리 임포트
 import { API_BASE_URL, USER } from '../../Axios/host-config'; // API 기본 URL 및 사용자 관련 경로 임포트
 import AuthContext from '../../context/UserContext'; // 사용자 인증 Context 임포트
@@ -36,6 +38,7 @@ const MyPage = () => {
               Authorization: `Bearer ${token}`,
             },
           },
+
         );
         if (res.status === 200) {
           const { userId, userName, phone, email, hintKey, hintValue } =
@@ -384,6 +387,7 @@ const MyPage = () => {
             수정
           </button>
         )}
+
       </div>
     </div>
   );
