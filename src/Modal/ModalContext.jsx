@@ -2,7 +2,7 @@
 import { createContext } from 'react';
 
 const ModalContext = createContext({
-  setModalType: () => {}, // 기본값 (실제 값은 App에서 덮어씀)
+  setModalType: () => {},
 });
 
 export default ModalContext;

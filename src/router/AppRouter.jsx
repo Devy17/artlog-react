@@ -11,6 +11,7 @@ import UpdatePasswordPage from '../Page/user/UpdatePasswordPage';
 import SignInPage from '../Page/user/SignInPage';
 import MainVisual from '../Component/main/MainPage/MainVisual';
 import ContentDetailPage from '../Page/content/ContentDetailPage';
+import MyReviewsPage from '../Page/user/MyReviewsPage';
 
 const AppRouter = () => {
   return (
@@ -36,6 +37,7 @@ const AppRouter = () => {
       />
       <Route path='/exhibitions' element={<ContentViewPage />} />
       <Route path='/contentDetail' element={<ContentDetailPage />} />
+      <Route path='/MyReviewsPage' element={<MyReviewsPage />}/>
     </Routes>
   );
 };

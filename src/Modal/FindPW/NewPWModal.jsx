@@ -50,7 +50,25 @@ const NewPWModal = ({ onClose }) => {
         setSuccess('비밀번호가 성공적으로 변경되었습니다.');
         localStorage.removeItem('pwResetUserId');
       } else if (res.status === 400) {
-        setError('기존 비밀번호와 동일한 비밀번호는 사용할 수 없습니다.');
+        if (
+          data.statusMessage ===
+          '비밀번호는 대소문자 각각 1자 이상, 특수문자 1자 이상을 포함해야 합니다.'
+        ) {
+          setError(
+            '비밀번호는 대소문자 각각 1자 이상, 특수문자 1자 이상을 포함해야 합니다.',
+          );
+        } else if (
+          data.statusMessage === '비밀번호는 최소 8자 이상이어야 합니다.'
+        ) {
+          setError('비밀번호는 최소 8자 이상이어야 합니다.');
+        } else if (data.statusMessage === '비밀번호는 필수입니다!') {
+          setError('비밀번호는 필수입니다!');
+        } else if (
+          data.statusMessage ===
+          '변경하려는 비밀번호가 이전 비밀번호와 동일합니다.'
+        ) {
+          setError('변경하려는 비밀번호가 이전 비밀번호와 동일합니다.');
+        }
       } else if (res.status === 404) {
         setError('사용자를 찾을 수 없습니다.');
       } else {
