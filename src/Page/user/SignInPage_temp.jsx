@@ -4,13 +4,17 @@ import AuthContext from '../../content/UserContext';
 import axios from 'axios';
 import { API_BASE_URL, USER } from '../../Axios/host-config';
 import styles from './SignInPage.module.scss';
+import ModalContext from '../../Modal/ModalContext';
 
 const SignInPage = () => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
-
   const navigate = useNavigate();
   const { onLogin } = useContext(AuthContext);
+  const { setModalType } = useContext(ModalContext);
+
+  const handleFindID = () => setModalType('findID');
+  const handleFindPW = () => setModalType('findPW');
 
   const doLogin = async () => {
     const loginData = {
@@ -70,6 +74,23 @@ const SignInPage = () => {
               onClick={() => navigate('/signUp')}
             >
               회원가입
+            </button>
+          </div>
+
+          <div className={styles.helperGroup}>
+            <button
+              type='button'
+              className={styles.helperBtn}
+              onClick={handleFindID}
+            >
+              아이디 찾기
+            </button>
+            <button
+              type='button'
+              className={styles.helperBtn}
+              onClick={handleFindPW}
+            >
+              비밀번호 찾기
             </button>
           </div>
         </form>
