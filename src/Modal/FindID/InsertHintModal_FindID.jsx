@@ -1,8 +1,8 @@
 // src/Modal/InsertHintModal_FindID.jsx
 import React, { useEffect, useState, useContext } from 'react';
 import styles from './InsertHintModal_FindID.module.scss';
-import ModalContext from './ModalContext';
-import { API_BASE_URL, USER } from '../Axios/host-config';
+import ModalContext from '../ModalContext';
+import { API_BASE_URL, USER } from '../../Axios/host-config';
 
 const InsertHintModal_FindID = ({ onClose }) => {
   const { setModalType } = useContext(ModalContext);

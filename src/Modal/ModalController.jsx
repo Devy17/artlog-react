@@ -1,8 +1,8 @@
 // src/components/modal/ModalController.jsx
 import React from 'react';
-import FindMyIDModal from './FindMyIDModal';
-import InsertHintModal from './InsertHintModal_FindID';
-import ShowIDModal from './ShowIDModal';
+import FindMyIDModal from './FindID/FindMyIDModal';
+import InsertHintModal from './FindID/InsertHintModal_FindID';
+import ShowIDModal from './FindID/ShowIDModal';
 // 필요에 따라 다른 모달도 import
 
 const ModalController = ({ modalType, setModalType }) => {

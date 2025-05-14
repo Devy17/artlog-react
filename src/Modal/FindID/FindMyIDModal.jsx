@@ -1,8 +1,8 @@
 // src/Modal/FindMyIDModal.jsx
 import React, { useState, useContext } from 'react';
 import styles from './FindMyIDModal.module.scss';
-import ModalContext from './ModalContext';
-import { API_BASE_URL, USER } from '../Axios/host-config';
+import ModalContext from '../ModalContext';
+import { API_BASE_URL, USER } from '../../Axios/host-config';
 
 const FindMyIDModal = ({ onClose }) => {
   const { setModalType } = useContext(ModalContext);

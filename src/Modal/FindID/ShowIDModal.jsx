@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './ShowIDModal.module.scss';
-import ModalContext from './ModalContext';
+import ModalContext from '../ModalContext';
 
 const ShowIDModal = ({ onClose }) => {
   const { setModalType } = useContext(ModalContext);
