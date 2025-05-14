@@ -103,7 +103,7 @@ const MyPage = () => {
     const { name, value } = e.target;
     setUserInfo(prev => ({
       ...prev,
-      [name]: name === "hintKey" ? parseInt(value) : value,
+      [name]: name === "hintKey" ? value : value,
     }));
   };
 
@@ -144,7 +144,7 @@ const MyPage = () => {
 
     // UserUpdateReqDto에 맞춰 payload 구성 (hintKey, hintValue, email, phone)
     const payload = {
-      hintKey: parseInt(userInfo.hintKey), // 힌트 키 파싱
+      hintKey: userInfo.hintKey, // 힌트 키 파싱
       hintValue: userInfo.hintValue,
       email: userInfo.email,
       phone: userInfo.phone,
@@ -221,6 +221,7 @@ const MyPage = () => {
          alert("회원 탈퇴 중 네트워크 또는 요청 오류 발생.");
        }
     }
+
   };
 
   // --- JSX 렌더링 (레이아웃 변경 반영) ---
@@ -253,6 +254,7 @@ const MyPage = () => {
             <label htmlFor="email">이메일</label>
             <input id="email" type="email" name="email" value={userInfo.email} onChange={handleChange} disabled={!editMode} />
           </div>
+
           <div className={styles.formItem}>
             <label htmlFor="hintKey">힌트 질문</label>
             <select id="hintKey" name="hintKey" value={userInfo.hintKey} onChange={handleChange} disabled={!editMode}>
@@ -261,6 +263,7 @@ const MyPage = () => {
                 <option key={hint.code} value={hint.code}>{hint.desc}</option>
               ))}
             </select>
+
           </div>
           <div className={styles.formItem}>
             <label htmlFor="hintValue">힌트 답변</label>
