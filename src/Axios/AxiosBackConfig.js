@@ -5,6 +5,7 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  responseEncoding: 'utf8',
 });
 
 // 요청용 인터셉터
@@ -16,6 +17,7 @@ axiosInstance.interceptors.request.use(
     const token = localStorage.getItem('ACCESS_TOKEN');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      config.withCredentials = true;
     }
     return config;
   },
