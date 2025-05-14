@@ -231,7 +231,9 @@ const MyPage = () => {
       {/* 상단 네비게이션 버튼 그룹 */}
       {/* Flexbox나 Grid를 사용하여 버튼들을 가로로 배치하는 CSS 필요 */}
       <div className={styles.topButtonGroup}>
-        <button className={styles.navButton}>비밀번호 변경</button>
+        <button className={styles.navButton}
+        onClick={() => navigate('/updatePwPage')}
+        >비밀번호 변경</button>
         <button className={styles.navButton}>나의 리뷰</button>
         <button className={styles.navButton}>쿠폰 조회 및 등록</button>
         <button className={styles.navButton}>콘텐츠 조회 및 취소</button>

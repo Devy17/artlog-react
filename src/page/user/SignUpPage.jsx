@@ -25,6 +25,10 @@ const SignUpPage = () => {
     // AuthContext는 default export이므로 useContext에 직접 전달
     const { isLoggedIn } = useContext(AuthContext);
 
+    const [isUserIdAvailable, setIsUserIdAvailable] = useState(false); // 현재 아이디가 사용 가능한지 여부
+    const [isUserIdChecked, setIsUserIdChecked] = useState(false);   // 현재 아이디에 대해 중복 확인을 완료했는지 여부
+
+
     // 이미 로그인된 경우 회원가입 페이지 접근 시 메인 페이지로 리다이렉트
     useEffect(() => {
         if (isLoggedIn) {
@@ -85,12 +89,15 @@ const SignUpPage = () => {
             if (response.data && response.data.statusCode === 200) {
                 // 백엔드 응답 결과 (result 필드) 확인 (boolean 값 예상: false=사용 가능, true=중복)
                 if (response.data.result === false) {
+                    setIsUserIdChecked(true);
                     alert(`'${userId}'는 사용 가능한 아이디입니다.`);
                 } else {
                     alert(`'${userId}'는 이미 사용 중인 아이디입니다.`);
                 }
             } else {
                 // 백엔드 2xx 응답이나 비즈니스 로직 오류
+                setIsUserIdChecked(false); // 체크 실패
+                setIsUserIdAvailable(false); // 사용 불가능으로 간주
                 console.error("중복 확인 실패 - 백엔드 오류:", response.data.statusCode, response.data.statusMessage);
                 alert(`중복 확인 중 오류가 발생했습니다: ${response.data.statusMessage || '알 수 없는 오류'}`);
             }
@@ -107,6 +114,14 @@ const SignUpPage = () => {
             }
         }
     };
+     // ✅ 아이디 입력 필드 변경 핸들러 (중복 확인 상태 초기화 포함)
+     const handleUserIdChange = (e) => {
+        setUserId(e.target.value);
+        // ✅ 아이디 값이 변경되면 중복 확인 상태를 초기화합니다.
+        setIsUserIdChecked(false);
+        setIsUserIdAvailable(false);
+    };
+
 
     // 비밀번호 유효성 검사 핸들러
     const handlePasswordChange = (e) => {
@@ -141,6 +156,16 @@ const SignUpPage = () => {
     // ✅ 회원가입 폼 제출 핸들러 - axios 사용
     const signup = async (e) => {
         e.preventDefault(); // 폼 기본 제출 동작 방지
+
+        if (!isUserIdChecked) {
+            alert("아이디 중복 확인을 먼저 해주세요.");
+            return;
+        }
+
+        if (!isUserIdAvailable) {
+            alert("사용할 수 없는 아이디입니다. 다른 아이디를 선택하거나 중복 확인을 다시 해주세요.");
+            return;
+        }
 
         // ✅ 클라이언트 측 유효성 검사
         if (!userId.trim()) { alert('아이디를 입력해주세요.'); return; }
@@ -191,7 +216,7 @@ const SignUpPage = () => {
                 console.error("Signup failed - HTTP Response:", error.response.status, error.response.data);
                 // 백엔드에서 보낸 오류 메시지 또는 기본 메시지 표시 (예: 400, 409 등)
                 const backendErrorMessage = error.response.data && error.response.data.statusMessage ? error.response.data.statusMessage : '서버 오류';
-                alert(`회원가입 실패: ${backendErrorMessage} (상태: ${error.response.status})`);
+                alert(`회원가입 실패: ${backendErrorMessage}`);
             } else {
                 // 응답 없음 또는 요청 설정 오류
                 alert('회원가입 요청 중 네트워크 오류가 발생했습니다. 백엔드 서버 상태를 확인해주세요.');
@@ -217,6 +242,7 @@ const SignUpPage = () => {
                                 id="userId"
                                 value={userId}
                                 onChange={(e) => setUserId(e.target.value)}
+                                
                                 required
                             />
                             <button
@@ -298,7 +324,7 @@ const SignUpPage = () => {
                             value={hintKey} // 상태 변수 연결
                             // 선택된 value (code, string으로 받아짐)를 parseInt로 정수 변환하여 상태에 저장
                             // value가 ''일 경우 parseInt하면 NaN이 되므로, 빈 문자열 그대로 저장하거나 다른 기본값 설정 필요
-                            onChange={(e) => setHintKey(e.target.value === '' ? '' : parseInt(e.target.value))}
+                            onChange={(e) => setHintKey(e.target.value === '' ? '' : e.target.value)}
                             required
                         >
                             <option value="">선택하세요</option> {/* 기본 옵션 */}
