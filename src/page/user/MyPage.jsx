@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-// import styles from "./MyPage.module.scss"; // CSS 모듈 스타일 임포트
+
+import styles from './MyPage.module.scss'; // CSS 모듈 스타일 임포트
+
 import axios from 'axios'; // axios 라이브러리 임포트
 import { API_BASE_URL, USER } from '../../Axios/host-config'; // API 기본 URL 및 사용자 관련 경로 임포트
 import AuthContext from '../../context/UserContext'; // 사용자 인증 Context 임포트
@@ -20,6 +22,10 @@ const MyPage = () => {
   // 수정 모드 상태
   const [editMode, setEditMode] = useState(false);
 
+  const handleCouponsClick = () => {
+    navigate('/coupons');
+  };
+
   useEffect(() => {
     const getUserInfo = async () => {
       const token = localStorage.getItem('ACCESS_TOKEN');
@@ -27,6 +33,12 @@ const MyPage = () => {
       try {
         const res = await axios.get(
           `${API_BASE_URL}${USER}/mypage/${loggedInUserId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+
         );
         if (res.status === 200) {
           const { userId, userName, phone, email, hintKey, hintValue } =
@@ -114,7 +126,7 @@ const MyPage = () => {
     const { name, value } = e.target;
     setUserInfo((prev) => ({
       ...prev,
-      [name]: name === 'hintKey' ? parseInt(value) : value,
+      [name]: name === "hintKey" ? value : value,
     }));
   };
 
@@ -157,7 +169,7 @@ const MyPage = () => {
 
     // UserUpdateReqDto에 맞춰 payload 구성 (hintKey, hintValue, email, phone)
     const payload = {
-      hintKey: parseInt(userInfo.hintKey), // 힌트 키 파싱
+      hintKey: userInfo.hintKey, // 힌트 키 파싱
       hintValue: userInfo.hintValue,
       email: userInfo.email,
       phone: userInfo.phone,
@@ -248,6 +260,7 @@ const MyPage = () => {
         alert('회원 탈퇴 중 네트워크 또는 요청 오류 발생.');
       }
     }
+
   };
 
   // --- JSX 렌더링 (레이아웃 변경 반영) ---
@@ -255,13 +268,18 @@ const MyPage = () => {
     <div className={styles.mypage}>
       <h1 className={styles.title}>마이 페이지</h1>
 
-      {/* 상단 네비게이션 버튼 그룹 */}
-      {/* Flexbox나 Grid를 사용하여 버튼들을 가로로 배치하는 CSS 필요 */}
       <div className={styles.topButtonGroup}>
-        <button className={styles.navButton}>비밀번호 변경</button>
+        <button className={styles.navButton}
+        onClick={() => navigate('/updatePwPage')}
+        >비밀번호 변경</button>
         <button className={styles.navButton}>나의 리뷰</button>
-        <button className={styles.navButton}>쿠폰 조회 및 등록</button>
-        <button className={styles.navButton}>콘텐츠 조회 및 취소</button>
+
+        <button className={styles.navButton} onClick={handleCouponsClick}>
+          쿠폰 조회 및 등록
+        </button>
+        <button className={styles.navButton}
+        onClick={() => navigate('/myOrdersPage')}>
+          콘텐츠 조회 및 취소</button>
       </div>
 
       {/* 회원 정보 수정 섹션 (수정 가능 필드) */}
@@ -295,6 +313,7 @@ const MyPage = () => {
               disabled={!editMode}
             />
           </div>
+
           <div className={styles.formItem}>
             <label htmlFor='hintKey'>힌트 질문</label>
             <select
@@ -311,6 +330,7 @@ const MyPage = () => {
                 </option>
               ))}
             </select>
+
           </div>
           <div className={styles.formItem}>
             <label htmlFor='hintValue'>힌트 답변</label>
@@ -353,6 +373,8 @@ const MyPage = () => {
       {/* 하단 액션 버튼 그룹 (저장, 회원 탈퇴) */}
       {/* Flexbox를 사용하여 자식 요소(버튼들)를 양쪽 끝으로 배치하는 CSS 필요 */}
       <div className={styles.bottomButtonContainer}>
+
+        <button onClick={handleDelete} className={styles.deleteButton}>회원 탈퇴</button>
         {editMode ? (
           <button onClick={handleSave} className={styles.saveButton}>
             저장
@@ -365,9 +387,7 @@ const MyPage = () => {
             수정
           </button>
         )}
-        <button onClick={handleDelete} className={styles.deleteButton}>
-          회원 탈퇴
-        </button>
+
       </div>
     </div>
   );
