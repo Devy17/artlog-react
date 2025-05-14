@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'; // useEffect 추가
-import { useNavigate } from 'react-router-dom';
-import AuthContext from '../../context/UserContext';
+import React, { useContext, useState } from 'react';
+import AuthContext from '../../content/UserContext';
 import axios from 'axios';
 import { API_BASE_URL, USER } from '../../Axios/host-config';
 import styles from './SignInPage.module.scss';
@@ -9,16 +8,10 @@ import ModalContext from '../../Modal/ModalContext';
 const SignInPage = ({ onClose }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-  const { onLogin, isLoggedIn } = useContext(AuthContext); // isLoggedIn 추가
-  const { setModalType } = useContext(ModalContext);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      alert('이미 로그인된 상태입니다.');
-      navigate('/', { replace: true });
-    }
-  }, [isLoggedIn, navigate]);
+  const { onLogin } = useContext(AuthContext);
+  const { setModalType } = useContext(ModalContext);
 
   const handleFindID = () => setModalType('findID');
   const handleFindPW = () => setModalType('findPW');
@@ -31,16 +24,14 @@ const SignInPage = ({ onClose }) => {
 
     try {
       const res = await axios.post(`${API_BASE_URL}${USER}/login`, loginData);
-      alert('로그인 성공!');
       onLogin(res.data.result);
-      navigate('/');
+      onClose();
     } catch (e) {
       console.error(e);
-      alert('로그인 실패입니다. 아이디 또는 비밀번호를 확인하세요!');
+      setErrorMessage('로그인 실패입니다. 아이디 또는 비밀번호를 확인하세요!');
     }
   };
 
-  // SignInPage.jsx
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -68,6 +59,7 @@ const SignInPage = ({ onClose }) => {
               required
             />
           </div>
+
           <div className={styles.formGroup}>
             <label htmlFor='password'>비밀번호</label>
             <input
@@ -78,6 +70,8 @@ const SignInPage = ({ onClose }) => {
               required
             />
           </div>
+
+          {errorMessage && <p className={styles.errorMsg}>{errorMessage}</p>}
 
           <div className={styles.helperGroup}>
             <button
@@ -103,7 +97,7 @@ const SignInPage = ({ onClose }) => {
             <button
               type='button'
               className={styles.secondaryBtn}
-              onClick={() => navigate('/signUp')}
+              onClick={() => setModalType('signUp')}
             >
               회원가입
             </button>
