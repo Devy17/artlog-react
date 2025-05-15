@@ -41,7 +41,7 @@ const ContentDetailPage = () => {
           component='img'
           src={searchParams.get('thumbnail')}
           onError={(e) => {
-            e.target.src = 'vite.svg'; // 대체 이미지 경로
+            e.target.src = 'no-img.png';
           }}
           style={{ width: '50%', height: 800, objectFit: 'cover' }}
         />

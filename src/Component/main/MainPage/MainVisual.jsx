@@ -13,7 +13,7 @@ function MainVisual() {
   const navigate = useNavigate();
 
   const numberOfContent = 6;
-  const page = 3;
+  const page = 5;
 
   useEffect(() => {
     const getData = async () => {
@@ -66,7 +66,7 @@ function MainVisual() {
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       goToNext();
-    }, 7000);
+    }, 1500);
   };
 
   const goToNext = () => {
