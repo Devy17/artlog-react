@@ -1,8 +1,9 @@
-import { Card, CardMedia } from '@mui/material';
+import { Card, CardContent, CardMedia, Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API, API_BASE_URL } from '../../Axios/host-config';
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import ContentDetailPage from './ContentDetailPage';
 import styles from './ContentViewPage.module.scss';
 
 const ContentViewPage = () => {
@@ -15,20 +16,22 @@ const ContentViewPage = () => {
 
   useEffect(() => {
     const getData = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `${API_BASE_URL}${API}/select?numOfRows=${numberOfContent}&pageNo=${page}`,
-        );
-        const newData = response.data.result;
-        setApiData((prev) => [...prev, ...newData]);
-        isLoading(true);
-      } catch (error) {
-        console.error('데이터 불러오기 실패:', error);
-      }
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}${API}/select?numOfRows=${numberOfContent}&pageNo=${page}`,
+      );
+      const data = response.data.result;
+      console.log(data);
+
+      console.log(data[0].contentThumbnail);
+      return data;
     };
 
-    getData();
+    getData().then((response) => {
+      setApiData((prev) => [...prev, ...response]);
+    });
   }, [page]);
+
+  useEffect(() => isLoading(true), [apiData]);
 
   const contentClickHandler = (data) => {
     const param = {
@@ -49,48 +52,42 @@ const ContentViewPage = () => {
   };
 
   return (
-    <div className={styles['content-view-page']}>
-      <h2 className={styles['page-title']}>전시 정보</h2>
-      <div className={styles['filter-sort-area']}>최신순</div>
-      <div className={styles['card-grid']}>
+    <div style={{ paddingTop: 300 }}>
+      <div>전시 정보</div>
+      <div>
+        <div>최신순</div>
+      </div>
+      <div>
         {loading ? (
-          apiData.map((data) => (
-            <div
-              key={data.contentId}
-              className={styles['content-item']}
-              onClick={() => contentClickHandler(data)}
-            >
-              <Card className={styles.card}>
+          <Grid container spacing={2} columns={3}>
+            {apiData.map((data) => (
+              <Grid
+                item
+                size={1}
+                key={data.contentId}
+                onClick={() => contentClickHandler(data)}
+              >
                 <CardMedia
                   component='img'
-                  image={data.contentThumbnail}
-                  alt={data.contentTitle}
-                  className={styles['item-image']}
+                  src={data.contentThumbnail}
                   onError={(e) => {
-                    e.target.src = 'no-img.png';
+                    e.target.src = 'vite.svg'; // 대체 이미지 경로
                   }}
+                  style={{ width: '90%', height: 800, objectFit: 'cover' }}
                 />
-                <div className={styles['item-textbox']}>
-                  <div className={styles['item-title']}>
-                    {data.contentTitle}
-                  </div>
-                  <div className={styles['item-details']}>
-                    {data.contentVenue}
-                  </div>
-                </div>
-              </Card>
-            </div>
-          ))
+                <div>{data.contentTitle}</div>
+              </Grid>
+            ))}
+          </Grid>
         ) : (
-          <div>Loading...</div>
+          <div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo minus
+            itaque iure at dolores pariatur eaque consequuntur nemo a ducimus
+            quos, quas omnis culpa nisi adipisci? Harum maiores eos nostrum!
+          </div>
         )}
       </div>
-      <button
-        className={styles['load-more-button']}
-        onClick={() => setPage(page + 1)}
-      >
-        더보기
-      </button>
+      <button onClick={() => setPage(page + 1)}> 더보기 </button>
     </div>
   );
 };
