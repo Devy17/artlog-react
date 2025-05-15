@@ -9,10 +9,17 @@ import {
 import { Card, CardContent, CardMedia } from '@mui/material';
 import WriteReview from '../../Component/content/WriteReview';
 import ShowReviews from '../../Component/content/ShowReviews';
+import style from './ContentDetailPage.module.scss';
 
 const ContentDetailPage = () => {
   const [searchParams] = useSearchParams();
   const navi = useNavigate();
+
+  const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
+
+  const handleReviewSubmit = () => {
+    setReviewRefreshKey((prev) => prev + 1); // 리뷰 작성 시 key 증가 → ShowReviews 다시 실행
+  };
 
   const isPastOrToday = (endDate) => {
     const inputDate = new Date(endDate);
@@ -30,22 +37,21 @@ const ContentDetailPage = () => {
   };
 
   return (
-    <>
-      <div style={{ paddingTop: 300 }}>
-        <Card>
-          <CardContent>{searchParams.get('title')}</CardContent>
-        </Card>
-      </div>
-      <div style={{ display: 'flex' }}>
+    <div className={style['content-detail-page']}>
+      <Card className={style['title-card']}>
+        <CardContent>{searchParams.get('title')}</CardContent>
+      </Card>
+
+      <div className={style['content-section']}>
         <CardMedia
           component='img'
           src={searchParams.get('thumbnail')}
           onError={(e) => {
             e.target.src = 'no-img.png';
           }}
-          style={{ width: '50%', height: 800, objectFit: 'cover' }}
         />
         <div>
+          <div className={style['info-box']}></div>
           <div>기간</div>
           <div>
             {searchParams.get('startDate') +
@@ -76,9 +82,16 @@ const ContentDetailPage = () => {
         </div>
       </div>
 
-      <WriteReview contentId={searchParams.get('id')} />
-      <ShowReviews contentId={searchParams.get('id')} />
-    </>
+      <div className={style['review-section']}></div>
+      <WriteReview
+        contentId={searchParams.get('id')}
+        onSubmit={handleReviewSubmit} // ⭐ 콜백 전달
+      />
+      <ShowReviews
+        contentId={searchParams.get('id')}
+        refreshKey={reviewRefreshKey} // ⭐ key 전달
+      />
+    </div>
   );
 };
 
