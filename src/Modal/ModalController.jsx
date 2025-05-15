@@ -24,8 +24,6 @@ const ModalController = ({ modalType, setModalType }) => {
       )}
       {modalType === 'showID' && <ShowIDModal onClose={closeModal} />}
       {modalType === 'resetPW' && <NewPWModal onClose={closeModal} />}
-
-      {modalType === 'mypage' && <MyPage onClose={closeModal} />}
     </>
   );
 };
