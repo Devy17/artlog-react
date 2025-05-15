@@ -14,9 +14,11 @@ const MyReviewsPage = () => {
   const authCtx = useContext(AuthContext);
   const { isLoggedIn,isInit } = authCtx;
   const { setModalType } = useContext(ModalContext);
-   const currentUserKey = localStorage.getItem('USER_ID');
-   const token = localStorage.getItem('ACCESS_TOKEN');
+  const currentUserKey = localStorage.getItem('USER_ID');
+  const token = localStorage.getItem('ACCESS_TOKEN');
   console.log("currentUserKey:", currentUserKey);
+  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [editingContent, setEditingContent] = useState('');
 
   const [reviewData, setReviewData] = useState([]);
   // ✅ loading 상태 제거
@@ -99,24 +101,23 @@ const MyReviewsPage = () => {
     } catch (err) {
       // ✅ API 호출 중 발생한 예외 처리 (네트워크 오류, 4xx/5xx HTTP 상태 코드 등)
       console.error("fetchMyReviews: Error fetching my reviews:", err); // 오류 로그
-      if (err.response) {
-        const httpStatus = err.response.status;
-        console.error("fetchMyReviews: 리뷰 로딩 실패 - HTTP 응답 상세:", httpStatus, err.response.data); // 상세 오류 로그
-        const backendErrorMessage = err.response.data && err.response.data.statusMessage ? err.response.data.statusMessage : `HTTP 오류 (${httpStatus})`;
+if (err.response) {
+  const httpStatus = err.response.status;
+  const backendErrorMessage = err.response.data?.statusMessage || `HTTP 오류 (${httpStatus})`;
 
-        if (httpStatus === 401 || httpStatus === 403) {
-          setError('로그인이 필요하거나 권한이 없습니다.'); // 오류 메시지 설정
-          alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
-          authCtx.onLogout();
-          setModalType('login');
-        } else {
-          setError(`리뷰 로딩 실패: ${backendErrorMessage}`); // 오류 메시지 설정
-        }
-      } else {
-        setError('네트워크 오류로 리뷰를 가져올 수 없습니다.'); // 오류 메시지 설정
-      }
-      setReviewData([]); // 오류 발생 시 목록 비움
-      // setTotalPages(1);
+  if (httpStatus === 401 || httpStatus === 403) {
+    alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
+    authCtx.onLogout();
+    setModalType('login');
+  } else if (httpStatus === 404) {
+    console.log("✅ 리뷰 없음: 404 처리 완료");
+    setReviewData([]);         // 빈 배열 설정
+    setError(null);            // ❌ 오류로 간주하지 않음
+  } else {
+    setError(`리뷰 로딩 실패: ${backendErrorMessage}`);
+    setReviewData([]);
+  }
+}
 
     } finally {
       // ✅ 로딩 상태 종료 제거
@@ -173,12 +174,40 @@ const MyReviewsPage = () => {
     }
   };
 
-  // 리뷰 수정 핸들러 (실제 기능 연결 필요)
-  const handleEditReview = (reviewId) => {
-    console.log(`리뷰 수정 버튼 클릭: ${reviewId}`);
-    // TODO: 리뷰 수정 페이지 또는 모달로 이동/표시 로직 구현
-    // 예: navigate(`/edit-review/${reviewId}`);
-  };
+const handleEditReview = (reviewId) => {
+  const target = reviewData.find(r => r.id === reviewId);
+  if (!target) return;
+  setEditingReviewId(reviewId);
+  setEditingContent(target.reviewContent || '');
+};
+
+const handleSaveEditedReview = async () => {
+  if (!editingReviewId || !editingContent.trim()) {
+    alert('내용을 입력해주세요.');
+    return;
+  }
+
+  try {
+    const response = await axiosInstance.put(
+      `${API_BASE_URL}${REVIEW}/update/${editingReviewId}`,
+      { reviewContent: editingContent }, // ← DTO 필드명 확인 필요!
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (response.data?.statusCode === 200) {
+      alert('리뷰가 수정되었습니다.');
+      setEditingReviewId(null);
+      setEditingContent('');
+      fetchMyReviews(); // 목록 새로고침
+    } else {
+      alert(response.data?.statusMessage || '리뷰 수정 실패');
+    }
+  } catch (err) {
+    console.error('리뷰 수정 오류:', err);
+    alert('리뷰 수정 중 문제가 발생했습니다.');
+  }
+};
+
 
   // 리뷰 삭제 핸들러 (실제 기능 연결 필요)
   const handleDeleteReview = async (reviewId) => {
@@ -283,54 +312,69 @@ const MyReviewsPage = () => {
               <div className={styles['reviews-list']}> {/* 리뷰 목록을 감싸는 컨테이너 */}
                 {reviewData.map(review => (
                   console.log("리뷰 데이터:", review), // 리뷰 데이터 로그
-                  <div key={review.id} className={styles['review-item']}>
+                 <div key={review.id} className={styles['review-item']}>
+  {/* 이미지 */}
+  <div className={styles['item-image-container']}>
+    <img
+      src={review.picUrl || 'placeholder_thumbnail.png'}
+      alt="리뷰 관련 이미지"
+      className={styles['item-image']}
+      onError={(e) => { e.target.src = 'placeholder_thumbnail.png'; }}
+    />
+  </div>
 
-                    {/* 썸네일 이미지 */}
-                    <div className={styles['item-image-container']}>
-                      <img
-                        src={review.picUrl || 'placeholder_thumbnail.png'}
-                        alt="리뷰 관련 이미지"
-                        className={styles['item-image']}
-                        onError={(e) => { e.target.src = 'placeholder_thumbnail.png'; }}
-                      />
-                    </div>
+  {/* 상세 정보 */}
+  <div className={styles['item-details']}>
+    <div className={styles['item-place-date']}>
+      {`[콘텐츠 정보 필요] Content ID: ${review.contentId}`}
+    </div>
 
-                    {/* 리뷰 상세 정보 */}
-                    <div className={styles['item-details']}>
+    {/* 수정 중이면 textarea, 아니면 내용 표시 */}
+    {editingReviewId === review.id ? (
+      <textarea
+        value={editingContent}
+        onChange={(e) => setEditingContent(e.target.value)}
+        className={styles['edit-textarea']}
+        maxLength={1000}
+        placeholder="리뷰를 입력하세요"
+      />
+    ) : (
+      <div className={styles['item-content']}>
+        {review.reviewContent || '리뷰 내용 없음'}
+      </div>
+    )}
 
-                      {/* 콘텐츠 정보 (예: 제목, 장소, 일시 등 - 추후 contentId로 조회해서 채워야 함) */}
-                      <div className={styles['item-place-date']}>
-                        {`[콘텐츠 정보 필요] Content ID: ${review.contentId}`}
-                      </div>
+    <div className={styles['item-date']}>
+      {review.updateDate ? `작성일: ${new Date(review.updateDate).toLocaleDateString()}` : '날짜 정보 없음'}
+    </div>
 
-                      {/* 리뷰 내용 */}
-                      <div className={styles['item-content']}>
-                        {review.reviewContent || '리뷰 내용 없음'}
-                      </div>
-
-                      {/* 작성일 */}
-                      <div className={styles['item-date']}>
-                        {review.updateDate ? `작성일: ${new Date(review.updateDate).toLocaleDateString()}` : '날짜 정보 없음'}
-                      </div>
-
-                      {/* 수정/삭제 버튼 */}
-                      <div className={styles['item-actions']}>
-                        <button
-                          onClick={() => handleEditReview(review.id)}
-                          className={styles['edit-button']}
-                        >
-                          리뷰 수정하기
-                        </button>
-                        <button
-                          onClick={() => handleDeleteReview(review.id)}
-                          className={styles['delete-button']}
-                        >
-                          리뷰 삭제하기
-                        </button>
-                      </div>
-
-                    </div>
-                  </div>
+    {/* 버튼 영역 */}
+    <div className={styles['item-actions']}>
+      {editingReviewId === review.id ? (
+        <>
+          <button onClick={handleSaveEditedReview} className={styles['save-button']}>
+            저장
+          </button>
+          <button onClick={() => setEditingReviewId(null)} className={styles['cancel-button']}>
+            취소
+          </button>
+          <button onClick={() => handleDeleteReview(review.id)} className={styles['delete-button']}>
+            리뷰 삭제하기
+          </button>
+        </>
+      ) : (
+        <>
+          <button onClick={() => handleEditReview(review.id)} className={styles['edit-button']}>
+            리뷰 수정하기
+          </button>
+          <button onClick={() => handleDeleteReview(review.id)} className={styles['delete-button']}>
+            리뷰 삭제하기
+          </button>
+        </>
+      )}
+    </div>
+  </div>
+</div>
                 ))}
               </div>
             ) : (
