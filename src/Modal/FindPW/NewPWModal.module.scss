@@ -1,0 +1,120 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  width: 800px;
+  height: 800px;
+  padding: 40px;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 55px;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.body {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.subtext {
+  font-size: 25px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 30px;
+  line-height: 1.4;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.inputGroup label {
+  font-size: 18px;
+  font-weight: 400;
+  margin-left: 10px;
+}
+
+.input {
+  height: 50px;
+  padding: 10px;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  border-radius: 0;
+}
+
+.confirmBtn {
+  height: 60px;
+  width: 100%;
+  max-width: 500px;
+  background-color: #400099;
+  color: white;
+  font-size: 25px;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  margin-top: 30px;
+}
+
+.confirmBtn {
+  height: 70px;
+  width: 100%;
+  max-width: 450px;
+  background-color: #400099;
+  color: white;
+  font-size: 30px;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  margin-top: 10px;
+  position: fixed;
+  bottom: 320px;
+}
+
+.error {
+  font-size: 16px;
+  color: red;
+  margin-top: -5px;
+  text-align: center;
+}
+
+.success {
+  color: green;
+  font-size: 16px;
+  margin-top: -5px;
+  text-align: center;
+}

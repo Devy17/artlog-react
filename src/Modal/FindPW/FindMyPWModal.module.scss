@@ -1,0 +1,131 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  width: 800px;
+  height: 800px;
+  padding: 40px;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 35px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  margin-top: -50px;
+}
+
+.body {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  position: relative;
+  top: 10px;
+}
+
+.question {
+  font-size: 35px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.subtext {
+  font-size: 20px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 30px;
+  line-height: 1.4;
+}
+
+.userIdGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 450px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.userIdGroup label {
+  font-size: 18px;
+  font-weight: 350;
+  margin-left: 15px;
+  margin-bottom: 5px;
+}
+
+.emailGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 450px;
+  margin-bottom: 55px;
+  margin-top: 5px;
+}
+
+.emailGroup label {
+  font-size: 18px;
+  font-weight: 350;
+  margin-left: 15px;
+  margin-bottom: 5px;
+}
+
+.input {
+  height: 50px;
+  padding: 10px;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  border-radius: 0;
+}
+
+.confirmBtn {
+  height: 70px;
+  width: 100%;
+  max-width: 450px;
+  background-color: #400099;
+  color: white;
+  font-size: 30px;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  margin-top: 10px;
+  position: fixed;
+  bottom: 300px;
+}
+
+.error {
+  font-size: 16px;
+  color: red;
+  margin-top: -20px;
+  text-align: center;
+}

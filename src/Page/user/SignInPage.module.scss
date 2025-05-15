@@ -1,0 +1,137 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  width: 800px;
+  height: 800px;
+  padding: 40px;
+  border: 1px solid black;
+  border-radius: 0;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 30px;
+  margin-left: 20px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  margin-top: -25px;
+  margin-right: 5px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 70px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  max-width: 450px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.formGroup label {
+  font-size: 20px;
+  font-weight: 350;
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+.formGroup input {
+  height: 35px;
+  padding: 8px;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  border-radius: 0;
+}
+
+.helperGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 10px;
+  margin-bottom: -10px;
+  width: 100%;
+  max-width: 450px;
+}
+
+.helperBtn {
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: #666;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  width: 100%;
+  max-width: 450px;
+}
+
+.primaryBtn {
+  background-color: #400099;
+  color: white;
+  height: 60px;
+  width: 100%;
+  font-size: 30px;
+  border: 1px solid black;
+  border-radius: 0;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.secondaryBtn {
+  background-color: #ccc;
+  color: black;
+  height: 60px;
+  width: 100%;
+  font-size: 30px;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.errorMsg {
+  color: red;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 0px;
+}
