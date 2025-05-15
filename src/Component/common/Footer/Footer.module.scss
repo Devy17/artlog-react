@@ -1,0 +1,17 @@
+.footer_wrap {
+  text-align: center;
+  margin-top: 50px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+
+  .footer_inner {
+    padding: 20px;
+    p {
+      color: #666;
+
+      a {
+        color: #000;
+        text-decoration: none;
+      }
+    }
+  }
+}
