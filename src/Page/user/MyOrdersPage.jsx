@@ -13,9 +13,12 @@ import { API_BASE_URL, ORDER } from '../../Axios/host-config';
 import styles from './MyOrdersPage.module.scss';
 import axios from "axios"; // axiosInstance 사용이 권장됩니다.
 import ModalContext from '../../Modal/ModalContext';
+import axiosInstance from '../../Axios/AxiosBackConfig';
 
 
 const MyOrdersPage = () => {
+  const [apiData, setApiData] = useState([]);
+    const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
   const { setModalType } = useContext(ModalContext);
@@ -30,6 +33,34 @@ const MyOrdersPage = () => {
 
   const token = useMemo(() => localStorage.getItem("ACCESS_TOKEN"), []);
   const userKey = useMemo(() => localStorage.getItem("USER_ID"), []);
+
+  const numberOfContent = 9;
+
+  const contentClickHandler = (contentId) => {
+    const orderData = orderList.find((item) => item.contentId === contentId);
+
+    if (!orderData) {
+      console.warn("해당 콘텐츠 ID를 찾을 수 없습니다.");
+      return;
+    }
+
+    const param = {
+      id: orderData.contentId,
+      title: orderData.contentTitle,
+      venue: orderData.contentVenue,
+      charge: orderData.contentCharge,
+      period: orderData.contentPeriod,
+      thumbnail: orderData.contentThumbnail,
+      url: orderData.contentUrl,
+      startDate: orderData.startDate,
+      endDate: orderData.endDate,
+    };
+
+    navigate({
+      pathname: '/contentDetail',
+      search: '?' + createSearchParams(param).toString(),
+    });
+  };
 
 
   const fetchMyOrders = useCallback(async () => {
@@ -99,6 +130,7 @@ const MyOrdersPage = () => {
     fetchMyOrders();
   }, [token, userKey, fetchMyOrders, authCtx, setModalType]);
 
+
   const handleCancelOrder = async (orderId) => {
     if (!window.confirm('이 예매를 취소하시겠습니까?')) return;
 
@@ -144,14 +176,7 @@ const MyOrdersPage = () => {
     }
   };
 
-  // ✅ 콘텐츠 상세 페이지로 이동하는 핸들러 추가
-  const handleOrderClick = (contentId) => {
-    console.log(`콘텐츠 상세 페이지로 이동: Content ID ${contentId}`);
-    navigate({
-      pathname: '/content-detail', // 이동할 경로
-      search: createSearchParams({ id: contentId }).toString(), // contentId를 'id'라는 이름의 search param으로 전달
-    });
-  };
+
 
 
 
@@ -250,7 +275,7 @@ const MyOrdersPage = () => {
               <li
                 key={order.id}
                 className={`${styles['order-item']} ${styles['clickable-order-item']}`} // 클릭 가능 스타일 클래스 추가
-                onClick={() => handleOrderClick(order.contentId)} // 클릭 핸들러 연결
+                onClick={() => contentClickHandler(order.contentId)} // 클릭 핸들러 연결
               >
                 <div className={styles['order-details']}>
                   {/* 콘텐츠 ID, 주문 ID 등 주문 정보 표시 */}
