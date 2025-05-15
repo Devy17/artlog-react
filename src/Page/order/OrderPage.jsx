@@ -12,16 +12,32 @@ const OrderPage = () => {
   const [searchParams] = useSearchParams();
   const [humanCount, setHumanCount] = useState(1);
   const { setModalType } = useContext(ModalContext);
-  const [userCouponKey, setUserCouponKey] = useState(null);
+  const [userCouponKey, setUserCouponKey] = useState(
+    localStorage.getItem('userCoupon'),
+  );
 
   const navi = useNavigate();
 
   const calcTotalPrice = () => {
-    return +searchParams.get('charge') * humanCount;
+    const originTotal = +searchParams.get('charge') * humanCount;
+    let discount = localStorage.get('discount');
+    if (discount) {
+      const result = originTotal - +discount;
+      return result <= 0 ? 0 : result;
+    } else {
+      discount = localStorage.get('percent');
+      if (!discount) return originTotal;
+      const result = (1 - +discount * 0.01) * originTotal;
+      return result;
+    }
   };
 
   const couponButtonClickHandler = () => {
     // 여기에 coupon Modal 창
+    localStorage.setItem(
+      'totalPrice',
+      +searchParams.get('charge') * humanCount,
+    );
     setModalType('orderCoupon');
   };
 
@@ -46,15 +62,23 @@ const OrderPage = () => {
   };
 
   return (
-    <div className='order-page'>
+    <div className='order-page' style={{ paddingTop: 100, marginLeft: 300 }}>
       <div className='sidebar'>
         <div className='sidebar-title'>예약</div>
-        <div className='image-box'>이미지</div>
-        <div className='info'>
-          <div>전시 이름</div>
-          <div>전시 장소</div>
-          <div>전시 일시</div>
-          <div>인원</div>
+        <div style={{ display: 'flex', fontSize: '2rem' }}>
+          <img src={searchParams.get('thumbnail')} style={{ width: '20%' }} />
+          <div className='info'>
+            <div>전시 이름</div>
+            <div>{searchParams.get('title')}</div>
+            <div>전시 장소</div>
+            <div>{searchParams.get('venue')}</div>
+            <div>전시 일시</div>
+            <div>
+              {searchParams.get('startDate') +
+                ' ~ ' +
+                searchParams.get('endDate')}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -85,7 +109,10 @@ const OrderPage = () => {
         </div>
         <div>선택한 날짜 : {selectedDate.toLocaleDateString('ko-KR')}</div>
 
-        <div className='person-select'>
+        <div
+          className='person-select'
+          style={searchParams.get('charge') != 0 ? {} : { display: 'none' }}
+        >
           <div>인원 선택</div>
           <div
             className='counter'
@@ -106,7 +133,11 @@ const OrderPage = () => {
 
         <div className='price-section'>
           <div>TotalPrice: {+searchParams.get('charge') * humanCount}</div>
-          <Button className='coupon' onClick={couponButtonClickHandler}>
+          <Button
+            className='coupon'
+            onClick={couponButtonClickHandler}
+            style={searchParams.get('charge') != 0 ? {} : { display: 'none' }}
+          >
             쿠폰 사용하기
           </Button>
         </div>

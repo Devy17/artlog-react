@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SignInPage from '../Page/user/SignInPage'; // ✅ 추가
 import FindMyIDModal from './FindID/FindMyIDModal';
 import FindMyPWModal from './FindPW/FindMyPWModal';
@@ -10,7 +10,13 @@ import MyPage from '../Page/user/MyPage';
 import OrderCouponModal from './order/OrderCouponModal';
 
 const ModalController = ({ modalType, setModalType }) => {
+  const [type, setType] = useState(false);
   const closeModal = () => setModalType(null);
+
+  const closeCouponModal = () => {
+    setModalType(null);
+    setType(true);
+  };
 
   return (
     <>
@@ -28,7 +34,9 @@ const ModalController = ({ modalType, setModalType }) => {
 
       {modalType === 'mypage' && <MyPage onClose={closeModal} />}
 
-      {modalType === 'orderCoupon' && <OrderCouponModal onClose={closeModal} />}
+      {modalType === 'orderCoupon' && (
+        <OrderCouponModal onClose={closeCouponModal} />
+      )}
     </>
   );
 };
