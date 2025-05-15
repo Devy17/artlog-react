@@ -30,12 +30,13 @@ const MyOrdersPage = () => {
 
     
     // 현재 로그인한 사용자 ID (주문 조회에 사용)
-    const loggedInUserId = localStorage.getItem("USER_ID");
-
+    const currentUserKey = localStorage.getItem('USER_ID');
+    console.log("currentUserKey:", currentUserKey);
   // ✅ 사용자별 주문 목록 가져오기 함수
   const fetchMyOrders = useCallback(async () => {
     const token = localStorage.getItem('ACCESS_TOKEN');
     const userKey = localStorage.getItem('USER_ID');
+    console.log("userKey:", userKey);
 
     if (!token || !userKey) {
       setLoading(false);
@@ -93,6 +94,10 @@ const MyOrdersPage = () => {
           `주문 목록 가져오기 실패: ${backendStatusMessage} (상태: ${httpStatus}, 코드: ${backendStatusCode})`,
         );
         setOrderList([]);
+        console.log("✅ API 호출 정보:");
+        console.log("  URL:", `<span class="math-inline">\{API\_BASE\_URL\}</span>{REVIEW}/findByUserKey/${currentUserKey}`);
+        console.log("  Method:", "GET"); // axios.get 사용
+        console.log("  Headers:", { Authorization: `Bearer ${token}` });
       }
     } catch (err) {
       console.error('Error fetching orders:', err);
@@ -136,6 +141,7 @@ const MyOrdersPage = () => {
             setOrderList([]);
         } finally {
             setLoading(false);
+            console.log("fetchMyReviews: API 요청 완료.");
         }
     }, [authCtx, navigate]);
 
@@ -251,6 +257,7 @@ setModalType('login');
             }
         } finally {
             setLoading(false);
+            
         }
     };
 
