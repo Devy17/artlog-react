@@ -36,7 +36,6 @@ axiosInstance.interceptors.response.use(
       'response interceptor 동작함! 응답에 문제가 발생! : Maybe TOKEN',
     );
     console.log(error);
-    localStorage.clear();
     return Promise.reject(error);
   },
 );

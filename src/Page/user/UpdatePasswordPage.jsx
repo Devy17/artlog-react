@@ -5,17 +5,19 @@ import axios from 'axios';
 import { API_BASE_URL, USER } from '../../Axios/host-config';
 import styles from './UpdatePasswordPage.module.scss';
 // import AuthContext from '../../context/UserContext'; // ✅ 이 줄은 중복되므로 제거
+import ModalContext from '../../Modal/ModalContext';
 
 const UpdatePasswordPage = () => {
-  const navigate = useNavigate();
-  // ✅ useContext 호출은 컴포넌트 함수 최상단에 위치해야 합니다.
-  const { onLogout } = useContext(AuthContext); // <-- 이 줄이 여기에 있어야 합니다.
+    const navigate = useNavigate();
+    // ✅ useContext 호출은 컴포넌트 함수 최상단에 위치해야 합니다.
+    const { onLogout } = useContext(AuthContext); // <-- 이 줄이 여기에 있어야 합니다.
+    const { setModalType } = useContext(ModalContext);
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const loggedInUserId = localStorage.getItem("USER_ID"); // URL에 사용
 
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const loggedInUserId = localStorage.getItem('USER_ID'); // URL에 사용
 
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
@@ -46,15 +48,16 @@ const UpdatePasswordPage = () => {
       password: newPassword, // 새 비밀번호
     };
 
-    const token = localStorage.getItem('ACCESS_TOKEN');
-    // 토큰이 없으면 요청 보내지 않고 로그인 페이지로 리다이렉트
-    if (!token) {
-      alert('로그인이 필요합니다.');
-      // ✅ onLogout 함수는 이제 컴포넌트 스코프에 정의되어 있으므로 바로 사용 가능
-      onLogout();
-      navigate('/login');
-      return;
-    }
+
+        const token = localStorage.getItem("ACCESS_TOKEN");
+        // 토큰이 없으면 요청 보내지 않고 로그인 페이지로 리다이렉트
+        if (!token) {
+             alert('로그인이 필요합니다.');
+             // ✅ onLogout 함수는 이제 컴포넌트 스코프에 정의되어 있으므로 바로 사용 가능
+             onLogout();
+             setModalType('login');
+             return;
+        }
 
     console.log('로그인한 유저 ID (URL에 사용):', loggedInUserId);
     console.log('현재 비밀번호 (입력값):', currentPassword); // 이 값은 백엔드 DTO로 전달 안될 수 있음
@@ -84,22 +87,20 @@ const UpdatePasswordPage = () => {
             '비밀번호가 성공적으로 변경되었습니다. | 로그인 페이지로 이동합니다.',
         );
 
-        // ✅ 비밀번호 변경 성공 시 로그아웃 처리
-        // onLogout 함수는 컴포넌트 최상단에 정의되었으므로 여기서 바로 사용 가능
-        onLogout();
-        // ✅ 로그인 페이지로 이동
-        navigate('/login');
-      } else if (response.data && response.data.statusCode !== undefined) {
-        console.error(
-          '비밀번호 변경 실패 - 백엔드 비즈니스 오류 응답:',
-          response.data,
-        );
-        setErrorMessage(
-          response.data.statusMessage || '비밀번호 변경 중 오류 발생 (백엔드).',
-        );
-      }
-    } catch (error) {
-      console.error('비밀번호 변경 요청 중 오류 발생:', error);
+                // ✅ 비밀번호 변경 성공 시 로그아웃 처리
+                // onLogout 함수는 컴포넌트 최상단에 정의되었으므로 여기서 바로 사용 가능
+                onLogout();
+                // ✅ 로그인 페이지로 이동
+                setModalType('login');
+
+
+            } else if (response.data && response.data.statusCode !== undefined) {
+                 console.error("비밀번호 변경 실패 - 백엔드 비즈니스 오류 응답:", response.data);
+                 setErrorMessage(response.data.statusMessage || '비밀번호 변경 중 오류 발생 (백엔드).');
+            }
+
+        } catch (error) {
+            console.error("비밀번호 변경 요청 중 오류 발생:", error);
 
       if (error.response) {
         console.error(
@@ -112,30 +113,28 @@ const UpdatePasswordPage = () => {
             ? error.response.data.statusMessage
             : '서버 오류';
 
-        if (error.response.status === 401 || error.response.status === 403) {
-          alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
-          // ✅ 오류 발생 시에도 로그아웃 및 리다이렉트 처리
-          // onLogout 함수는 컴포넌트 최상단에 정의되었으므로 여기서 바로 사용 가능
-          onLogout();
-          navigate('/login');
-        } else if (error.response.status === 400) {
-          setErrorMessage(
-            backendErrorMessage || '잘못된 요청 또는 유효성 검사 오류입니다.',
-          );
-        } else if (error.response.status === 404) {
-          setErrorMessage(backendErrorMessage || '사용자를 찾을 수 없습니다.');
-        } else {
-          setErrorMessage(
-            `비밀번호 변경 실패: ${backendErrorMessage} (상태: ${error.response.status})`,
-          );
+                if (error.response.status === 401 || error.response.status === 403) {
+                    alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
+                    // ✅ 오류 발생 시에도 로그아웃 및 리다이렉트 처리
+                    // onLogout 함수는 컴포넌트 최상단에 정의되었으므로 여기서 바로 사용 가능
+                    onLogout();
+                    setModalType('login');
+
+                } else if (error.response.status === 400) {
+                    setErrorMessage(backendErrorMessage || '잘못된 요청 또는 유효성 검사 오류입니다.');
+                } else if (error.response.status === 404) {
+                     setErrorMessage(backendErrorMessage || '사용자를 찾을 수 없습니다.');
+                 }
+                else {
+                    setErrorMessage(`비밀번호 변경 실패: ${backendErrorMessage} (상태: ${error.response.status})`);
+                }
+            } else if (error.request) {
+                setErrorMessage('네트워크 오류로 비밀번호 변경에 실패했습니다.');
+            } else {
+                setErrorMessage('요청 설정 중 오류가 발생했습니다.');
+            }
         }
-      } else if (error.request) {
-        setErrorMessage('네트워크 오류로 비밀번호 변경에 실패했습니다.');
-      } else {
-        setErrorMessage('요청 설정 중 오류가 발생했습니다.');
-      }
-    }
-  };
+    };
 
   return (
     <div className={styles['update-container']}>

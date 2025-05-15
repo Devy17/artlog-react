@@ -4,6 +4,7 @@ import AuthContext from '../../context/UserContext'; // Correct path if differen
 import { API_BASE_URL, USER } from '../../Axios/host-config';
 import styles from './SignUpPage.module.scss';
 import axios from 'axios'; // axios 임포트
+import ModalContext from '../../Modal/ModalContext';
 
 const SignUpPage = () => {
   // ... (existing states for userId, userName, email, phone, hintKey, hintValue)
@@ -29,6 +30,7 @@ const SignUpPage = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useContext(AuthContext); // Assuming correct path for AuthContext
 
+  const { setModalType } = useContext(ModalContext);
   // ... (useEffect for isLoggedIn check - same as before)
   useEffect(() => {
     if (isLoggedIn) {
@@ -254,7 +256,7 @@ const SignUpPage = () => {
         alert(
           `${response.data.result}님 환영합니다! 회원가입이 완료되었습니다.`,
         );
-        navigate('/login'); // 로그인 페이지로 이동
+        setModalType('login'); // 로그인 페이지로 이동
       } else {
         console.error(
           'Signup failed - Backend error:',
