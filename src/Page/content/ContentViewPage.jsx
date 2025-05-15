@@ -52,14 +52,11 @@ const ContentViewPage = () => {
   };
 
   return (
-    <div className={styles['content-view-page']}>
-      <h2 className={styles['page-title']}>전시 정보</h2>
-       <div className={styles['filter-sort-container']}>
-         <div className={styles['sort-options']}>
-          <span className={styles['sort-text']}>최신순</span>
-     </div>
+    <div style={{ paddingTop: 300 }}>
+      <div>전시 정보</div>
+      <div>
+        <div>최신순</div>
       </div>
-
       <div>
         {loading ? (
           <Grid container spacing={2} columns={3}>
