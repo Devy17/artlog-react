@@ -326,7 +326,7 @@ const handleSaveEditedReview = async () => {
   {/* 상세 정보 */}
   <div className={styles['item-details']}>
     <div className={styles['item-place-date']}>
-      {`[콘텐츠 정보 필요] Content ID: ${review.contentId}`}
+      {`콘텐츠 아이디: ${review.contentId}`}
     </div>
 
     {/* 수정 중이면 textarea, 아니면 내용 표시 */}
