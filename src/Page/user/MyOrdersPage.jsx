@@ -47,6 +47,7 @@ const MyOrdersPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      console.log('📦 주문 응답:', response.data.result);
 
       if (response.data?.statusCode === 200) {
         setOrderList(Array.isArray(response.data.result) ? response.data.result : []);
@@ -176,6 +177,7 @@ const MyOrdersPage = () => {
     setSortCriterion(criterion);
     setSortDirection(direction);
   };
+  
 
   return (
     <div className={styles['my-orders-page-wrapper']}>
@@ -226,14 +228,14 @@ const MyOrdersPage = () => {
                 </div>
                 <p className={styles['order-status']}>
                   <strong>상태:</strong>{' '}
-                  <span className={order.active === 1 ? styles.active : styles.cancelled}>
-                    {order.active === 1 ? '예매 완료' : '취소됨'}
+                  <span className={order.active === true ? styles.active : styles.cancelled}>
+                    {order.active === true ? '예매 완료' : '취소됨'}
                   </span>
                 </p>
                 <div className={styles['button-group']}>
                   <button
                     onClick={() => handleCancelOrder(order.id)}
-                    disabled={order.active !== 1}
+                    disabled={order.active !== true}
                     className={styles['cancel-button']}
                   >
                     주문 취소
