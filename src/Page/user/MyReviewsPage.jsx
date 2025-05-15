@@ -36,9 +36,7 @@ const MyReviewsPage = () => {
         if (!currentUserKey || !authToken) { // 토큰 체크도 추가
             setReviewData([]);
             setLoading(false);
-            setError('사용자 정보를 찾을 수 없거나 로그인이 필요합니다.'); // 메시지 수정
-            // TODO: 로그인 페이지로 리다이렉트 등 처리 (e.g., navigate('/login'))
-            return;
+            setError('사용자 정보를 찾을 수 없거나 로그인이 필요합니다.'); // 메시지 수정            return;
         }
 
         setLoading(true); // ✅ 로딩 시작

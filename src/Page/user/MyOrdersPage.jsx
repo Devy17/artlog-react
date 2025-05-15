@@ -6,10 +6,12 @@ import AuthContext from '../../context/UserContext';
 import { API_BASE_URL, ORDER } from '../../Axios/host-config';
 import styles from './MyOrdersPage.module.scss';
 import axios from "axios";
+import ModalContext from '../../Modal/ModalContext';
 
 const MyOrdersPage = () => {
     const navigate = useNavigate();
     const authCtx = useContext(AuthContext);
+    const { setModalType } = useContext(ModalContext);
 
     const [orderList, setOrderList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -20,7 +22,7 @@ const MyOrdersPage = () => {
     const [sortCriterion, setSortCriterion] = useState('registDate'); // ✅ 정렬 기준 (기본: 예매일)
     const [sortDirection, setSortDirection] = useState('desc'); // ✅ 정렬 방향 (기본: 내림차순)
 
-
+    
     // 현재 로그인한 사용자 ID (주문 조회에 사용)
     const loggedInUserId = localStorage.getItem("USER_ID");
 
@@ -82,7 +84,7 @@ const MyOrdersPage = () => {
                 if (httpStatus === 401 || httpStatus === 403) {
                     alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
                     authCtx.onLogout();
-                    navigate('/login');
+                    setModalType('login');
                 }
                 else {
                     setError(`주문 목록 가져오기 실패: ${backendErrorMessage} (상태: ${httpStatus}, 코드: ${backendStatusCodeInBody})`);
@@ -109,7 +111,7 @@ const MyOrdersPage = () => {
             setError("로그인이 필요합니다.");
             alert('로그인이 필요한 페이지입니다.');
             authCtx.onLogout();
-            navigate('/login');
+setModalType('login');
             return;
         }
 
@@ -134,7 +136,7 @@ const MyOrdersPage = () => {
               setError("사용자 인증 정보가 없습니다. 다시 로그인해주세요.");
               alert('사용자 인증 정보가 없습니다. 다시 로그인해주세요.');
               authCtx.onLogout();
-              navigate('/login');
+              setModalType('login');
               setLoading(false);
               return;
          }
@@ -175,7 +177,7 @@ const MyOrdersPage = () => {
                 if (httpStatus === 401 || httpStatus === 403) {
                     alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
                     authCtx.onLogout();
-                    navigate('/login');
+                    setModalType('login');
                 } else {
                     setError(`주문 취소 실패: ${backendErrorMessage} (상태: ${httpStatus}, 코드: ${backendStatusCodeInBody})`);
                 }

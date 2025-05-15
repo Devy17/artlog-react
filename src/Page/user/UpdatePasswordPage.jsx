@@ -5,12 +5,13 @@ import axios from 'axios';
 import { API_BASE_URL, USER } from '../../Axios/host-config';
 import styles from './UpdatePasswordPage.module.scss';
 // import AuthContext from '../../context/UserContext'; // ✅ 이 줄은 중복되므로 제거
+import ModalContext from '../../Modal/ModalContext';
 
 const UpdatePasswordPage = () => {
     const navigate = useNavigate();
     // ✅ useContext 호출은 컴포넌트 함수 최상단에 위치해야 합니다.
     const { onLogout } = useContext(AuthContext); // <-- 이 줄이 여기에 있어야 합니다.
-
+    const { setModalType } = useContext(ModalContext);
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -56,7 +57,7 @@ const UpdatePasswordPage = () => {
              alert('로그인이 필요합니다.');
              // ✅ onLogout 함수는 이제 컴포넌트 스코프에 정의되어 있으므로 바로 사용 가능
              onLogout();
-             navigate('/login');
+             setModalType('login');
              return;
         }
 
@@ -87,7 +88,7 @@ const UpdatePasswordPage = () => {
                 // onLogout 함수는 컴포넌트 최상단에 정의되었으므로 여기서 바로 사용 가능
                 onLogout();
                 // ✅ 로그인 페이지로 이동
-                navigate('/login');
+                setModalType('login');
 
 
             } else if (response.data && response.data.statusCode !== undefined) {
@@ -107,7 +108,7 @@ const UpdatePasswordPage = () => {
                     // ✅ 오류 발생 시에도 로그아웃 및 리다이렉트 처리
                     // onLogout 함수는 컴포넌트 최상단에 정의되었으므로 여기서 바로 사용 가능
                     onLogout();
-                    navigate('/login');
+                    setModalType('login');
 
                 } else if (error.response.status === 400) {
                     setErrorMessage(backendErrorMessage || '잘못된 요청 또는 유효성 검사 오류입니다.');

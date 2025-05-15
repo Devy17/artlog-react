@@ -1,150 +1,134 @@
-/* src/pages/ContentViewPage.module.scss */
 
-/* ✅ 페이지 전체 컨테이너 스타일 */
 .content-view-page {
-    // ✅ 헤더 높이만큼 상단 패딩 추가 (실제 헤더 높이에 맞춰 이 값 조정 필요)
-    padding-top: 80px; // 예시: 일반적인 헤더 높이
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
-    background-color: #f8f8f8; // 페이지 배경색 (MyOrdersPage와 유사)
-    min-height: 100vh; // 최소 높이
-    max-width: 1200px; // 페이지 최대 너비
-    margin: 0 auto; // 가운데 정렬
-    box-sizing: border-box; // 패딩을 너비 계산에 포함
+  max-width: 1200px; // 페이지 최대 너비 설정 (가운데 정렬하기 좋음)
+  margin: 0 auto; // 가운데 정렬
+  padding: 20px; // 내부 여백
+  padding-top: 320px; // 상단 패딩 (헤더 높이 고려)
 
-    @media (max-width: 768px) {
-        padding-top: 70px; // 모바일 헤더 높이에 맞춰 조정
-        padding-left: 15px;
-        padding-right: 15px;
-        padding-bottom: 15px;
-    }
-}
+  // 로딩, 오류, 데이터 없음 메시지 스타일
+  .loading-message,
+  .error-message,
+  .no-data-message {
+    text-align: center; // 텍스트 가운데 정렬
+    font-size: 1.2em; // 글자 크기
+    color: #555; // 기본 글자 색상
+    margin-top: 20px; // 상단 여백
+  }
 
-/* ✅ 페이지 제목 스타일 ("전시 정보") */
-.page-title { // JSX에서 h2에 적용
-    text-align: center;
-    color: #333;
-    margin-bottom: 30px;
-    font-size: 2em; // 좀 더 큰 제목
-    font-weight: bold;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee; // 하단 구분선
-}
+  .error-message {
+    color: #d32f2f; // 오류 메시지는 붉은색
+  }
 
-/* ✅ 필터/정렬 영역 스타일 ("최신순") */
-.filter-sort-area { // JSX에서 해당 div에 적용
-    display: flex;
-    justify-content: flex-end; // 우측 정렬
-    margin-bottom: 20px;
-    font-size: 0.9em;
-    color: #555;
+  .page-title {
+    font-size: 2em; // 제목 글자 크기
+    font-weight: bold; // 글자 두께
+    margin-bottom: 20px; // 하단 여백
+    text-align: center; // 가운데 정렬
+  }
 
-    // TODO: 실제 Select/Input 요소 스타일링 필요 시 여기에 추가
-    // 예: select { padding: ...; border: ...; }
-}
+  .filter-sort-container {
+    display: flex; // 자식 요소들을 가로로 배치
+    justify-content: flex-end; // 오른쪽 정렬
+    align-items: center; // 세로 가운데 정렬
+    margin-bottom: 20px; // 하단 여백
+    padding: 0 10px; // 좌우 패딩
+  }
 
-/* ✅ 콘텐츠 목록을 감싸는 컨테이너 (Grid 컨테이너의 부모) */
-.content-list-container { // JSX에서 Grid container를 감싸는 div에 적용
-    // 필요한 경우 여기에 배경색, 패딩 등 추가 가능
-    // background-color: #fff;
-    // padding: 20px;
-    // border-radius: 8px;
-    // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-}
-
-
-/* ✅ 콘텐츠 개별 항목 스타일 (Grid item) */
-.content-item { // JSX에서 Grid item에 적용
-    text-align: center; // 이미지 및 제목 가운데 정렬
-    cursor: pointer; // 클릭 가능한 요소임을 표시
-    background-color: #fff; // 항목 배경색
-    border-radius: 8px; // 모서리 둥글게
-    overflow: hidden; // 둥근 모서리 밖으로 내용 안 나가도록
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); // 그림자 효과
-    transition: transform 0.3s ease, box-shadow 0.3s ease; // 호버 효과
-    padding-bottom: 15px; // 하단에 제목과 상세 정보 여백
-
-    &:hover {
-        transform: translateY(-5px); // 호버 시 살짝 위로
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); // 호버 시 그림자 진하게
-    }
-
-    /* ✅ 이미지 스타일 */
-    .item-image { // JSX에서 CardMedia에 적용
-        width: 100%; // 부모 컨테이너 (Grid item) 너비에 맞춤
-        height: 250px; // 이미지 고정 높이 (원하는 비율에 맞춰 조정)
-        object-fit: cover; // 이미지가 비율 유지하며 컨테이너 채우도록
-        margin-bottom: 10px; // 이미지 하단 여백
-        // object-position: center; // 이미지 중앙 정렬
-    }
-
-    /* ✅ 제목 스타일 */
-    .item-title { // JSX에서 제목 div에 적용
-        font-size: 1.1em;
-        font-weight: bold;
-        color: #333;
-        padding: 0 10px; // 좌우 패딩
-        text-overflow: ellipsis; // 넘치는 텍스트 ... 처리
-        white-space: nowrap; // 줄바꿈 방지
-        overflow: hidden; // 넘치는 텍스트 숨김
-    }
-
-    /* TODO: 장소, 기간 등 상세 정보 스타일 필요 시 추가 */
-    .item-details { // 예시 클래스
-        font-size: 0.9em;
-        color: #666;
-        padding: 0 10px;
-        margin-top: 5px;
-    }
-}
-
-/* ✅ 로딩 및 메시지 스타일 */
-.loading-message, // 초기 로딩 메시지
-.loading-more-message, // 더보기 로딩 메시지
-.error-message, // 오류 메시지
-.no-content-message { // 데이터 없음 메시지
-    text-align: center;
-    font-size: 1.1em;
-    margin-top: 30px;
-}
-
-.loading-message,
-.loading-more-message {
-    color: #007bff; // 파란색 로딩 메시지
-}
-
-.error-message {
-    color: #dc3545; // 빨간색 오류 메시지
-}
-
-.no-content-message {
-    color: #666; // 회색 정보 메시지
-}
-
-
-/* ✅ 더보기 버튼 스타일 */
-.load-more-button { // JSX에서 버튼에 적용
-    display: block; // 블록 요소로 만들어서
-    width: 200px; // 너비 설정
-    margin: 30px auto; // 중앙 정렬 및 상하 여백
-    padding: 12px 20px;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0; // 연한 배경색
-    border-radius: 5px;
-    cursor: pointer;
+  .sort-options {
+    // "최신순" 등의 정렬 텍스트나 셀렉트 박스 스타일
     font-size: 1em;
-    font-weight: bold;
-    text-align: center;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    color: #333;
+  }
+
+  .content-list-area {
+    // 콘텐츠 목록 (Grid) 또는 메시지가 표시될 영역
+    margin-top: 20px; // 상단 여백
+
+    // MUI Grid Container에 직접 적용되는 스타일은 SCSS에서 제어하기 어려울 수 있습니다.
+    // Grid item 내부의 .content-item에 스타일을 적용하는 것이 일반적입니다.
+  }
+
+  .content-grid-item {
+    // 각 Grid Item (콘텐츠 항목 하나를 감싸는 부분) 스타일
+    // MUI Grid의 spacing에 의해 간격은 자동 조절됩니다.
+    // 클릭 가능하도록 커서 변경
+    cursor: pointer;
+    // transition: transform 0.2s ease-in-out; // 호버 효과 (선택 사항)
 
     &:hover {
-        background-color: #e0e0e0;
-        border-color: #bbb;
+      // 호버 시 효과 (선택 사항)
+      // transform: translateY(-5px);
+      opacity: 0.9;
+    }
+  }
+
+
+  .content-item {
+    // 각 콘텐츠 항목 (썸네일과 제목을 포함하는 박스) 스타일
+    border: 1px solid #eee; // 경계선
+    border-radius: 8px; // 모서리 둥글게
+    overflow: hidden; // 모서리를 둥글게 할 때 이미지 넘치는 것 방지
+    display: flex; // 내부 요소를 세로로 배치 (flex-direction 기본값은 row이지만, 이미지와 텍스트가 세로로 쌓이게 조정)
+    flex-direction: column; // 세로 방향 배치
+    background-color: #fff; // 배경색
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // 그림자 효과
+    height: 100%; // Grid item에 맞춰 높이 100% 설정 (동일 높이 유지에 도움)
+  }
+
+  .content-thumbnail {
+    // 썸네일 이미지 스타일 (CardMedia)
+    width: 100%; // 부모 (.content-item) 너비에 맞춤
+    // height: 800px; // 원본 코드의 높이 (매우 큼) - 레이아웃 이미지에 맞게 조절 필요
+    height: 300px; // 예시: 적절한 썸네일 높이 설정
+    object-fit: cover; // 이미지가 비율 유지하며 꽉 차게
+    display: block; // 이미지 하단의 미세한 여백 제거
+    border-bottom: 1px solid #eee; // 이미지 하단 경계선
+  }
+
+  .content-info {
+    // 썸네일 아래 텍스트 정보를 감싸는 영역
+    padding: 15px; // 내부 여백
+    flex-grow: 1; // 남은 공간을 채우도록 설정 (내용이 적어도 제목 영역이 일정 공간 차지)
+    display: flex; // 내부 요소 세로 배치
+    flex-direction: column;
+    justify-content: space-between; // 제목과 다른 정보(추후 추가될) 간 간격 조절
+  }
+
+  .content-title {
+    // 콘텐츠 제목 스타일
+    font-size: 1.1em; // 글자 크기
+    font-weight: bold; // 글자 두께
+    margin-bottom: 10px; // 하단 여백
+    color: #333; // 글자 색상
+    // 텍스트가 길 경우 생략하고 ... 표시 (선택 사항)
+    // white-space: nowrap;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+  }
+
+  // TODO: 다른 콘텐츠 정보 (장소, 일시 등) 스타일 추가 필요 (.content-info 내부의 p 태그 등)
+
+
+  .load-more-button {
+    display: block; // 블록 요소로 만들어 너비 전체 사용
+    width: 100%; // 부모(.content-view-page) 너비에 맞춤
+    padding: 15px 20px; // 내부 여백
+    background-color: #007bff; // 배경색 (파란색 계열)
+    color: white; // 글자색
+    border: none; // 경계선 없음
+    border-radius: 5px; // 모서리 둥글게
+    font-size: 1.1em; // 글자 크기
+    cursor: pointer; // 마우스 오버 시 커서 변경
+    margin-top: 30px; // 상단 여백
+    transition: background-color 0.2s ease; // 호버 효과 애니메이션
+
+    &:hover {
+      background-color: #0056b3; // 호버 시 배경색 변경
     }
 
     &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
+      background-color: #ccc; // 비활성화 시 배경색
+      cursor: not-allowed; // 비활성화 시 커서
     }
+  }
 }
