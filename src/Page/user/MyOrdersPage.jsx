@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { useNavigate, useSearchParams, createSearchParams } from 'react-router-dom'; // createSearchParams import
 import AuthContext from '../../context/UserContext';
-import { API_BASE_URL, ORDER } from '../../Axios/host-config';
+import { API_BASE_URL, ORDER, API } from '../../Axios/host-config';
 import styles from './MyOrdersPage.module.scss';
 import axios from "axios"; // axiosInstance 사용이 권장됩니다.
 import ModalContext from '../../Modal/ModalContext';
@@ -36,31 +36,50 @@ const MyOrdersPage = () => {
 
   const numberOfContent = 9;
 
-  const contentClickHandler = (contentId) => {
-    const orderData = orderList.find((item) => item.contentId === contentId);
+   useEffect(() => {
+    const getData = async () => {
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}${API}/select?numOfRows=${numberOfContent}&pageNo=${page}`,
+      );
+      const data = response.data.result;
+      console.log(data);
 
-    if (!orderData) {
-      console.warn("해당 콘텐츠 ID를 찾을 수 없습니다.");
-      return;
-    }
-
-    const param = {
-      id: orderData.contentId,
-      title: orderData.contentTitle,
-      venue: orderData.contentVenue,
-      charge: orderData.contentCharge,
-      period: orderData.contentPeriod,
-      thumbnail: orderData.contentThumbnail,
-      url: orderData.contentUrl,
-      startDate: orderData.startDate,
-      endDate: orderData.endDate,
+      console.log(data[0].contentThumbnail);
+      return data;
     };
 
-    navigate({
-      pathname: '/contentDetail',
-      search: '?' + createSearchParams(param).toString(),
+    getData().then((response) => {
+      setApiData((prev) => [...prev, ...response]);
     });
+  }, [page]);
+
+ const contentClickHandler = (contentId) => {
+  const orderData = orderList.find((item) => item.contentId === contentId);
+  const contentData = apiData.find((item) => item.contentId === contentId);
+
+  if (!orderData || !contentData) {
+    console.warn("필요한 콘텐츠 정보를 찾을 수 없습니다.");
+    return;
+  }
+
+  const param = {
+    id: contentId,
+    title: contentData.contentTitle,
+    venue: contentData.contentVenue,
+    charge: contentData.contentCharge,
+    period: contentData.contentPeriod,
+    thumbnail: contentData.contentThumbnail,
+    url: contentData.contentUrl,
+    startDate: contentData.startDate,
+    endDate: contentData.endDate,
   };
+
+  navigate({
+    pathname: '/contentDetail',
+    search: '?' + createSearchParams(param).toString(),
+  });
+};
+
 
 
   const fetchMyOrders = useCallback(async () => {
