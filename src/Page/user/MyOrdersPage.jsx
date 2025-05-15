@@ -7,12 +7,13 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams,createSearchParams } from 'react-router-dom';
 import AuthContext from '../../context/UserContext';
 import { API_BASE_URL, ORDER } from '../../Axios/host-config';
 import styles from './MyOrdersPage.module.scss';
 import axios from "axios";
 import ModalContext from '../../Modal/ModalContext';
+
 
 const MyOrdersPage = () => {
   const navigate = useNavigate();
@@ -29,6 +30,16 @@ const MyOrdersPage = () => {
 
   const token = useMemo(() => localStorage.getItem("ACCESS_TOKEN"), []);
   const userKey = useMemo(() => localStorage.getItem("USER_ID"), []);
+
+  const [searchParams] = useSearchParams();
+  
+    const orderClickHandler = () => {
+      navi({
+        pathname: '/order',
+        search: '?' + createSearchParams(searchParams).toString(),
+      });
+    };
+
 
   const fetchMyOrders = useCallback(async () => {
     if (!token || !userKey) {
