@@ -15,6 +15,12 @@ const ContentDetailPage = () => {
   const [searchParams] = useSearchParams();
   const navi = useNavigate();
 
+  const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
+
+  const handleReviewSubmit = () => {
+    setReviewRefreshKey((prev) => prev + 1);
+  };
+
   const isPastOrToday = (endDate) => {
     const inputDate = new Date(endDate);
     const today = new Date();
@@ -77,8 +83,14 @@ const ContentDetailPage = () => {
       </div>
 
       <div className={style['review-section']}></div>
-      <WriteReview contentId={searchParams.get('id')} />
-      <ShowReviews contentId={searchParams.get('id')} />
+      <WriteReview
+        contentId={searchParams.get('id')}
+        onSubmit={handleReviewSubmit}
+      />
+      <ShowReviews
+        contentId={searchParams.get('id')}
+        refreshKey={reviewRefreshKey}
+      />
     </div>
   );
 };
