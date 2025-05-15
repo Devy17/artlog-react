@@ -3,42 +3,38 @@ import React, { useState } from 'react';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API_BASE_URL, REVIEW } from '../../Axios/host-config';
 
-const WriteReview = ({ contentId }) => {
+const WriteReview = ({ contentId, onSubmit }) => {
   const [input, setInput] = useState('');
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(contentId);
 
-    const postData = async (id, input) => {
+    const postData = async () => {
       try {
-        await axiosInstance
-          .post(`${API_BASE_URL}${REVIEW}/insert`, {
-            contentId: id,
-            reviewContent: input.trim(),
-          })
-          .then((response) => console.log(response.data));
+        await axiosInstance.post(`${API_BASE_URL}${REVIEW}/insert`, {
+          contentId,
+          reviewContent: input.trim(),
+        });
+
+        setInput('');
+        if (onSubmit) onSubmit(); // ⭐ 등록 후 알림
       } catch (e) {
         console.log(e);
       }
     };
 
-    postData(contentId, input);
+    postData();
   };
+
   return (
-    <>
-      <div>
-        <form onSubmit={handleSubmit} style={{ display: 'flex' }}>
-          <TextField
-            label='댓글을 입력하세요'
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <Button type='submit' variant='contained' sx={{ mt: 1 }}>
-            등록
-          </Button>
-        </form>
-      </div>
-    </>
+    <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '10px' }}>
+      <TextField
+        label='댓글을 입력하세요'
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <Button type='submit' variant='contained'>등록</Button>
+    </form>
   );
 };
 
