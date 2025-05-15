@@ -18,6 +18,7 @@ const ContentDetailPage = () => {
   const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
 
   const handleReviewSubmit = () => {
+
     setReviewRefreshKey((prev) => prev + 1); // 리뷰 작성 시 key 증가 → ShowReviews 다시 실행
   };
 
@@ -140,8 +141,7 @@ const ContentDetailPage = () => {
           />
       </div> {/* reviews-section div 종료 */}
 
-    </div> {/* content-detail-page-wrapper div 종료 */}
-    </>
+
   );
 };
 
