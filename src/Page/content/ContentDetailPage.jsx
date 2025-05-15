@@ -18,7 +18,7 @@ const ContentDetailPage = () => {
   const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
 
   const handleReviewSubmit = () => {
-    setReviewRefreshKey((prev) => prev + 1); // 리뷰 작성 시 key 증가 → ShowReviews 다시 실행
+    setReviewRefreshKey((prev) => prev + 1);
   };
 
   const isPastOrToday = (endDate) => {
@@ -85,11 +85,11 @@ const ContentDetailPage = () => {
       <div className={style['review-section']}></div>
       <WriteReview
         contentId={searchParams.get('id')}
-        onSubmit={handleReviewSubmit} // ⭐ 콜백 전달
+        onSubmit={handleReviewSubmit}
       />
       <ShowReviews
         contentId={searchParams.get('id')}
-        refreshKey={reviewRefreshKey} // ⭐ key 전달
+        refreshKey={reviewRefreshKey}
       />
     </div>
   );
