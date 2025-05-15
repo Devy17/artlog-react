@@ -15,7 +15,7 @@ function App() {
         <div className='App'>
           <Header />
           <div className='content-wrapper'>
-            <AppRouter />
+            <AppRouter /> {/* 모든 라우팅은 여기서 처리 */}
           </div>
           <Footer />
           <ModalController modalType={modalType} setModalType={setModalType} />

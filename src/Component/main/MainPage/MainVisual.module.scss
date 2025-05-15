@@ -1,7 +1,7 @@
 .dual_visual {
   position: relative;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1800px;
   margin: 0 auto;
   height: 70vh;
   overflow: hidden;
@@ -14,13 +14,19 @@
 
   .visual_box,
   .visual_box_empty {
-    flex: 1;
-    background-size: contain;
+    width: 33.333%;
+    height: 100%;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-color: #0D1B2AFF;
+    background-color: #0d1b2aff;
     position: relative;
     overflow: hidden;
+    cursor: pointer;
+  }
+
+  .visual_box_empty {
+    background-color: #f0f0f0;
   }
 
   .overlay {
@@ -31,6 +37,9 @@
     align-items: center;
     background-color: transparent;
     transition: background-color 0.4s ease;
+    flex-direction: column;
+    padding: 0 10px;
+    text-align: center;
   }
 
   .title {
@@ -39,33 +48,30 @@
     font-weight: bold;
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    text-align: center;
+    transition:
+      opacity 0.4s ease,
+      transform 0.4s ease;
+  }
+
+  .description {
+    color: #fff;
+    font-size: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.4s ease,
+      transform 0.4s ease;
+    margin-top: 8px;
   }
 
   .visual_box:hover .overlay {
-    background-color: rgba(202, 202, 202, 0.4);
+    background-color: rgba(202, 202, 202, 0.6);
   }
 
-  .visual_box:hover .title {
+  .visual_box:hover .title,
+  .visual_box:hover .description {
     opacity: 1;
     transform: translateY(0);
-  }
-
-  .color0:hover .overlay {
-    background-color: rgba(255, 192, 203, 0.8); // 핑크
-  }
-
-  .color1:hover .overlay {
-    background-color: rgba(135, 206, 250, 0.8); // 파랑
-  }
-
-  .color2:hover .overlay {
-    background-color: rgba(255, 165, 0, 0.8); // 주황
-  }
-
-  .color3:hover .overlay {
-    background-color: rgba(255, 255, 0, 0.8); // 노랑
   }
 
   .btn_move {
@@ -99,5 +105,12 @@
 
   .btn_next {
     right: 20px;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 100px 0;
+    font-size: 1.2rem;
+    color: #666;
   }
 }

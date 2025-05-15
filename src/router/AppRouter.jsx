@@ -13,11 +13,12 @@ import MainVisual from '../Component/main/MainPage/MainVisual';
 import ContentDetailPage from '../Page/content/ContentDetailPage';
 import MyReviewsPage from '../Page/user/MyReviewsPage';
 import OrderPage from '../Page/order/OrderPage';
+import MainPage from '../Component/main/MainPage/MainPage';
 
 const AppRouter = () => {
   return (
     <Routes>
-      <Route path='/' element={<MainVisual />} />
+      <Route path='/' element={<MainPage />} />
       {/* <Route path='/' element={<ContentViewPage />} /> */}
       {/* 로그인 토큰 테스트 */}
       <Route path='/login' element={<SignInPage />} />
