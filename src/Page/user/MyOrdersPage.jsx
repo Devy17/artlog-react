@@ -11,23 +11,26 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/UserContext';
 import { API_BASE_URL, ORDER } from '../../Axios/host-config';
 import styles from './MyOrdersPage.module.scss';
-import axios from 'axios';
+import axios from "axios";
+import ModalContext from '../../Modal/ModalContext';
 
 const MyOrdersPage = () => {
-  const navigate = useNavigate();
-  const authCtx = useContext(AuthContext);
+    const navigate = useNavigate();
+    const authCtx = useContext(AuthContext);
+    const { setModalType } = useContext(ModalContext);
 
   const [orderList, setOrderList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // ✅ 검색/정렬 관련 상태 추가
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortCriterion, setSortCriterion] = useState('registDate'); // ✅ 정렬 기준 (기본: 예매일)
-  const [sortDirection, setSortDirection] = useState('desc'); // ✅ 정렬 방향 (기본: 내림차순)
+    // ✅ 검색/정렬 관련 상태 추가
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortCriterion, setSortCriterion] = useState('registDate'); // ✅ 정렬 기준 (기본: 예매일)
+    const [sortDirection, setSortDirection] = useState('desc'); // ✅ 정렬 방향 (기본: 내림차순)
 
-  // 현재 로그인한 사용자 ID (주문 조회에 사용)
-  const loggedInUserId = localStorage.getItem('USER_ID');
+    
+    // 현재 로그인한 사용자 ID (주문 조회에 사용)
+    const loggedInUserId = localStorage.getItem("USER_ID");
 
   // ✅ 사용자별 주문 목록 가져오기 함수
   const fetchMyOrders = useCallback(async () => {
@@ -117,46 +120,39 @@ const MyOrdersPage = () => {
             ? err.response.data.statusCode
             : 'N/A';
 
-        if (httpStatus === 401 || httpStatus === 403) {
-          alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
-          authCtx.onLogout();
-          navigate('/login');
-        } else {
-          setError(
-            `주문 목록 가져오기 실패: ${backendErrorMessage} (상태: ${httpStatus}, 코드: ${backendStatusCodeInBody})`,
-          );
-          console.error(
-            '주문 목록 가져오기 실패 - 백엔드 오류 응답:',
-            httpStatus,
-            backendStatusCode,
-            backendStatusMessage,
-            response.data,
-          );
+                if (httpStatus === 401 || httpStatus === 403) {
+                    alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
+                    authCtx.onLogout();
+                    setModalType('login');
+                }
+                else {
+                    setError(`주문 목록 가져오기 실패: ${backendErrorMessage} (상태: ${httpStatus}, 코드: ${backendStatusCodeInBody})`);
+                    console.error("주문 목록 가져오기 실패 - 백엔드 오류 응답:", httpStatus, backendStatusCode, backendStatusMessage, response.data);
+
+                }
+            } else {
+                setError('네트워크 오류로 주문 목록을 가져올 수 없습니다.');
+            }
+            setOrderList([]);
+        } finally {
+            setLoading(false);
         }
-      } else {
-        setError('네트워크 오류로 주문 목록을 가져올 수 없습니다.');
-      }
-      setOrderList([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [authCtx, navigate]);
+    }, [authCtx, navigate]);
+
 
   useEffect(() => {
     const token = localStorage.getItem('ACCESS_TOKEN');
     const userKey = localStorage.getItem('USER_ID');
 
-    if (!token || !userKey) {
-      console.log(
-        'MyOrdersPage Mount: Authentication info missing. Redirecting.',
-      );
-      setLoading(false);
-      setError('로그인이 필요합니다.');
-      alert('로그인이 필요한 페이지입니다.');
-      authCtx.onLogout();
-      navigate('/login');
-      return;
-    }
+        if (!token || !userKey) {
+            console.log("MyOrdersPage Mount: Authentication info missing. Redirecting.");
+            setLoading(false);
+            setError("로그인이 필요합니다.");
+            alert('로그인이 필요한 페이지입니다.');
+            authCtx.onLogout();
+setModalType('login');
+            return;
+        }
 
     fetchMyOrders();
   }, [authCtx, navigate, fetchMyOrders]);
@@ -171,16 +167,16 @@ const MyOrdersPage = () => {
     setLoading(true);
     setError(null);
 
-    const token = localStorage.getItem('ACCESS_TOKEN');
-    const userKey = localStorage.getItem('USER_ID');
-    if (!token || !userKey) {
-      setError('사용자 인증 정보가 없습니다. 다시 로그인해주세요.');
-      alert('사용자 인증 정보가 없습니다. 다시 로그인해주세요.');
-      authCtx.onLogout();
-      navigate('/login');
-      setLoading(false);
-      return;
-    }
+        const token = localStorage.getItem("ACCESS_TOKEN");
+        const userKey = localStorage.getItem("USER_ID");
+         if (!token || !userKey) {
+              setError("사용자 인증 정보가 없습니다. 다시 로그인해주세요.");
+              alert('사용자 인증 정보가 없습니다. 다시 로그인해주세요.');
+              authCtx.onLogout();
+              setModalType('login');
+              setLoading(false);
+              return;
+         }
 
     try {
       const response = await axios.delete(
@@ -243,22 +239,21 @@ const MyOrdersPage = () => {
             ? err.response.data.statusCode
             : 'N/A';
 
-        if (httpStatus === 401 || httpStatus === 403) {
-          alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
-          authCtx.onLogout();
-          navigate('/login');
-        } else {
-          setError(
-            `주문 취소 실패: ${backendErrorMessage} (상태: ${httpStatus}, 코드: ${backendStatusCodeInBody})`,
-          );
+                if (httpStatus === 401 || httpStatus === 403) {
+                    alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
+                    authCtx.onLogout();
+                    setModalType('login');
+                } else {
+                    setError(`주문 취소 실패: ${backendErrorMessage} (상태: ${httpStatus}, 코드: ${backendStatusCodeInBody})`);
+                }
+            } else {
+                setError('네트워크 오류로 주문 취소에 실패했습니다.');
+            }
+        } finally {
+            setLoading(false);
         }
-      } else {
-        setError('네트워크 오류로 주문 취소에 실패했습니다.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
 
   // ✅ 핸들러: 리뷰 작성 버튼 클릭 (임시) (기존 코드 유지)
   const handleWriteReviewClick = (contentId) => {
