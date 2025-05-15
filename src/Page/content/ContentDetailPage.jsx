@@ -24,7 +24,7 @@ const ContentDetailPage = () => {
 
   const orderClickHandler = () => {
     navi({
-      pathname: '/',
+      pathname: '/order',
       search: '?' + createSearchParams(searchParams).toString(),
     });
   };

@@ -1,15 +1,17 @@
 import { Button } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // 스타일 파일 (원하면 삭제하거나 수정해도 됨)
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API_BASE_URL, ORDER } from '../../Axios/host-config';
+import ModalContext from '../../Modal/ModalContext';
 
 const OrderPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [searchParams] = useSearchParams();
   const [humanCount, setHumanCount] = useState(1);
+  const { setModalType } = useContext(ModalContext);
   const [userCouponKey, setUserCouponKey] = useState(null);
 
   const navi = useNavigate();
@@ -20,6 +22,7 @@ const OrderPage = () => {
 
   const couponButtonClickHandler = () => {
     // 여기에 coupon Modal 창
+    setModalType('orderCoupon');
   };
 
   const orderButtonClickHandler = () => {
@@ -59,6 +62,7 @@ const OrderPage = () => {
         <div className='date-select-title'>날짜 선택</div>
         <div className='calendar-wrapper'>
           <Calendar
+            minDate={new Date()}
             formatDay={(locale, date) => date.getDate()}
             calendarType='gregory'
             onChange={(date) => {
