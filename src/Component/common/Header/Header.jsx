@@ -54,9 +54,6 @@ const Header = () => {
                   <li>
                     <Link to='/exhibitions'>전시 정보</Link>
                   </li>
-                  <li>
-                    <Link to='/reviews'>리뷰</Link>
-                  </li>
                   {isLoggedIn && (
                     <li>
                       <Link to='/mypage'>마이페이지</Link>
