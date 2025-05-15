@@ -5,12 +5,6 @@ import { API_BASE_URL, REVIEW } from '../../Axios/host-config';
 
 const WriteReview = ({ contentId }) => {
   const [input, setInput] = useState('');
-
-  localStorage.setItem(
-    'ACCESS_TOKEN',
-    'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzQ3MjE1NDQ1LCJleHAiOjE3NDcyMjI2NDUsInJvbGUiOiJVU0VSIn0.jMErQUj4ludjxkg9Iq2Kf19ZwNv31wKGs8T4UOpssBgK861c5pt0jwflLv46yTcZDlX_4EdQ8_y8crKiWLXmNQ',
-  );
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(contentId);

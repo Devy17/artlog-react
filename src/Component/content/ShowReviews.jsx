@@ -7,18 +7,9 @@ const ShowReviews = ({ contentId }) => {
   const [reviewData, setReviewData] = useState([]);
   const [loading, isLoading] = useState(false);
 
-  //  테스트 용도
-  localStorage.setItem(
-    'ACCESS_TOKEN',
-    'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzQ3MjE1NDQ1LCJleHAiOjE3NDcyMjI2NDUsInJvbGUiOiJVU0VSIn0.jMErQUj4ludjxkg9Iq2Kf19ZwNv31wKGs8T4UOpssBgK861c5pt0jwflLv46yTcZDlX_4EdQ8_y8crKiWLXmNQ',
-  );
 
   useEffect(() => {
     const getData = async () => {
-      localStorage.setItem(
-        'ACCESS_TOKEN',
-        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzQ3MjE1NDQ1LCJleHAiOjE3NDcyMjI2NDUsInJvbGUiOiJVU0VSIn0.jMErQUj4ludjxkg9Iq2Kf19ZwNv31wKGs8T4UOpssBgK861c5pt0jwflLv46yTcZDlX_4EdQ8_y8crKiWLXmNQ',
-      );
       const response = await axiosInstance.get(
         `${API_BASE_URL}${REVIEW}/findByContentId/${contentId}`,
       );

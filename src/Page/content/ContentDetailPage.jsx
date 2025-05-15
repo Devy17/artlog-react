@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { ExAxiosInstance } from '../../Axios/ExAxiosConfig';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import {
+  createSearchParams,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import { Card, CardContent, CardMedia } from '@mui/material';
 import WriteReview from '../../Component/content/WriteReview';
 import ShowReviews from '../../Component/content/ShowReviews';
 
 const ContentDetailPage = () => {
   const [searchParams] = useSearchParams();
+  const navi = useNavigate();
 
   const isPastOrToday = (endDate) => {
     const inputDate = new Date(endDate);
@@ -14,6 +20,13 @@ const ContentDetailPage = () => {
     today.setHours(0, 0, 0, 0);
     inputDate.setHours(0, 0, 0, 0);
     return inputDate <= today;
+  };
+
+  const orderClickHandler = () => {
+    navi({
+      pathname: '/',
+      search: '?' + createSearchParams(searchParams).toString(),
+    });
   };
 
   return (
@@ -56,6 +69,7 @@ const ContentDetailPage = () => {
                 ? { display: 'none' }
                 : {}
             }
+            onClick={orderClickHandler}
           >
             예매하기
           </button>
