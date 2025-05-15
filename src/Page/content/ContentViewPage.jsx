@@ -27,10 +27,10 @@ const ContentViewPage = () => {
     };
 
     getData().then((response) => {
-      setApiData(response); // 전체 저장
+      setApiData((prev) => [...prev, ...response]); // 전체 저장
       isLoading(true); // 로딩 완료
     });
-  }, []);
+  }, [page]);
 
   const contentClickHandler = (data) => {
     const param = {
@@ -59,7 +59,7 @@ const ContentViewPage = () => {
       <div className={styles['filter-sort-area']}>최신순</div>
       <div className={styles['card-grid']}>
         {loading ? (
-          visibleData.map((data) => (
+          apiData.map((data) => (
             <div
               key={data.contentId}
               className={styles['content-item']}
@@ -72,7 +72,7 @@ const ContentViewPage = () => {
                   alt={data.contentTitle}
                   className={styles['item-image']}
                   onError={(e) => {
-                    e.target.src = 'vite.svg';
+                    e.target.src = 'no-img.png';
                   }}
                 />
                 <div className={styles['item-textbox']}>
@@ -90,14 +90,13 @@ const ContentViewPage = () => {
           <div>Loading...</div>
         )}
       </div>
-      {visibleData.length < apiData.length && (
-        <button
-          className={styles['load-more-button']}
-          onClick={() => setPage(page + 1)}
-        >
-          더보기
-        </button>
-      )}
+
+      <button
+        className={styles['load-more-button']}
+        onClick={() => setPage(page + 1)}
+      >
+        더보기
+      </button>
     </div>
   );
 };
