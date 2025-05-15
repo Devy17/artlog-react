@@ -35,7 +35,7 @@ const Header = () => {
     }
   };
 
-  const logoImageUrl = './logo1.png';
+  const logoImageUrl = './logo.png';
 
   return (
     <>
