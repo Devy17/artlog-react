@@ -4,12 +4,14 @@ import styles from './ExhibitionListSection.module.scss';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import axiosInstance from '../../../Axios/AxiosBackConfig';
 import { API_BASE_URL, API } from '../../../Axios/host-config';
+import { useNavigate } from 'react-router-dom';
 
 function ExhibitionListSection() {
   const [exhibitions, setExhibitions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [pageIndex, setPageIndex] = useState(0);
+  const navigate = useNavigate();
 
   const ITEMS_PER_PAGE = 3;
 
@@ -74,9 +76,12 @@ function ExhibitionListSection() {
           <div className={styles.tit_area}>
             <h2 className={styles.tit}>전시정보</h2>
             <div className={styles.side}>
-              <a href='/exhibitions' className={styles.btn_more}>
+              <button
+                className={styles.btn_more}
+                onClick={() => navigate('/exhibitions')}
+              >
                 <span>더보기</span>
-              </a>
+              </button>
             </div>
           </div>
           <p className={styles.txt}>
