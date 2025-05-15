@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/UserContext'; // AuthContext 경로 확인
 import axios from 'axios';
@@ -19,36 +19,34 @@ const UpdatePasswordPage = () => {
     const loggedInUserId = localStorage.getItem("USER_ID"); // URL에 사용
 
 
-    const handlePasswordUpdate = async (e) => {
-        e.preventDefault();
+  const handlePasswordUpdate = async (e) => {
+    e.preventDefault();
 
-        // ✅ useContext 호출은 여기서 제거합니다.
-        // const { onLogout } = useContext(AuthContext); // ✅ 이 줄은 제거
+    // ✅ useContext 호출은 여기서 제거합니다.
+    // const { onLogout } = useContext(AuthContext); // ✅ 이 줄은 제거
 
+    // 클라이언트 측: 새 비밀번호 확인 일치 여부
+    if (newPassword !== confirmPassword) {
+      setErrorMessage('새 비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+      return;
+    }
+    // 새 비밀번호 길이 검사
+    if (newPassword.length < 8) {
+      setErrorMessage('비밀번호는 최소 8자 이상이어야 합니다.');
+      return;
+    }
 
-        // 클라이언트 측: 새 비밀번호 확인 일치 여부
-        if (newPassword !== confirmPassword) {
-            setErrorMessage('새 비밀번호와 비밀번호 확인이 일치하지 않습니다.');
-            return;
-        }
-        // 새 비밀번호 길이 검사
-        if (newPassword.length < 8) {
-            setErrorMessage('비밀번호는 최소 8자 이상이어야 합니다.');
-            return;
-        }
+    // 새 비밀번호와 현재 비밀번호가 동일한 경우 방지
+    if (currentPassword === newPassword) {
+      setErrorMessage('새 비밀번호는 현재 비밀번호와 달라야 합니다.');
+      return;
+    }
 
-         // 새 비밀번호와 현재 비밀번호가 동일한 경우 방지
-        if (currentPassword === newPassword) {
-            setErrorMessage('새 비밀번호는 현재 비밀번호와 달라야 합니다.');
-            return;
-        }
-
-
-        // 현재 비밀번호를 payload에 포함해야 하는지는 백엔드 API 명세 확인 필요
-        const payload = {
-             // currentPassword: currentPassword, // 백엔드 필요시 추가
-             password: newPassword, // 새 비밀번호
-        };
+    // 현재 비밀번호를 payload에 포함해야 하는지는 백엔드 API 명세 확인 필요
+    const payload = {
+      // currentPassword: currentPassword, // 백엔드 필요시 추가
+      password: newPassword, // 새 비밀번호
+    };
 
 
         const token = localStorage.getItem("ACCESS_TOKEN");
@@ -61,28 +59,33 @@ const UpdatePasswordPage = () => {
              return;
         }
 
-        console.log('로그인한 유저 ID (URL에 사용):', loggedInUserId);
-        console.log('현재 비밀번호 (입력값):', currentPassword); // 이 값은 백엔드 DTO로 전달 안될 수 있음
-        console.log('새 비밀번호 (입력값, payload의 password로 전송):', newPassword);
-        console.log('전송 payload:', payload);
+    console.log('로그인한 유저 ID (URL에 사용):', loggedInUserId);
+    console.log('현재 비밀번호 (입력값):', currentPassword); // 이 값은 백엔드 DTO로 전달 안될 수 있음
+    console.log(
+      '새 비밀번호 (입력값, payload의 password로 전송):',
+      newPassword,
+    );
+    console.log('전송 payload:', payload);
 
+    try {
+      // ✅ useContext 호출은 여기서도 제거합니다.
+      // const { onLogout } = useContext(AuthContext); // ✅ 이 줄은 제거
 
-        try {
-            // ✅ useContext 호출은 여기서도 제거합니다.
-            // const { onLogout } = useContext(AuthContext); // ✅ 이 줄은 제거
+      const response = await axios.post(
+        `${API_BASE_URL}${USER}/updatePw/${loggedInUserId}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-            const response = await axios.post(
-                `${API_BASE_URL}${USER}/updatePw/${loggedInUserId}`,
-                payload,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-
-            if (response.data && response.data.statusCode === 200) {
-                alert(response.data.statusMessage || '비밀번호가 성공적으로 변경되었습니다. | 로그인 페이지로 이동합니다.');
+      if (response.data && response.data.statusCode === 200) {
+        alert(
+          response.data.statusMessage ||
+            '비밀번호가 성공적으로 변경되었습니다. | 로그인 페이지로 이동합니다.',
+        );
 
                 // ✅ 비밀번호 변경 성공 시 로그아웃 처리
                 // onLogout 함수는 컴포넌트 최상단에 정의되었으므로 여기서 바로 사용 가능
@@ -99,9 +102,16 @@ const UpdatePasswordPage = () => {
         } catch (error) {
             console.error("비밀번호 변경 요청 중 오류 발생:", error);
 
-            if (error.response) {
-                console.error("비밀번호 변경 실패 - HTTP 응답 상세:", error.response.status, error.response.data);
-                const backendErrorMessage = error.response.data && error.response.data.statusMessage ? error.response.data.statusMessage : '서버 오류';
+      if (error.response) {
+        console.error(
+          '비밀번호 변경 실패 - HTTP 응답 상세:',
+          error.response.status,
+          error.response.data,
+        );
+        const backendErrorMessage =
+          error.response.data && error.response.data.statusMessage
+            ? error.response.data.statusMessage
+            : '서버 오류';
 
                 if (error.response.status === 401 || error.response.status === 403) {
                     alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
@@ -126,55 +136,56 @@ const UpdatePasswordPage = () => {
         }
     };
 
-    return (
-      <div className={styles["update-container"]}>
+  return (
+    <div className={styles['update-container']}>
+      <div className={styles.update_inner}>
         <h2>비밀번호 변경</h2>
-
         <form onSubmit={handlePasswordUpdate}>
-           {/* 현재 비밀번호 입력 필드 - 백엔드 명세에 따라 필요 여부 확인 필요 */}
-           <div className={styles["form-group"]}>
-             <label htmlFor="current-password">현재 비밀번호</label>
-             <input
-               id="current-password"
-               type="password"
-               value={currentPassword}
-               onChange={(e) => setCurrentPassword(e.target.value)}
-               required
-             />
-           </div>
+          {/* 현재 비밀번호 입력 필드 - 백엔드 명세에 따라 필요 여부 확인 필요 */}
+          <div className={styles['form-group']}>
+            <label htmlFor='current-password'>현재 비밀번호</label>
+            <input
+              id='current-password'
+              type='password'
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              required
+            />
+          </div>
 
-         <div className={styles["form-group"]}>
-           <label htmlFor="new-password">새 비밀번호</label>
-           <input
-             id="new-password"
-             type="password"
-             value={newPassword}
-             onChange={(e) => setNewPassword(e.target.value)}
-             required
-           />
-         </div>
+          <div className={styles['form-group']}>
+            <label htmlFor='new-password'>새 비밀번호</label>
+            <input
+              id='new-password'
+              type='password'
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+          </div>
 
-         <div className={styles["form-group"]}>
-           <label htmlFor="confirm-password">비밀번호 확인</label>
-           <input
-             id="confirm-password"
-             type="password"
-             value={confirmPassword}
-             onChange={(e) => setConfirmPassword(e.target.value)}
-             required
-           />
-         </div>
+          <div className={styles['form-group']}>
+            <label htmlFor='confirm-password'>비밀번호 확인</label>
+            <input
+              id='confirm-password'
+              type='password'
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
 
-         <button type="submit" className={styles["submit-btn"]}>
-           비밀번호 변경하기
-         </button>
+          <button type='submit' className={styles['submit-btn']}>
+            비밀번호 변경하기
+          </button>
 
-         {errorMessage && (
-           <p className={styles["error-message"]}>{errorMessage}</p>
-         )}
-       </form>
+          {errorMessage && (
+            <p className={styles['error-message']}>{errorMessage}</p>
+          )}
+        </form>
       </div>
-    );
+    </div>
+  );
 };
 
 export default UpdatePasswordPage;

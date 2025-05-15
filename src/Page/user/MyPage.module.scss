@@ -1,6 +1,6 @@
 .mypage {
-  max-width: 700px;
-  margin: 60px auto;
+  width: 700px;
+  margin: 160px auto 100px;
   padding: 40px;
   background-color: #fffdf9;
   border-radius: 20px;
@@ -92,7 +92,9 @@
     border-radius: 10px;
     font-size: 1rem;
     background-color: #fff;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
 
     &:disabled {
       background-color: #f5f5f5;
