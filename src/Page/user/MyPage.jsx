@@ -6,10 +6,16 @@ import axios from 'axios'; // axios 라이브러리 임포트
 import { API_BASE_URL, USER } from '../../Axios/host-config'; // API 기본 URL 및 사용자 관련 경로 임포트
 import AuthContext from '../../context/UserContext'; // 사용자 인증 Context 임포트
 import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위한 useNavigate 임포트
+import ModalContext from '../../Modal/ModalContext';
 
 const MyPage = () => {
   const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
+  const { setModalType } = useContext(ModalContext);
+
+  if (!authCtx.isLoggedIn) {
+    return null;
+  }
 
   const loggedInUserId = localStorage.getItem('USER_ID');
 
@@ -38,7 +44,6 @@ const MyPage = () => {
               Authorization: `Bearer ${token}`,
             },
           },
-
         );
         if (res.status === 200) {
           const { userId, userName, phone, email, hintKey, hintValue } =
@@ -92,7 +97,7 @@ const MyPage = () => {
       ) {
         alert('세션이 만료되었습니다. 다시 로그인해주세요.');
         authCtx.onLogout();
-        navigate('/login');
+        setModalType('login');
       } else {
         const backendErrorMessage =
           error.response.data && error.response.data.statusMessage
@@ -114,7 +119,7 @@ const MyPage = () => {
     if (!token || !userId) {
       console.log('MyPage Mount: Authentication info missing. Redirecting.');
       authCtx.onLogout();
-      navigate('/login');
+      setModalType('login');
       return;
     }
 
@@ -126,7 +131,7 @@ const MyPage = () => {
     const { name, value } = e.target;
     setUserInfo((prev) => ({
       ...prev,
-      [name]: name === "hintKey" ? value : value,
+      [name]: name === 'hintKey' ? value : value,
     }));
   };
 
@@ -140,7 +145,7 @@ const MyPage = () => {
     if (!token || !userId) {
       alert('회원 정보가 유효하지 않습니다. 다시 로그인 해주세요.');
       authCtx.onLogout();
-      navigate('/login');
+      setModalType('login');
       return;
     }
 
@@ -201,7 +206,7 @@ const MyPage = () => {
         );
         if (error.response.status === 401 || error.response.status === 403) {
           authCtx.onLogout();
-          navigate('/login');
+          setModalType('login');
         }
       } else {
         alert('정보 저장 중 네트워크 또는 요청 오류 발생.');
@@ -222,7 +227,7 @@ const MyPage = () => {
     if (!token || !userId) {
       alert('Login information is invalid. Please log in again to delete.');
       authCtx.onLogout();
-      navigate('/login');
+      setModalType('login');
       return;
     }
 
@@ -240,7 +245,7 @@ const MyPage = () => {
         localStorage.removeItem('USER_ROLE'); // 역할 정보도 저장했다면 삭제
 
         authCtx.onLogout();
-        navigate('/'); // 홈페이지 또는 로그인 페이지로 이동
+        setModalType('login'); // 홈페이지 또는 로그인 페이지로 이동
       } else {
         alert(
           `Failed to delete account: ${response.data.statusMessage || 'An unknown error occurred.'}`,
@@ -254,13 +259,12 @@ const MyPage = () => {
         );
         if (error.response.status === 401 || error.response.status === 403) {
           authCtx.onLogout();
-          navigate('/login');
+          setModalType('login');
         }
       } else {
         alert('회원 탈퇴 중 네트워크 또는 요청 오류 발생.');
       }
     }
-
   };
 
   // --- JSX 렌더링 (레이아웃 변경 반영) ---
@@ -269,17 +273,23 @@ const MyPage = () => {
       <h1 className={styles.title}>마이 페이지</h1>
 
       <div className={styles.topButtonGroup}>
-        <button className={styles.navButton}
-        onClick={() => navigate('/updatePwPage')}
-        >비밀번호 변경</button>
+        <button
+          className={styles.navButton}
+          onClick={() => navigate('/updatePwPage')}
+        >
+          비밀번호 변경
+        </button>
         <button className={styles.navButton}>나의 리뷰</button>
 
         <button className={styles.navButton} onClick={handleCouponsClick}>
           쿠폰 조회 및 등록
         </button>
-        <button className={styles.navButton}
-        onClick={() => navigate('/myOrdersPage')}>
-          콘텐츠 조회 및 취소</button>
+        <button
+          className={styles.navButton}
+          onClick={() => navigate('/myOrdersPage')}
+        >
+          콘텐츠 조회 및 취소
+        </button>
       </div>
 
       {/* 회원 정보 수정 섹션 (수정 가능 필드) */}
@@ -313,7 +323,6 @@ const MyPage = () => {
               disabled={!editMode}
             />
           </div>
-
           <div className={styles.formItem}>
             <label htmlFor='hintKey'>힌트 질문</label>
             <select
@@ -330,7 +339,6 @@ const MyPage = () => {
                 </option>
               ))}
             </select>
-
           </div>
           <div className={styles.formItem}>
             <label htmlFor='hintValue'>힌트 답변</label>
@@ -373,8 +381,9 @@ const MyPage = () => {
       {/* 하단 액션 버튼 그룹 (저장, 회원 탈퇴) */}
       {/* Flexbox를 사용하여 자식 요소(버튼들)를 양쪽 끝으로 배치하는 CSS 필요 */}
       <div className={styles.bottomButtonContainer}>
-
-        <button onClick={handleDelete} className={styles.deleteButton}>회원 탈퇴</button>
+        <button onClick={handleDelete} className={styles.deleteButton}>
+          회원 탈퇴
+        </button>
         {editMode ? (
           <button onClick={handleSave} className={styles.saveButton}>
             저장
@@ -387,7 +396,6 @@ const MyPage = () => {
             수정
           </button>
         )}
-
       </div>
     </div>
   );
