@@ -9,6 +9,7 @@ import {
 import { Card, CardContent, CardMedia } from '@mui/material';
 import WriteReview from '../../Component/content/WriteReview';
 import ShowReviews from '../../Component/content/ShowReviews';
+import style from './ContentDetailPage.module.scss';
 
 const ContentDetailPage = () => {
   const [searchParams] = useSearchParams();
@@ -30,22 +31,21 @@ const ContentDetailPage = () => {
   };
 
   return (
-    <>
-      <div style={{ paddingTop: 300 }}>
-        <Card>
-          <CardContent>{searchParams.get('title')}</CardContent>
-        </Card>
-      </div>
-      <div style={{ display: 'flex' }}>
+    <div className={style['content-detail-page']}>
+      <Card className={style['title-card']}>
+        <CardContent>{searchParams.get('title')}</CardContent>
+      </Card>
+
+      <div className={style['content-section']}>
         <CardMedia
           component='img'
           src={searchParams.get('thumbnail')}
           onError={(e) => {
             e.target.src = 'no-img.png';
           }}
-          style={{ width: '50%', height: 800, objectFit: 'cover' }}
         />
         <div>
+          <div className={style['info-box']}></div>
           <div>기간</div>
           <div>
             {searchParams.get('startDate') +
@@ -76,9 +76,10 @@ const ContentDetailPage = () => {
         </div>
       </div>
 
+      <div className={style['review-section']}></div>
       <WriteReview contentId={searchParams.get('id')} />
       <ShowReviews contentId={searchParams.get('id')} />
-    </>
+    </div>
   );
 };
 
