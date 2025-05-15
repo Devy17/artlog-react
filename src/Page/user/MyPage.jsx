@@ -273,13 +273,13 @@ const MyPage = () => {
       <h1 className={styles.title}>마이 페이지</h1>
 
       <div className={styles.topButtonGroup}>
-        <button
-          className={styles.navButton}
-          onClick={() => navigate('/updatePwPage')}
-        >
-          비밀번호 변경
-        </button>
-        <button className={styles.navButton}>나의 리뷰</button>
+        <button className={styles.navButton}
+        onClick={() => navigate('/updatePwPage')}
+        >비밀번호 변경</button>
+        <button className={styles.navButton}
+        onClick={() => navigate('/myReviewsPage')}
+        >리뷰 작성 및 조회</button>
+
 
         <button className={styles.navButton} onClick={handleCouponsClick}>
           쿠폰 조회 및 등록
