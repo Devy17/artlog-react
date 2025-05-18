@@ -20,12 +20,12 @@ const OrderPage = () => {
 
   const calcTotalPrice = () => {
     const originTotal = +searchParams.get('charge') * humanCount;
-    let discount = localStorage.get('discount');
+    let discount = localStorage.getItem('discount');
     if (discount) {
       const result = originTotal - +discount;
       return result <= 0 ? 0 : result;
     } else {
-      discount = localStorage.get('percent');
+      discount = localStorage.getItem('percent');
       if (!discount) return originTotal;
       const result = (1 - +discount * 0.01) * originTotal;
       return result;
@@ -36,7 +36,7 @@ const OrderPage = () => {
     // 여기에 coupon Modal 창
     localStorage.setItem(
       'totalPrice',
-      +searchParams.get('charge') * humanCount,
+      +searchParams.getItem('charge') * humanCount,
     );
     setModalType('orderCoupon');
   };
