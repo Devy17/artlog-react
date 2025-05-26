@@ -28,15 +28,17 @@ function ExhibitionCard({ exhibition }) {
 
   const handleCardClick = () => {
     const param = {
-      id: exhibition.id,
-      title: exhibition.title,
-      venue: exhibition.location,
-      charge: exhibition.place,
-      period: exhibition.date,
-      thumbnail: exhibition.imageUrl,
-      url: '', // exhibition에 contentUrl이 없다면 빈 문자열로
-      startDate: '',
-      endDate: '',
+      id: exhibition.contentId,
+      imageUrl:
+        exhibition.contentThumbnail ||
+        'https://placehold.co/400x300?text=No+Image',
+      title: exhibition.contentTitle || '제목 없음',
+      description: exhibition.contentPeriod || '기간 정보 없음',
+      venue: exhibition.contentVenue,
+      charge: exhibition.contentCharge,
+      url: exhibition.contentUrl,
+      startDate: exhibition.startDate,
+      endDate: exhibition.endDate,
     };
 
     navigate({

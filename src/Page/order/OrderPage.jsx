@@ -6,6 +6,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API_BASE_URL, ORDER } from '../../Axios/host-config';
 import ModalContext from '../../Modal/ModalContext';
+import AuthContext from '../../context/UserContext';
 
 const OrderPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -15,21 +16,13 @@ const OrderPage = () => {
   const [userCouponKey, setUserCouponKey] = useState(
     localStorage.getItem('userCoupon'),
   );
+  const {isLoggedIn} = useContext(AuthContext)
 
   const navi = useNavigate();
 
   const calcTotalPrice = () => {
     const originTotal = +searchParams.get('charge') * humanCount;
-    let discount = localStorage.getItem('discount');
-    if (discount) {
-      const result = originTotal - +discount;
-      return result <= 0 ? 0 : result;
-    } else {
-      discount = localStorage.getItem('percent');
-      if (!discount) return originTotal;
-      const result = (1 - +discount * 0.01) * originTotal;
-      return result;
-    }
+    return originTotal;
   };
 
   const couponButtonClickHandler = () => {
@@ -42,6 +35,11 @@ const OrderPage = () => {
   };
 
   const orderButtonClickHandler = () => {
+    if(!isLoggedIn) {
+      alert('로그인 후 진행해주세요!');
+      navi('/')
+    }
+
     const getData = async () => {
       const body = {
         contentId: searchParams.get('id'),
