@@ -29,7 +29,7 @@ const OrderPage = () => {
     // 여기에 coupon Modal 창
     localStorage.setItem(
       'totalPrice',
-      +searchParams.get('charge') * humanCount,
+      +searchParams.getItem('charge') * humanCount,
     );
     setModalType('orderCoupon');
   };
