@@ -6,6 +6,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API_BASE_URL, ORDER } from '../../Axios/host-config';
 import ModalContext from '../../Modal/ModalContext';
+import OrderCouponModal from '../../Modal/order/OrderCouponModal'
 
 const OrderPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -33,7 +34,7 @@ const OrderPage = () => {
   };
 
   const couponButtonClickHandler = () => {
-    // 여기에 coupon Modal 창
+    setModalType('orderCoupon')
     localStorage.setItem(
       'totalPrice',
       +searchParams.getItem('charge') * humanCount,
