@@ -35,7 +35,14 @@ const ModalController = ({ modalType, setModalType }) => {
       {modalType === 'mypage' && <MyPage onClose={closeModal} />}
 
       {modalType === 'orderCoupon' && (
-        <OrderCouponModal onClose={closeCouponModal} />
+        <OrderCouponModal 
+          onClose={closeCouponModal} 
+          onApply={(coupon) => {
+            console.log("쿠폰 적용됨: ", coupon);
+           
+        }}
+
+      />
       )}
     </>
   );

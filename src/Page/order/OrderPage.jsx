@@ -19,20 +19,44 @@ const OrderPage = () => {
   );
   const {isLoggedIn} = useContext(AuthContext)
 
+  // 쿠폰 정보 상태 추가
+  const [couponInfo, setCouponInfo] = useState({ discount: null, percent: null });
+  const [modalOpen, setModalOpen] = useState(false);
+
   const navi = useNavigate();
 
   const calcTotalPrice = () => {
     const originTotal = +searchParams.get('charge') * humanCount;
+    const { discount, percent } = couponInfo;
+
+    if (discount) {
+      const result = originTotal - discount;
+      return result <= 0 ? 0 : result;
+    } else if (percent) {
+      const result = originTotal * (1 - percent / 100);
+      return result;
+    }
+
     return originTotal;
   };
 
+  const handleApplyCoupon = ({discount, percent, title}) => {
+
+    setCouponInfo({ discount, percent });
+    setUserCouponKey(title);
+
+    localStorage.setItem('userCoupon', title);
+    if(discount) localStorage.setItem('discount', discount);
+    if(percent) localStorage.setItem('percent', percent);
+    
+    setModalOpen(false);
+    alert('쿠폰이 적용되었습니다.');
+     console.log('calcTotalPrice:', calcTotalPrice());
+  }
+
   const couponButtonClickHandler = () => {
-    setModalType('orderCoupon')
-    localStorage.setItem(
-      'totalPrice',
-      +searchParams.getItem('charge') * humanCount,
-    );
-    setModalType('orderCoupon');
+    setModalOpen(true);
+    localStorage.setItem('totalPrice', +searchParams.get('charge') * humanCount);
   };
 
   const orderButtonClickHandler = () => {
@@ -54,6 +78,8 @@ const OrderPage = () => {
           console.log(res.data.result);
         });
     };
+
+
 
     getData();
     alert(searchParams.get('title') + '이 결제되었습니다.');
@@ -131,7 +157,7 @@ const OrderPage = () => {
         </div>
 
         <div className='price-section'>
-          <div>TotalPrice: {+searchParams.get('charge') * humanCount}</div>
+            <div>totalPrice: {calcTotalPrice()}원</div>
           <Button
             className='coupon'
             onClick={couponButtonClickHandler}
@@ -146,6 +172,13 @@ const OrderPage = () => {
             예매하기
           </Button>
         </div>
+
+        {modalOpen && (
+          <OrderCouponModal
+            onClose={() => setModalOpen(false)}
+            onApply={handleApplyCoupon}
+          />
+        )}
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ function App() {
             <AppRouter /> {/* 모든 라우팅은 여기서 처리 */}
           </div>
           <Footer />
-          <ModalController modalType={modalType} setModalType={setModalType} />
+          <ModalController modalType={modalType} setModalType={setModalType}/>
         </div>
       </ModalContext.Provider>
     </AuthContextProvider>
