@@ -31,15 +31,16 @@ const OrderCouponModal = ({ onClose, onApply }) => {
   }, [apiData]);
 
 
-  const couponUseHandler = (title) => {
+  const couponUseHandler = (coupon) => {
+    const title = coupon.couponTitle;
     let value = '';
     for (let c of title) {
       if (c >= '0' && c <= '9') value += c;
       else if (c === '%') {
-        onApply({ percent: +value, discount: null, title });
+        onApply({ percent: +value, discount: null, userCouponKey: coupon.id });
         break;
       } else if (c === '원') {
-        onApply({ discount: +value, percent: null, title });
+        onApply({ discount: +value, percent: null, userCouponKey: coupon.id });
         break;
       }
     }
@@ -64,7 +65,7 @@ const OrderCouponModal = ({ onClose, onApply }) => {
                     <Card key={idx} style={{display: 'flex'}}>
                       <div>{data.couponTitle}</div>
                       <Button
-                          onClick={() => couponUseHandler(data.couponTitle)}
+                          onClick={() => couponUseHandler(data)}
                           style={{color: 'red'}}
                       >
                         쿠폰 사용하기

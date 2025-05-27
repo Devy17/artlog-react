@@ -40,12 +40,12 @@ const OrderPage = () => {
     return originTotal;
   };
 
-  const handleApplyCoupon = ({discount, percent, title}) => {
+  const handleApplyCoupon = ({discount, percent, userCouponKey}) => {
 
     setCouponInfo({ discount, percent });
-    setUserCouponKey(title);
+    setUserCouponKey(userCouponKey);
 
-    localStorage.setItem('userCoupon', title);
+    localStorage.setItem('userCoupon', userCouponKey);
     if(discount) localStorage.setItem('discount', discount);
     if(percent) localStorage.setItem('percent', percent);
     
