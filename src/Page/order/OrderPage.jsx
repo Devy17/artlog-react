@@ -25,20 +25,30 @@ const OrderPage = () => {
 
   const navi = useNavigate();
 
-  const calcTotalPrice = () => {
-    const originTotal = +searchParams.get('charge') * humanCount;
-    const { discount, percent } = couponInfo;
+const calcTotalPrice = () => {
+  const charge = Number(searchParams.get('charge'));
+  const count = Number(humanCount);
 
-    if (discount) {
-      const result = originTotal - discount;
-      return result <= 0 ? 0 : result;
-    } else if (percent) {
-      const result = originTotal * (1 - percent / 100);
-      return result;
-    }
+  // 둘 중 하나라도 NaN이거나 0 이하면 0 반환
+  if (isNaN(charge) || isNaN(count) || charge <= 0 || count <= 0) {
+    return 0;
+  }
 
-    return originTotal;
-  };
+  const originTotal = charge * count;
+  const { discount, percent } = couponInfo;
+
+  if (discount) {
+    const result = originTotal - discount;
+    return result > 0 ? result : 0;
+  } else if (percent) {
+    const result = originTotal * (1 - percent / 100);
+    return result > 0 ? Math.floor(result) : 0;
+  }
+
+  return originTotal;
+};
+
+
 
   const handleApplyCoupon = ({discount, percent, userCouponKey}) => {
 
@@ -56,7 +66,12 @@ const OrderPage = () => {
 
   const couponButtonClickHandler = () => {
     setModalOpen(true);
-    localStorage.setItem('totalPrice', +searchParams.get('charge') * humanCount);
+
+    const charge = Number(searchParams.get('charge'));
+    const count = Number(humanCount);
+    const totalPrice = isNaN(charge) || isNaN(count) ? 0 : charge * count;
+
+    localStorage.setItem('totalPrice', totalPrice);
   };
 
   const orderButtonClickHandler = () => {
@@ -71,7 +86,7 @@ const OrderPage = () => {
         userCouponKey: userCouponKey,
         totalPrice: calcTotalPrice(),
       };
-
+      
       await axiosInstance
         .post(`${API_BASE_URL}${ORDER}/insert`, body)
         .then((res) => {
@@ -84,9 +99,10 @@ const OrderPage = () => {
     getData();
     alert(searchParams.get('title') + '이 결제되었습니다.');
     navi('/');
-  };
 
+  };
   return (
+
     <div className='order-page' style={{ paddingTop: 100, marginLeft: 300 }}>
       <div className='sidebar'>
         <div className='sidebar-title'>예약</div>
@@ -158,13 +174,17 @@ const OrderPage = () => {
 
         <div className='price-section'>
             <div>totalPrice: {calcTotalPrice()}원</div>
-          <Button
-            className='coupon'
-            onClick={couponButtonClickHandler}
-            style={searchParams.get('charge') != 0 ? {} : { display: 'none' }}
-          >
-            쿠폰 사용하기
+            {calcTotalPrice() > 0 &&(
+            <Button
+              className='coupon'
+              onClick={couponButtonClickHandler}
+              style={searchParams.get('charge') != 0 ? {} : { display: 'none' }}
+            >
+          쿠폰 사용하기
           </Button>
+              
+            )}
+
         </div>
 
         <div className='submit-section'>

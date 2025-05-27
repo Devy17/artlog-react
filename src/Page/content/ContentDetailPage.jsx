@@ -38,6 +38,8 @@ const ContentDetailPage = () => {
 
   // src/pages/ContentDetailPage.jsx 파일의 return 부분
 
+  console.log('ContentDetailPage searchParams:', searchParams.get('charge'));
+
   return (
     <>
       {/* ✅ 페이지 전체 컨테이너: style['content-detail-page'] -> style['content-detail-page-wrapper'] */}
