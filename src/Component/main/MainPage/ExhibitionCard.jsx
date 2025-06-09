@@ -10,6 +10,8 @@ function ExhibitionCard({ exhibition }) {
   const [shouldScroll, setShouldScroll] = useState(false);
   const navigate = useNavigate();
 
+
+
   useEffect(() => {
     const el = titleRef.current;
     const container = containerRef.current;
@@ -18,6 +20,7 @@ function ExhibitionCard({ exhibition }) {
     } else {
       setShouldScroll(false);
     }
+    
   }, [exhibition.title]);
 
   const handleScrapClick = (e) => {
@@ -26,24 +29,29 @@ function ExhibitionCard({ exhibition }) {
     setIsScrapped(!isScrapped);
   };
 
-  const handleCardClick = () => {
-    const param = {
-      id: exhibition.id,
-      title: exhibition.title,
-      venue: exhibition.location,
-      charge: exhibition.place,
-      period: exhibition.date,
-      thumbnail: exhibition.imageUrl,
-      url: '', // exhibition에 contentUrl이 없다면 빈 문자열로
-      startDate: '',
-      endDate: '',
-    };
-
-    navigate({
-      pathname: '/contentDetail',
-      search: '?' + createSearchParams(param).toString(),
-    });
+const handleCardClick = () => {
+  console.log("exhibition 객체 구조 확인:", exhibition);
+  
+  const param = {
+    id: exhibition.id,
+    thumbnail: exhibition.thumbnail || 'https://placehold.co/400x300?text=No+Image',
+    title: exhibition.title || '제목 없음',
+    description: exhibition.description || (exhibition.date ? exhibition.date.toString() : '기간 정보 없음'),
+    venue: exhibition.location || '',
+    charge: exhibition.charge || '무료',
+    url: exhibition.url || '',
+    startDate: exhibition.startDate || '',
+    endDate: exhibition.endDate || '',
   };
+
+  console.log('전시 정보 param:', param);
+  
+
+  navigate({
+    pathname: '/contentDetail',
+    search: '?' + createSearchParams(param).toString(),
+  });
+};
 
   return (
     <div className={styles.comm_ex_item} onClick={handleCardClick}>
@@ -51,7 +59,7 @@ function ExhibitionCard({ exhibition }) {
         <figcaption></figcaption>
         <img
           className={styles.ex_img}
-          src={exhibition.imageUrl}
+          src={exhibition.thumbnail || 'https://placehold.co/400x300?text=No+Image'}
           alt={`전시정보 관련 포스터: ${exhibition.title}`}
         />
       </figure>

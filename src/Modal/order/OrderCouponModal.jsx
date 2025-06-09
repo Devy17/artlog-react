@@ -5,7 +5,7 @@ import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API_BASE_URL, COUPON, USER } from '../../Axios/host-config';
 import { Button, Card } from '@mui/material';
 
-const OrderCouponModal = ({ onClose }) => {
+const OrderCouponModal = ({ onClose, onApply }) => {
   const { setModalType } = useContext(ModalContext);
   const [apiData, setApiData] = useState([]);
   const [loading, isLoading] = useState(false);
@@ -30,58 +30,54 @@ const OrderCouponModal = ({ onClose }) => {
     isLoading(true);
   }, [apiData]);
 
-  const couponUseHandler = (title) => {
-    const titleStr = toString(title);
-    let discount = '';
-    for (let index = 0; index < titleStr.length; index++) {
-      const c = titleStr.charAt(index);
-      if (c >= '0' && c <= '9') discount = discount + c;
-      else if (c === '-') {
-        localStorage.setItem('discount', +discount);
+
+  const couponUseHandler = (coupon) => {
+    const title = coupon.couponTitle;
+    let value = '';
+    for (let c of title) {
+      if (c >= '0' && c <= '9') value += c;
+      else if (c === '%') {
+        onApply({ percent: +value, discount: null, userCouponKey: coupon.id });
         break;
-      } else if (c === '%') {
-        localStorage.setItem('percent', +discount)
-        break;
-      } else {
+      } else if (c === '원') {
+        onApply({ discount: +value, percent: null, userCouponKey: coupon.id });
         break;
       }
     }
-
-    if (!discount) return;
-
-    localStorage.setItem('userCoupon', title);
+    onClose();
   };
 
+
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>쿠폰 적용</h2>
-          <button className={styles.closeBtn} onClick={onClose}>
-            ✕
-          </button>
-        </div>
+      <div className={styles.overlay}>
+        <div className={styles.modal}>
+          <div className={styles.header}>
+            <h2 className={styles.title}>쿠폰 적용</h2>
+            <button className={styles.closeBtn} onClick={onClose}>
+              ✕
+            </button>
+          </div>
 
-        <div>
-          <div>totalPrice : {total}</div>
-          {loading
-            ? apiData.map((data) => (
-                <Card style={{ display: 'flex' }}>
-                  <div>{data.couponTitle}</div>
-                  <Button
-                    onClick={() => couponUseHandler(data.couponTitle)}
-                    style={{ color: 'red' }}
-                  >
-                    쿠폰 사용하기
-                  </Button>
-                </Card>
-              ))
-            : 'Loading'}
-        </div>
+          <div>
+            <div>totalPrice : {total}</div>
+            {loading
+                ? apiData.map((data, idx) => (
+                    <Card key={idx} style={{display: 'flex'}}>
+                      <div>{data.couponTitle}</div>
+                      <Button
+                          onClick={() => couponUseHandler(data)}
+                          style={{color: 'red'}}
+                      >
+                        쿠폰 사용하기
+                      </Button>
+                    </Card>
+                ))
+                : 'Loading'}
+          </div>
 
-        <div className={styles.body}></div>
+          <div className={styles.body}></div>
+        </div>
       </div>
-    </div>
   );
 };
 

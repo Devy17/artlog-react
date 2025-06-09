@@ -28,13 +28,17 @@ function ExhibitionListSection() {
           .filter((item) => !item.contentTitle.includes('테스트'))
           .map((item) => ({
             id: item.contentId,
-            imageUrl:
+            thumbnail:
               item.contentThumbnail ||
               'https://placehold.co/400x300?text=No+Image',
             title: item.contentTitle || '제목 없음',
             date: item.contentPeriod || '기간 정보 없음',
             location: item.contentVenue || '',
-            place: item.contentCharge || '',
+            charge: item.contentCharge || '',
+            url: item.contentUrl || '',
+            startDate: item.startDate || '',
+            endDate: item.endDate || '',
+            description: item.description || '',
             isRecommended: Math.random() < 0.3,
             isScrapped: false,
           }));

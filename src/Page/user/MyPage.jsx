@@ -13,6 +13,8 @@ const MyPage = () => {
   const authCtx = useContext(AuthContext);
   const { setModalType } = useContext(ModalContext);
 
+  
+
   if (!authCtx.isLoggedIn) {
     return null;
   }
@@ -35,6 +37,7 @@ const MyPage = () => {
   useEffect(() => {
     const getUserInfo = async () => {
       const token = localStorage.getItem('ACCESS_TOKEN');
+      console.log("token:", token);
       if (!token) return;
       try {
         const res = await axios.get(

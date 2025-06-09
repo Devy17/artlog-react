@@ -6,6 +6,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API_BASE_URL, ORDER } from '../../Axios/host-config';
 import ModalContext from '../../Modal/ModalContext';
+import OrderCouponModal from '../../Modal/order/OrderCouponModal'
+import AuthContext from '../../context/UserContext';
 
 const OrderPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -15,40 +17,76 @@ const OrderPage = () => {
   const [userCouponKey, setUserCouponKey] = useState(
     localStorage.getItem('userCoupon'),
   );
+  const {isLoggedIn} = useContext(AuthContext)
+
+  // 쿠폰 정보 상태 추가
+  const [couponInfo, setCouponInfo] = useState({ discount: null, percent: null });
+  const [modalOpen, setModalOpen] = useState(false);
 
   const navi = useNavigate();
 
-  const calcTotalPrice = () => {
-    const originTotal = +searchParams.get('charge') * humanCount;
-    let discount = localStorage.get('discount');
-    if (discount) {
-      const result = originTotal - +discount;
-      return result <= 0 ? 0 : result;
-    } else {
-      discount = localStorage.get('percent');
-      if (!discount) return originTotal;
-      const result = (1 - +discount * 0.01) * originTotal;
-      return result;
-    }
-  };
+const calcTotalPrice = () => {
+  const charge = Number(searchParams.get('charge'));
+  const count = Number(humanCount);
+
+  // 둘 중 하나라도 NaN이거나 0 이하면 0 반환
+  if (isNaN(charge) || isNaN(count) || charge <= 0 || count <= 0) {
+    return 0;
+  }
+
+  const originTotal = charge * count;
+  const { discount, percent } = couponInfo;
+
+  if (discount) {
+    const result = originTotal - discount;
+    return result > 0 ? result : 0;
+  } else if (percent) {
+    const result = originTotal * (1 - percent / 100);
+    return result > 0 ? Math.floor(result) : 0;
+  }
+
+  return originTotal;
+};
+
+
+
+  const handleApplyCoupon = ({discount, percent, userCouponKey}) => {
+
+    setCouponInfo({ discount, percent });
+    setUserCouponKey(userCouponKey);
+
+    localStorage.setItem('userCoupon', userCouponKey);
+    if(discount) localStorage.setItem('discount', discount);
+    if(percent) localStorage.setItem('percent', percent);
+    
+    setModalOpen(false);
+    alert('쿠폰이 적용되었습니다.');
+     console.log('calcTotalPrice:', calcTotalPrice());
+  }
 
   const couponButtonClickHandler = () => {
-    // 여기에 coupon Modal 창
-    localStorage.setItem(
-      'totalPrice',
-      +searchParams.get('charge') * humanCount,
-    );
-    setModalType('orderCoupon');
+    setModalOpen(true);
+
+    const charge = Number(searchParams.get('charge'));
+    const count = Number(humanCount);
+    const totalPrice = isNaN(charge) || isNaN(count) ? 0 : charge * count;
+
+    localStorage.setItem('totalPrice', totalPrice);
   };
 
   const orderButtonClickHandler = () => {
+    if(!isLoggedIn) {
+      alert('로그인 후 진행해주세요!');
+      navi('/')
+    }
+
     const getData = async () => {
       const body = {
         contentId: searchParams.get('id'),
         userCouponKey: userCouponKey,
         totalPrice: calcTotalPrice(),
       };
-
+      
       await axiosInstance
         .post(`${API_BASE_URL}${ORDER}/insert`, body)
         .then((res) => {
@@ -56,12 +94,15 @@ const OrderPage = () => {
         });
     };
 
+
+
     getData();
     alert(searchParams.get('title') + '이 결제되었습니다.');
     navi('/');
-  };
 
+  };
   return (
+
     <div className='order-page' style={{ paddingTop: 100, marginLeft: 300 }}>
       <div className='sidebar'>
         <div className='sidebar-title'>예약</div>
@@ -132,14 +173,18 @@ const OrderPage = () => {
         </div>
 
         <div className='price-section'>
-          <div>TotalPrice: {+searchParams.get('charge') * humanCount}</div>
-          <Button
-            className='coupon'
-            onClick={couponButtonClickHandler}
-            style={searchParams.get('charge') != 0 ? {} : { display: 'none' }}
-          >
-            쿠폰 사용하기
+            <div>totalPrice: {calcTotalPrice()}원</div>
+            {calcTotalPrice() > 0 &&(
+            <Button
+              className='coupon'
+              onClick={couponButtonClickHandler}
+              style={searchParams.get('charge') != 0 ? {} : { display: 'none' }}
+            >
+          쿠폰 사용하기
           </Button>
+              
+            )}
+
         </div>
 
         <div className='submit-section'>
@@ -147,6 +192,13 @@ const OrderPage = () => {
             예매하기
           </Button>
         </div>
+
+        {modalOpen && (
+          <OrderCouponModal
+            onClose={() => setModalOpen(false)}
+            onApply={handleApplyCoupon}
+          />
+        )}
       </div>
     </div>
   );
