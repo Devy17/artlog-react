@@ -22,7 +22,6 @@ const OrderPage = () => {
   const { isLoggedIn } = useContext(AuthContext);
 
   const [couponInfo, setCouponInfo] = useState(() => {
-    // 로컬 스토리지에서 기존 쿠폰 정보 불러오기
     const storedDiscount = localStorage.getItem('discount');
     const storedPercent = localStorage.getItem('percent');
     return {
@@ -41,7 +40,6 @@ const OrderPage = () => {
     new Date(exhibitionEndDateStr.replace(/\./g, '-')) :
     null;
 
-
   const calcTotalPrice = () => {
     const charge = Number(searchParams.get('charge'));
     const count = Number(humanCount);
@@ -53,10 +51,10 @@ const OrderPage = () => {
     const originTotal = charge * count;
     const { discount, percent } = couponInfo;
 
-    if (discount !== null) { // discount가 null이 아닐 때만 적용
+    if (discount !== null) { 
       const result = originTotal - discount;
       return result > 0 ? result : 0;
-    } else if (percent !== null) { // percent가 null이 아닐 때만 적용
+    } else if (percent !== null) { 
       const result = originTotal * (1 - percent / 100);
       return result > 0 ? Math.floor(result) : 0;
     }
@@ -70,7 +68,6 @@ const OrderPage = () => {
     localStorage.removeItem('userCoupon');
     localStorage.removeItem('discount');
     localStorage.removeItem('percent');
-    console.log('전시 ID 변경 감지: 쿠폰 정보 초기화됨.');
   }, [searchParams.get('id')]); 
 
   const handleApplyCoupon = ({ discount, percent, userCouponKey }) => {
@@ -85,7 +82,6 @@ const OrderPage = () => {
     alert('쿠폰이 적용되었습니다.');
   };
 
-  // 새로운 함수: 쿠폰 적용 취소
   const handleCancelCoupon = () => {
     setCouponInfo({ discount: null, percent: null });
     setUserCouponKey(null);
@@ -96,31 +92,26 @@ const OrderPage = () => {
   };
 
   const couponButtonClickHandler = () => {
-    // 쿠폰 모달을 열기 전에 원래 총 금액이 0인지 확인
     const charge = Number(searchParams.get('charge'));
     const count = Number(humanCount);
-    // 요금이나 인원이 유효하지 않으면 원래 총 금액을 0으로 간주
     const originalTotalPrice = isNaN(charge) || isNaN(count) || charge <= 0 || count <= 0 ? 0 : charge * count;
 
-    // 만약 원래 총 금액이 0이라면 쿠폰 적용 불가 메시지를 띄우고 함수 종료
     if (originalTotalPrice === 0) {
         alert('무료 전시에는 쿠폰을 적용할 수 없습니다.');
         return;
     }
 
     setModalOpen(true);
-    localStorage.setItem('totalPrice', originalTotalPrice); // 쿠폰 모달에서 사용할 원래 총 금액 저장
+    localStorage.setItem('totalPrice', originalTotalPrice); 
   };
 
   const orderButtonClickHandler = () => {
     if (!isLoggedIn) {
       alert('로그인 후 진행해주세요!');
-      navi('/login'); // 로그인 페이지로 이동
+      navi('/login'); 
       return;
     }
 
-
-    // --- 여기부터 날짜 유효성 검사 로직 추가 ---
     if (exhibitionEndDate) {
       const selectedDateOnly = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
       const exhibitionEndDateOnly = new Date(exhibitionEndDate.getFullYear(), exhibitionEndDate.getMonth(), exhibitionEndDate.getDate());
@@ -136,7 +127,6 @@ const OrderPage = () => {
         return;
       }
     }
-    // --- 날짜 유효성 검사 로직 끝 ---
 
 
     const getData = async () => {
@@ -144,19 +134,25 @@ const OrderPage = () => {
         contentId: searchParams.get('id'),
         userCouponKey: userCouponKey,
         totalPrice: calcTotalPrice(),
-        selectedDate: selectedDate.toISOString().split('T')[0],
       };
 
       try {
-        await axiosInstance.post(`${API_BASE_URL}${ORDER}/insert`, body);
+         await axiosInstance
+        .post(`${API_BASE_URL}${ORDER}/insert`, body)
+        .then((res) => {
+          console.log(res.data.result);
+        });
+
         alert(searchParams.get('title') + '이(가) 결제되었습니다.');
-        // 결제 성공 후 로컬 스토리지에서 쿠폰 정보 제거
         localStorage.removeItem('userCoupon');
         localStorage.removeItem('discount');
         localStorage.removeItem('percent');
+                console.log(body);
         navi('/');
       } catch (error) {
         console.error('주문 실패:', error);
+        console.log(body);
+        
         alert('주문에 실패했습니다. 다시 시도해주세요.');
       }
     };
@@ -181,7 +177,6 @@ const OrderPage = () => {
   return (
     <div className={style['order-page']}>
       <div className={style['order-container']}>
-        {/* 사이드바 영역 (기존과 동일) */}
         <div className={style.sidebar}>
           <div className={style['sidebar-section']}>
             <div className={style['section-title']}>개인예매</div>
@@ -190,7 +185,7 @@ const OrderPage = () => {
                 <img src={searchParams.get('thumbnail')} alt="전시 썸네일" className={style['thumbnail-image']} />
               </div>
               <div className={style['exhibition-details']}>
-                리움 현대미술 소장품전
+                ARTLOG
               </div>
               <div className={style['exhibition-sub-details']}>
                 {searchParams.get('title')}
@@ -289,8 +284,6 @@ const OrderPage = () => {
               <Button onClick={() => setHumanCount((prev) => prev + 1)}>+</Button>
             </div>
           </div>
-
-          {/* ⭐ 쿠폰 적용 섹션 추가 ⭐ */}
           <div className={style['coupon-section']}>
             <div className={style['section-title']}>쿠폰</div>
             <div className={style['coupon-status-group']}>
@@ -315,8 +308,8 @@ const OrderPage = () => {
                 onClick={couponButtonClickHandler}
                 className={style['coupon-apply-button']}
                 sx={{
-                  backgroundColor: '#15202b', // 검정색 배경
-                  color: '#fff', // 흰색 텍스트
+                  backgroundColor: '#15202b', 
+                  color: '#fff', 
                   padding: '10px 20px',
                   fontSize: '0.9rem',
                   fontWeight: 'bold',

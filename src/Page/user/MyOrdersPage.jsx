@@ -1,5 +1,3 @@
-// src/pages/MyOrdersPage.jsx
-
 import React, {
   useContext,
   useState,
@@ -34,13 +32,12 @@ const MyOrdersPage = () => {
   const token = useMemo(() => localStorage.getItem("ACCESS_TOKEN"), []);
   const userKey = useMemo(() => localStorage.getItem("USER_ID"), []);
 
-  const numberOfContent = 9;
-
    useEffect(() => {
     const getData = async () => {
       const response = await axiosInstance.get(
-        `${API_BASE_URL}${API}/select?numOfRows=${numberOfContent}&pageNo=${page}`,
+        `${API_BASE_URL}${API}/selectByUserKey/${userKey}`,
       );
+
       const data = response.data.result;
       console.log(data);
 
