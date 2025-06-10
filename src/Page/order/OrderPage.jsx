@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import React, { useContext, useState, useEffect } from 'react'; // useEffect 추가
+import React, { useContext, useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // react-calendar 기본 스타일은 유지하고 SCSS로 오버라이드
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -26,11 +26,11 @@ const OrderPage = () => {
 
   const navi = useNavigate();
 
-  // 현재 월을 표시하기 위한 상태
-  const [displayMonth, setDisplayMonth] = useState(new Date());
+  // 캘린더 뷰의 현재 활성 시작 날짜를 제어하기 위한 상태
+  // 이 상태가 변경되면 캘린더의 월도 함께 변경됩니다.
+  const [activeStartDate, setActiveStartDate] = useState(new Date());
 
   // 휴관일 (예시 데이터, 실제로는 API로 받아올 수 있습니다)
-  // 리움 이미지에 '휴관'으로 표시된 날짜들을 참고
   const holidays = [
     new Date(2025, 5, 8).toDateString(), // 2025년 6월 8일 (일요일)
     new Date(2025, 5, 22).toDateString(), // 2025년 6월 22일 (일요일)
@@ -112,6 +112,24 @@ const OrderPage = () => {
     getData();
   };
 
+  // '이전 달' 버튼 클릭 핸들러
+  const handlePrevMonth = () => {
+    setActiveStartDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+  };
+
+  // '다음 달' 버튼 클릭 핸들러
+  const handleNextMonth = () => {
+    setActiveStartDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+  };
+
+  // Calendar 컴포넌트의 onActiveStartDateChange 핸들러
+  // 캘린더 내부에서 월이 변경될 때 displayMonth 상태를 업데이트합니다.
+  const handleCalendarActiveStartDateChange = ({ activeStartDate, view }) => {
+    if (view === 'month') {
+      setActiveStartDate(activeStartDate);
+    }
+  };
+
   return (
     <div className={style['order-page']}>
       <div className={style['order-container']}>
@@ -121,7 +139,8 @@ const OrderPage = () => {
             <div className={style['section-title']}>개인예매</div>
             <div className={style['exhibition-info']}>
               <div className={style['thumbnail-box']}>
-                <img src={searchParams.get('thumbnail')} alt="전시 썸네일" />
+                {/* 썸네일 object-fit: contain 적용 */}
+                <img src={searchParams.get('thumbnail')} alt="전시 썸네일" className={style['thumbnail-image']} />
               </div>
               <div className={style['exhibition-details']}>
                 리움 현대미술 소장품전
@@ -157,18 +176,24 @@ const OrderPage = () => {
           {/* 상단 헤더 */}
           <div className={style['top-header']}>
             <div className={style['main-title']}>날짜 선택</div>
-            <div className={style['top-buttons']}>
-            </div>
+            {/* '이달/다음달' 버튼은 리움 이미지에 있는 네비게이션 버튼과 독립적으로 보임,
+                캘린더 헤더에서 월 이동 버튼을 직접 제어할 것이므로 여기서는 제거하거나 용도 변경 필요
+                현재 리움과 유사한 UI를 위해 캘린더 자체 네비게이션으로 대체. */}
+            {/* <div className={style['top-buttons']}>
+              <Button className={style.active}>이달</Button>
+              <Button>다음달</Button>
+            </div> */}
           </div>
 
           {/* 캘린더 섹션 */}
           <div className={style['calendar-section']}>
+            {/* 캘린더 헤더와 버튼들 */}
             <div className={style['calendar-header']}>
-              <Button onClick={() => setDisplayMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}>{'<'}</Button>
+              <Button onClick={handlePrevMonth}>{'<'}</Button>
               <div className={style['current-month']}>
-                {displayMonth.getFullYear()}년 {displayMonth.getMonth() + 1}월
+                {activeStartDate.getFullYear()}년 {activeStartDate.getMonth() + 1}월
               </div>
-              <Button onClick={() => setDisplayMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}>{'>'}</Button>
+              <Button onClick={handleNextMonth}>{'>'}</Button>
             </div>
 
             <div className={style['calendar-wrapper']}>
@@ -177,6 +202,8 @@ const OrderPage = () => {
                 formatDay={(locale, date) => {
                   const day = date.getDate();
                   const isDateHoliday = isHoliday(date);
+                  // 휴관일이면서 비활성화된 날짜는 '휴관' 텍스트를 표시하지 않음
+                  // Calendar 컴포넌트의 disableDates 설정에 따라 실제 동작은 달라질 수 있음
                   return (
                     <div className={isDateHoliday ? style['is-holiday'] : ''}>
                       {day}
@@ -189,9 +216,10 @@ const OrderPage = () => {
                   console.log('선택한 날짜:', date);
                   setSelectedDate(date);
                 }}
-                value={selectedDate}
+                value={selectedDate} // 선택된 날짜
+                activeStartDate={activeStartDate} // 캘린더가 보여줄 시작 날짜
+                onActiveStartDateChange={handleCalendarActiveStartDateChange} // 캘린더 내부에서 월 변경 시
                 locale='ko-KR'
-                onActiveStartDateChange={({ activeStartDate }) => setDisplayMonth(activeStartDate)} // 캘린더 월 변경 시 상태 업데이트
                 tileClassName={({ date, view }) => {
                   const classes = [];
                   if (
@@ -237,8 +265,6 @@ const OrderPage = () => {
               </Button>
               <div className={style['human-count-display']}>{humanCount}</div>
               <Button onClick={() => setHumanCount((prev) => prev + 1)}>+</Button>
-              {/* 리움은 초기화 버튼이 없음, 필요하면 추가 */}
-              {/* <Button className={style['reset-button']} onClick={() => setHumanCount(1)}>초기화</Button> */}
             </div>
           </div>
 
@@ -251,18 +277,8 @@ const OrderPage = () => {
           {/* 예매하기 버튼 섹션 */}
           <div className={style['submit-button-container']}>
             <Button className={style['submit-button']} onClick={orderButtonClickHandler}>
-              다음
+              예매하기 {/* '다음'에서 '예매하기'로 변경 */}
             </Button>
-            {/* 쿠폰 사용하기 버튼은 리움 페이지에서는 안 보임, 필요하면 추가 */}
-            {/* {calcTotalPrice() > 0 && (
-              <Button
-                className={style.coupon}
-                onClick={couponButtonClickHandler}
-                style={searchParams.get('charge') != 0 ? {} : { display: 'none' }}
-              >
-                쿠폰 사용하기
-              </Button>
-            )} */}
           </div>
 
           {modalOpen && (
