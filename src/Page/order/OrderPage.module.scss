@@ -1,3 +1,5 @@
+/* 기존 SCSS 내용은 거의 동일하며, `.after-exhibition-end` 클래스 추가 */
+
 /* 리움미술관 2차 개발 스타일을 위한 변수 설정 */
 $color-dark-gray: #333333; // 메인 텍스트, 강한 요소
 $color-medium-gray: #666666; // 보조 텍스트
@@ -287,6 +289,15 @@ $color-holiday: #f0f0f0; // 캘린더 휴관일 배경 (연한 회색)
                 background-color: $color-holiday; // 비활성화된 휴관일도 배경 유지
             }
           }
+
+          // --- 새로운 클래스 추가: 전시 종료일 이후의 날짜 ---
+          &.after-exhibition-end {
+            background-color: $color-white; // 배경은 흰색 유지
+            color: $color-light-gray; // 텍스트를 흐리게
+            pointer-events: none; // 클릭 불가
+            cursor: not-allowed; // 마우스 커서 변경
+          }
+          // --- 새로운 클래스 추가 끝 ---
           
           &.react-calendar__month-view__days__day--weekend {
               // 캘린더에서 기본으로 제공하는 주말 클래스 (토, 일)
