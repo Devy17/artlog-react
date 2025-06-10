@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
+import Pagination from "@mui/material/Pagination";
 import { useNavigate, useSearchParams, createSearchParams } from 'react-router-dom'; // createSearchParams import
 import AuthContext from '../../context/UserContext';
 import { API_BASE_URL, ORDER, API } from '../../Axios/host-config';
@@ -16,7 +17,12 @@ import axiosInstance from '../../Axios/AxiosBackConfig';
 
 const MyOrdersPage = () => {
   const [apiData, setApiData] = useState([]);
-    const [page, setPage] = useState(1);
+
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 10;
+  const [nextPage, setNextPage] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+
   const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
   const { setModalType } = useContext(ModalContext);
@@ -38,7 +44,7 @@ const MyOrdersPage = () => {
    useEffect(() => {
     const getData = async () => {
       const response = await axiosInstance.get(
-        `${API_BASE_URL}${API}/selectByUserKeyPaging?userKey=${userKey}&pageNo=1&numOfRows=10`,
+        `${API_BASE_URL}${API}/selectByUserKeyPaging?userKey=${userKey}&pageNo=${page}&numOfRows=10`,
       );
 
       const data = response.data.result;
@@ -51,7 +57,7 @@ const MyOrdersPage = () => {
     getData().then((response) => {
       setApiData((prev) => [...prev, ...response]);
     });
-  }, [page]);
+  });
 
  const contentClickHandler = (contentId) => {
   const orderData = orderList.find((item) => item.contentId === contentId);
@@ -94,19 +100,31 @@ const MyOrdersPage = () => {
 
     try {
       const response = await axios.get( 
-        `${API_BASE_URL}${API}/selectByUserKeyPaging?userKey=${userKey}&pageNo=1&numOfRows=10`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        `${API_BASE_URL}${API}/selectByUserKeyPaging?userKey=${userKey}&pageNo=${page}&numOfRows=${rowsPerPage}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
       );
       console.log('📦 주문 응답:', response.data.result);
 
       if (response.data?.statusCode === 200) {
         setOrderList(Array.isArray(response.data.result) ? response.data.result : []);
         console.log('주문 목록 가져오기 성공:', response.data.statusMessage);
+
+        const result = Array.isArray(response.data.result) ? response.data.result : [];
+        setOrderList(result);
+        setNextPage(result.length === rowsPerPage);
+        if (result.length < rowsPerPage) {
+           setTotalPages(page);
+        } else {
+          setTotalPages(page + 1);
+        }
+
+
       } else if (response.status === 404) { // ✅ 백엔드 CommonResDto의 statusCode를 확인하는 것이 더 정확
         console.log('주문 목록 없음:', response.data?.statusMessage || '');
         setOrderList([]);
+        setNextPage(false);
       } else {
         const msg = response.data?.statusMessage || '예상치 못한 백엔드 오류';
         const code = response.data?.statusCode || 'N/A';
@@ -119,22 +137,27 @@ const MyOrdersPage = () => {
         const { status, data } = err.response;
         const msg = data?.statusMessage || '서버 오류';
         const code = data?.statusCode ?? 'N/A';
+        setNextPage(false);
 
         if (status === 401 || status === 403) {
           alert('세션이 만료되었거나 권한이 없습니다. 다시 로그인해주세요.');
           authCtx.onLogout();
+          setNextPage(false);
           setModalType('login');
         } else {
           setError(`주문 목록 가져오기 실패: ${msg} (HTTP 상태: ${status}, 코드: ${code})`);
+          setNextPage(false);
         }
       } else {
         setError('네트워크 오류로 주문 목록을 가져올 수 없습니다.');
+        setNextPage(false);
       }
       setOrderList([]);
     } finally {
       setLoading(false);
+      setNextPage(false);
     }
-  }, [authCtx, navigate, token, userKey, setModalType]); // navigate 의존성은 불필요할 수 있습니다. fetch 함수에서는 사용 안함.
+  }, [authCtx, navigate, token, userKey, setModalType, page]); // navigate 의존성은 불필요할 수 있습니다. fetch 함수에서는 사용 안함.
 
   useEffect(() => {
     if (!token || !userKey) {
@@ -142,11 +165,12 @@ const MyOrdersPage = () => {
       authCtx.onLogout();
       setModalType('login');
       setLoading(false);
+      setOrderList([]);
       setError("로그인이 필요합니다.");
       return;
     }
     fetchMyOrders();
-  }, [token, userKey, fetchMyOrders, authCtx, setModalType]);
+  }, [token, userKey, fetchMyOrders, authCtx, setModalType, page]);
 
 
   const handleCancelOrder = async (orderId) => {
@@ -285,8 +309,8 @@ const MyOrdersPage = () => {
               : '예매한 콘텐츠가 없습니다.'}
           </p>
         )}
-
         {!loading && !error && filteredAndSortedOrders.length > 0 && (
+          <>
           <ul className={styles['orders-list']}>
             {filteredAndSortedOrders.map(order => (
               // ✅ 예매 항목 클릭 이벤트 추가
@@ -350,6 +374,15 @@ const MyOrdersPage = () => {
               </li>
             ))}
           </ul>
+          <div className={styles['pagination-wrapper']}>
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={(e, value) => setPage(value)}
+              color="primary"
+              />
+              </div>
+              </>
         )}
       </div>
     </div>
