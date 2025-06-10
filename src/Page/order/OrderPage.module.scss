@@ -1,0 +1,491 @@
+/* 리움미술관 2차 개발 스타일을 위한 변수 설정 */
+$color-dark-gray: #333333; // 메인 텍스트, 강한 요소
+$color-medium-gray: #666666; // 보조 텍스트
+$color-light-gray: #aaaaaa; // 아주 연한 텍스트, 비활성화 요소
+$color-white: #ffffff; // 기본 배경색
+$color-off-white: #fcfcfc; // 약간의 그림자나 튀는 배경 (거의 흰색)
+$color-border-light: #e0e0e0; // 아주 연한 테두리 (가장 많이 사용)
+$color-border-medium: #cccccc; // 중간 테두리 (구분선)
+$color-border-dark: #888888; // 진한 테두리 (캘린더 선택 등)
+$color-selected-date: #000000; // 캘린더 선택 날짜 배경 (검정)
+$color-holiday: #f0f0f0; // 캘린더 휴관일 배경 (연한 회색)
+
+
+.order-page {
+  display: flex;
+  justify-content: center; // 전체 내용을 중앙으로 정렬
+  padding: 60px 20px; // 상하 60px, 좌우 20px 여백
+  min-height: calc(100vh - 120px); // 푸터/헤더 제외한 최소 높이
+  font-family: 'Noto Sans KR', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  color: $color-dark-gray;
+  background-color: $color-white;
+}
+
+.order-container {
+  display: flex;
+  width: 100%;
+  max-width: 1200px; // 최대 너비 설정
+  background-color: $color-white;
+  // 리움은 바깥 테두리가 거의 없음, 내부 요소로 구분
+  // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); // 은은한 그림자로 구분
+
+  .sidebar {
+    flex: 0 0 320px; // 리움 이미지 기준 사이드바 너비
+    padding: 30px;
+    background-color: $color-white;
+    border-right: 1px solid $color-border-light; // 메인 콘텐츠와의 구분선
+    display: flex;
+    flex-direction: column;
+    gap: 25px; // 섹션 간 간격
+
+    .sidebar-section {
+      // 각 섹션의 제목 스타일
+      .section-title {
+        font-size: 1.05rem;
+        font-weight: bold;
+        color: $color-dark-gray;
+        margin-bottom: 10px;
+      }
+      .section-content {
+        font-size: 0.95rem;
+        color: $color-medium-gray;
+        line-height: 1.4;
+      }
+    }
+
+    .exhibition-info {
+      .section-title {
+        // "개인예매" 제목
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+      }
+      .thumbnail-box {
+        width: 100%;
+        position: relative;
+        padding-top: 75%; // 4:3 비율 (높이/너비 * 100)
+        margin-bottom: 15px;
+        overflow: hidden;
+        background-color: $color-off-white; // 이미지 로딩 전 배경
+        
+        img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border: 1px solid $color-border-light; // 썸네일 테두리
+        }
+      }
+
+      .exhibition-details {
+        font-size: 1rem;
+        color: $color-dark-gray;
+        font-weight: bold;
+        margin-bottom: 5px;
+        line-height: 1.3;
+      }
+      .exhibition-sub-details {
+        font-size: 0.9rem;
+        color: $color-medium-gray;
+        margin-bottom: 15px;
+      }
+    }
+
+    // 장소, 일시, 인원 같은 섹션
+    .info-section {
+      padding: 15px 0;
+      border-top: 1px solid $color-border-light; // 상단 구분선
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+
+      &:last-child {
+        // 마지막 인원 섹션은 하단에 선이 없음
+        border-bottom: none;
+      }
+
+      .info-label {
+        font-size: 1rem;
+        color: $color-dark-gray;
+        flex-shrink: 0; // 라벨이 줄어들지 않도록
+      }
+      .info-value {
+        font-size: 1rem;
+        color: $color-medium-gray;
+        text-align: right; // 값을 우측으로 정렬
+        flex-grow: 1; // 값이 공간을 채우도록
+      }
+    }
+  }
+
+  .main-content {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: $color-white;
+
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px; // 하단 여백
+      border-bottom: 1px solid $color-border-light; // 하단 구분선
+      padding-bottom: 15px;
+
+      .main-title {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: $color-dark-gray;
+      }
+      .top-buttons {
+        display: flex;
+        gap: 10px; // 버튼 간 간격
+
+        .MuiButton-root {
+          font-size: 0.9rem;
+          padding: 8px 15px;
+          border: 1px solid $color-border-medium;
+          border-radius: 4px;
+          color: $color-medium-gray;
+          background-color: $color-white;
+          text-transform: none; // 대문자 변환 방지
+
+          &:hover {
+            background-color: $color-off-white;
+            border-color: $color-dark-gray;
+            color: $color-dark-gray;
+          }
+          &.active { // 선택된 버튼
+            background-color: $color-dark-gray;
+            color: $color-white;
+            border-color: $color-dark-gray;
+          }
+        }
+      }
+    }
+
+    .calendar-section {
+      margin-bottom: 40px;
+
+      .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .current-month {
+          font-size: 1.2rem;
+          font-weight: bold;
+          color: $color-dark-gray;
+        }
+        .MuiButton-root {
+          min-width: 30px;
+          padding: 5px;
+          color: $color-dark-gray;
+          border-radius: 4px;
+          &:hover {
+            background-color: $color-off-white;
+          }
+        }
+      }
+
+      .react-calendar {
+        width: 100%;
+        border: none; // 기본 테두리 제거
+        font-family: 'Noto Sans KR', sans-serif, 'Arial';
+        background-color: $color-white;
+
+        .react-calendar__navigation {
+          display: none; // 상단 네비게이션은 직접 구현하므로 숨김
+        }
+
+        .react-calendar__month-view__weekdays {
+          background-color: $color-off-white; // 요일 배경
+          .react-calendar__month-view__weekdays__weekday {
+            font-size: 0.9rem;
+            color: $color-medium-gray;
+            padding: 12px 0; // 요일 간격
+            text-align: center;
+            border-bottom: 1px solid $color-border-light; // 요일 아래 구분선
+            abbr {
+              text-decoration: none; // 요일 줄임말 밑줄 제거
+              font-weight: normal;
+            }
+            &:last-child { // 일요일은 빨간색으로
+                color: #ff0000;
+            }
+            &:nth-child(6) { // 토요일은 파란색으로
+                color: #0000ff;
+            }
+          }
+        }
+
+        .react-calendar__tile {
+          padding: 15px 0;
+          font-size: 0.95rem;
+          color: $color-dark-gray;
+          text-align: center;
+          border-radius: 0;
+          position: relative; // 휴관일 텍스트를 위한 position
+
+          &:hover {
+            background-color: $color-off-white;
+          }
+
+          &.react-calendar__tile--now {
+            background-color: $color-off-white; // 오늘 날짜 연한 배경
+            border: 1px solid $color-border-medium; // 테두리 추가
+            color: $color-dark-gray;
+            box-sizing: border-box; // 테두리가 패딩에 포함되도록
+          }
+          
+          &.holiday-text { // 휴관일 텍스트 스타일
+            color: $color-light-gray; // 텍스트를 더 흐리게
+            font-size: 0.8rem;
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+          }
+
+          // 리움의 선택된 날짜와 휴관일 스타일 (겹치지 않게 조절)
+          &.selected-date { // 선택된 날짜 클래스 (이미지에서 검은색 원에 가까움)
+            background-color: $color-selected-date !important;
+            color: $color-white !important;
+            font-weight: bold;
+            border-radius: 50%; // 원형으로
+            width: 40px; // 원의 크기
+            height: 40px;
+            line-height: 40px; // 텍스트 중앙 정렬
+            margin: auto; // 중앙 정렬
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute; // 원래 위치에서 벗어나 중앙 정렬
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1; // 다른 요소 위에 오도록
+          }
+
+          &.react-calendar__tile--disabled { // 비활성화된 날짜 (선택 불가능)
+            background-color: $color-white; // 배경은 흰색 유지
+            color: $color-light-gray; // 텍스트를 더 흐리게
+            .holiday-text {
+                color: $color-light-gray; // 휴관일 텍스트도 흐리게
+            }
+          }
+          
+          // 이미지에서 보이는 휴관일 배경색
+          &.is-holiday {
+            background-color: $color-holiday; // 휴관일 연한 회색 배경
+            .holiday-text {
+                color: $color-medium-gray; // 휴관일 텍스트는 보조 텍스트 색상
+            }
+            &.react-calendar__tile--disabled {
+                background-color: $color-holiday; // 비활성화된 휴관일도 배경 유지
+            }
+          }
+          
+          &.react-calendar__month-view__days__day--weekend {
+              // 캘린더에서 기본으로 제공하는 주말 클래스 (토, 일)
+              color: $color-dark-gray; // 기본 텍스트 색상
+              // 리움은 특정 날짜에만 '휴관' 텍스트를 넣고, 일반 주말은 그냥 날짜만 표시하는 듯
+          }
+        }
+      }
+      .calendar-legend {
+        display: flex;
+        justify-content: flex-end; // 우측 정렬
+        margin-top: 20px;
+        gap: 20px;
+        font-size: 0.9rem;
+        color: $color-medium-gray;
+
+        div {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+        .legend-box {
+          width: 15px;
+          height: 15px;
+          border: 1px solid $color-border-light;
+        }
+        .legend-available {
+          background-color: $color-white;
+        }
+        .legend-selected {
+          background-color: $color-selected-date;
+        }
+      }
+    }
+
+    .time-select-section, .person-select-section {
+        padding: 25px 0;
+        border-top: 1px solid $color-border-light;
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: $color-dark-gray;
+            margin-bottom: 15px;
+            border-bottom: none; // 하단 선 없음
+            padding-bottom: 0;
+        }
+    }
+
+    .person-select-section {
+      // 인원 선택 섹션
+      .counter-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: $color-dark-gray;
+
+        .MuiButton-root {
+          min-width: 40px;
+          height: 40px;
+          border: 1px solid $color-border-medium;
+          border-radius: 4px;
+          background-color: $color-white;
+          color: $color-dark-gray;
+          font-size: 1.5rem;
+          &:hover {
+            background-color: $color-off-white;
+            border-color: $color-dark-gray;
+          }
+          &:active {
+              background-color: $color-dark-gray;
+              color: $color-white;
+          }
+        }
+        .human-count-display {
+            width: 40px;
+            text-align: center;
+        }
+      }
+    }
+
+
+    .total-price-section {
+      margin-top: 40px;
+      padding-top: 25px;
+      border-top: 1px solid $color-border-light; // 얇은 선
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: $color-dark-gray;
+      .total-price-value {
+          font-size: 1.8rem; // 총 금액은 크게
+      }
+    }
+
+    .submit-button-container {
+      margin-top: 40px;
+      text-align: center; // 리움처럼 중앙 정렬
+
+      .MuiButton-root {
+        background-color: $color-dark-gray; // 검정색 제출 버튼
+        color: $color-white;
+        padding: 15px 60px; // 더 넓은 패딩
+        font-size: 1.1rem;
+        border-radius: 4px;
+        text-transform: none; // 대문자 변환 방지
+        box-shadow: none; // 그림자 없음
+        &:hover {
+          background-color: $color-medium-gray; // 호버 시 약간 밝은 회색
+        }
+      }
+    }
+  }
+}
+
+// React Calendar의 기본 스타일을 오버라이드
+.react-calendar {
+    abbr[title] {
+        text-decoration: none; // 요일 약어 밑줄 제거
+    }
+    .react-calendar__tile--range {
+        background-color: transparent; // 범위 선택 시 기본 배경색 제거
+    }
+    .react-calendar__tile--rangeStart,
+    .react-calendar__tile--rangeEnd,
+    .react-calendar__tile--hover,
+    .react-calendar__tile--active {
+        background-color: transparent; // 선택/호버 시 배경색 제거 (우리가 직접 `selected-date`로 컨트롤)
+    }
+    // 기타 Calendar.css에서 오는 불필요한 스타일 제거
+    .react-calendar__viewContainer {
+        border-top: 1px solid $color-border-light; // 날짜 그리드 상단 테두리
+    }
+}
+
+
+// React Calendar 기본 스타일 오버라이딩 (선택 날짜 시각화)
+.react-calendar__month-view__days__day {
+  // 기본적으로 투명하게 설정하고, 휴관일 등을 위한 배경은 is-holiday 클래스에서 관리
+  background-color: transparent; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px; // 각 날짜 칸의 높이
+  position: relative; // 내부 요소 정렬을 위해
+}
+
+
+// 반응형 디자인 (Media Queries)
+@media (max-width: 992px) {
+  .order-container {
+    flex-direction: column;
+    border: none;
+    box-shadow: none;
+  }
+  .sidebar {
+    width: 100%;
+    flex: none;
+    border-right: none;
+    border-bottom: 1px solid $color-border-light; // 모바일에서는 하단 구분선
+    padding: 20px;
+  }
+  .main-content {
+    padding: 20px;
+  }
+  .top-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  .calendar-section .calendar-legend {
+    justify-content: flex-start;
+  }
+  .total-price-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .order-page {
+    padding: 30px 10px;
+  }
+  .sidebar {
+    padding: 15px;
+  }
+  .sidebar-section {
+    gap: 15px;
+  }
+  .main-content {
+    padding: 15px;
+  }
+  .submit-button-container .MuiButton-root {
+    padding: 12px 30px;
+    font-size: 1rem;
+    width: 100%; // 모바일에서 버튼 폭 채우기
+  }
+}
