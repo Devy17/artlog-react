@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams, createSearchParams } from 'react-router-d
 import AuthContext from '../../context/UserContext';
 import { API_BASE_URL, ORDER, API } from '../../Axios/host-config';
 import styles from './MyOrdersPage.module.scss';
-import axios from "axios"; // axiosInstance 사용이 권장됩니다.
+import axios from "axios"; 
 import ModalContext from '../../Modal/ModalContext';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 
@@ -29,13 +29,16 @@ const MyOrdersPage = () => {
   const [sortCriterion, setSortCriterion] = useState('registDate');
   const [sortDirection, setSortDirection] = useState('desc');
 
-  const token = useMemo(() => localStorage.getItem("ACCESS_TOKEN"), []);
-  const userKey = useMemo(() => localStorage.getItem("USER_ID"), []);
+  const token = localStorage.getItem("ACCESS_TOKEN");
+  const userKey = localStorage.getItem("USER_ID");
+
+  console.log(token, userKey);
+  
 
    useEffect(() => {
     const getData = async () => {
       const response = await axiosInstance.get(
-        `${API_BASE_URL}${API}/selectByUserKey/${userKey}`,
+        `${API_BASE_URL}${API}/selectByUserKeyPaging?userKey=${userKey}&pageNo=1&numOfRows=10`,
       );
 
       const data = response.data.result;
@@ -90,9 +93,8 @@ const MyOrdersPage = () => {
     setError(null);
 
     try {
-      // axios 대신 axiosInstance 사용이 일관성 있고 좋습니다.
-      const response = await axios.get( // ✅ axiosInstance 사용 권장
-        `${API_BASE_URL}${ORDER}/findByAll/${userKey}`,
+      const response = await axios.get( 
+        `${API_BASE_URL}${API}/selectByUserKeyPaging?userKey=${userKey}&pageNo=1&numOfRows=10`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
