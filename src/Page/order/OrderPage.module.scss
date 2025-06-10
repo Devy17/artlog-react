@@ -396,23 +396,30 @@ $color-holiday: #f0f0f0; // 캘린더 휴관일 배경 (연한 회색)
       }
     }
 
-    .submit-button-container {
-      margin-top: 40px;
-      text-align: center; // 리움처럼 중앙 정렬
+  .submit-button-container {
+    margin-top: 40px;
+    text-align: center; // 리움처럼 중앙 정렬
 
-      .MuiButton-root {
-        background-color: $color-dark-gray; // 검정색 제출 버튼
-        color: $color-white;
-        padding: 15px 60px; // 더 넓은 패딩
-        font-size: 1.1rem;
-        border-radius: 4px;
-        text-transform: none; // 대문자 변환 방지
-        box-shadow: none; // 그림자 없음
-        &:hover {
-          background-color: $color-medium-gray; // 호버 시 약간 밝은 회색
-        }
+    .submit-button {
+      background-color: #15202b; // 변경된 색상 적용
+      color: $color-white;
+      padding: 18px 80px; // 패딩을 늘려 버튼 크기 확대
+      font-size: 1.25rem; // 폰트 크기 확대
+      border-radius: 4px;
+      text-transform: none; // 대문자 변환 방지
+      box-shadow: none; // 그림자 없음
+      width: 100%; // 너비를 100%로 설정하여 부모 컨테이너에 꽉 채우기 (모바일 및 데스크톱 모두 고려)
+      max-width: 400px; // 최대 너비 설정 (너무 커지는 것을 방지)
+      transition: background-color 0.3s ease; // 호버 애니메이션 추가
+
+      &:hover {
+        background-color: darken(#15202b, 10%); // 호버 시 색상을 10% 더 어둡게
+      }
+      &:active {
+          background-color: darken(#15202b, 15%); // 클릭 시 더 어둡게
       }
     }
+  }
   }
 }
 
@@ -478,25 +485,5 @@ $color-holiday: #f0f0f0; // 캘린더 휴관일 배경 (연한 회색)
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-  }
-}
-
-@media (max-width: 576px) {
-  .order-page {
-    padding: 30px 10px;
-  }
-  .sidebar {
-    padding: 15px;
-  }
-  .sidebar-section {
-    gap: 15px;
-  }
-  .main-content {
-    padding: 15px;
-  }
-  .submit-button-container .MuiButton-root {
-    padding: 12px 30px;
-    font-size: 1rem;
-    width: 100%; // 모바일에서 버튼 폭 채우기
   }
 }
