@@ -1,4 +1,4 @@
-import { Card, CardMedia } from '@mui/material';
+import { Card, CardMedia, CircularProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API, API_BASE_URL } from '../../Axios/host-config';
@@ -94,14 +94,20 @@ const ContentViewPage = () => {
         )}
       </div>
 
-      <button
-        className={styles['load-more-button']}
-        onClick={() => {
-          if (!waiting) setPage(page + 1);
-        }}
-      >
-        더보기
-      </button>
+      {waiting ? (
+        <div className={styles['load-circular-bar']}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <button
+          className={styles['load-more-button']}
+          onClick={() => {
+            setPage(page + 1);
+          }}
+        >
+          더보기
+        </button>
+      )}
     </div>
   );
 };
