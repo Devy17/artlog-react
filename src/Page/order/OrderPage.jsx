@@ -1,3 +1,4 @@
+// src/pages/OrderPage/OrderPage.jsx
 import { Button } from '@mui/material';
 import React, { useContext, useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
@@ -8,7 +9,7 @@ import { API_BASE_URL, ORDER } from '../../Axios/host-config';
 import ModalContext from '../../Modal/ModalContext';
 import OrderCouponModal from '../../Modal/order/OrderCouponModal';
 import AuthContext from '../../context/UserContext';
-import style from './OrderPage.module.scss';
+import style from './OrderPage.module.scss'; // OrderPage 전용 SCSS 파일
 
 const OrderPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -20,26 +21,25 @@ const OrderPage = () => {
   );
   const { isLoggedIn } = useContext(AuthContext);
 
-  const [couponInfo, setCouponInfo] = useState({ discount: null, percent: null });
+  const [couponInfo, setCouponInfo] = useState(() => {
+    // 로컬 스토리지에서 기존 쿠폰 정보 불러오기
+    const storedDiscount = localStorage.getItem('discount');
+    const storedPercent = localStorage.getItem('percent');
+    return {
+      discount: storedDiscount ? Number(storedDiscount) : null,
+      percent: storedPercent ? Number(storedPercent) : null,
+    };
+  });
   const [modalOpen, setModalOpen] = useState(false);
 
   const navi = useNavigate();
 
   const [activeStartDate, setActiveStartDate] = useState(new Date());
 
-  // 전시 종료일 파싱 (YYYY.MM.DD 형식)
   const exhibitionEndDateStr = searchParams.get('endDate');
   const exhibitionEndDate = exhibitionEndDateStr ?
-    new Date(exhibitionEndDateStr.replace(/\./g, '-')) : // "YYYY.MM.DD" -> "YYYY-MM-DD"로 변환 후 파싱
+    new Date(exhibitionEndDateStr.replace(/\./g, '-')) :
     null;
-
-  // 휴관일 (예시 데이터)
-  const holidays = [
-    new Date(2025, 5, 8).toDateString(),
-    new Date(2025, 5, 22).toDateString(),
-    new Date(2025, 5, 29).toDateString(),
-  ];
-  const isHoliday = (date) => holidays.includes(date.toDateString());
 
 
   const calcTotalPrice = () => {
@@ -53,10 +53,10 @@ const OrderPage = () => {
     const originTotal = charge * count;
     const { discount, percent } = couponInfo;
 
-    if (discount) {
+    if (discount !== null) { // discount가 null이 아닐 때만 적용
       const result = originTotal - discount;
       return result > 0 ? result : 0;
-    } else if (percent) {
+    } else if (percent !== null) { // percent가 null이 아닐 때만 적용
       const result = originTotal * (1 - percent / 100);
       return result > 0 ? Math.floor(result) : 0;
     }
@@ -64,47 +64,76 @@ const OrderPage = () => {
     return originTotal;
   };
 
+   useEffect(() => {
+    setCouponInfo({ discount: null, percent: null });
+    setUserCouponKey(null);
+    localStorage.removeItem('userCoupon');
+    localStorage.removeItem('discount');
+    localStorage.removeItem('percent');
+    console.log('전시 ID 변경 감지: 쿠폰 정보 초기화됨.');
+  }, [searchParams.get('id')]); 
+  
   const handleApplyCoupon = ({ discount, percent, userCouponKey }) => {
     setCouponInfo({ discount, percent });
     setUserCouponKey(userCouponKey);
 
     localStorage.setItem('userCoupon', userCouponKey);
-    if (discount) localStorage.setItem('discount', discount);
-    if (percent) localStorage.setItem('percent', percent);
+    localStorage.setItem('discount', discount !== null ? discount : ''); // null일 경우 빈 문자열 저장
+    localStorage.setItem('percent', percent !== null ? percent : '');     // null일 경우 빈 문자열 저장
 
     setModalOpen(false);
     alert('쿠폰이 적용되었습니다.');
-    console.log('calcTotalPrice:', calcTotalPrice());
+  };
+
+  // 새로운 함수: 쿠폰 적용 취소
+  const handleCancelCoupon = () => {
+    setCouponInfo({ discount: null, percent: null });
+    setUserCouponKey(null);
+    localStorage.removeItem('userCoupon');
+    localStorage.removeItem('discount');
+    localStorage.removeItem('percent');
+    alert('쿠폰 적용이 취소되었습니다.');
   };
 
   const couponButtonClickHandler = () => {
-    setModalOpen(true);
-
+    // 쿠폰 모달을 열기 전에 원래 총 금액이 0인지 확인
     const charge = Number(searchParams.get('charge'));
     const count = Number(humanCount);
-    const totalPrice = isNaN(charge) || isNaN(count) ? 0 : charge * count;
+    // 요금이나 인원이 유효하지 않으면 원래 총 금액을 0으로 간주
+    const originalTotalPrice = isNaN(charge) || isNaN(count) || charge <= 0 || count <= 0 ? 0 : charge * count;
 
-    localStorage.setItem('totalPrice', totalPrice);
+    // 만약 원래 총 금액이 0이라면 쿠폰 적용 불가 메시지를 띄우고 함수 종료
+    if (originalTotalPrice === 0) {
+        alert('무료 전시에는 쿠폰을 적용할 수 없습니다.');
+        return;
+    }
+
+    setModalOpen(true);
+    localStorage.setItem('totalPrice', originalTotalPrice); // 쿠폰 모달에서 사용할 원래 총 금액 저장
   };
 
   const orderButtonClickHandler = () => {
     if (!isLoggedIn) {
       alert('로그인 후 진행해주세요!');
-      navi('/');
+      navi('/login'); // 로그인 페이지로 이동
       return;
     }
 
+
     // --- 여기부터 날짜 유효성 검사 로직 추가 ---
     if (exhibitionEndDate) {
-      // 선택된 날짜의 시간을 자정으로 설정하여 날짜만 비교
       const selectedDateOnly = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-      // 전시 종료일의 시간을 자정으로 설정하여 날짜만 비교
       const exhibitionEndDateOnly = new Date(exhibitionEndDate.getFullYear(), exhibitionEndDate.getMonth(), exhibitionEndDate.getDate());
 
-      // 선택된 날짜가 전시 종료일보다 늦으면 예매 불가
       if (selectedDateOnly.getTime() > exhibitionEndDateOnly.getTime()) {
         alert('선택하신 날짜는 전시 기간이 종료되었습니다. 다른 날짜를 선택해주세요.');
-        return; // 예매 진행을 막음
+        return;
+      }
+      const today = new Date();
+      today.setHours(0,0,0,0); // 오늘 날짜의 자정
+      if (selectedDateOnly.getTime() < today.getTime()) {
+        alert('선택하신 날짜는 이미 지난 날짜입니다. 다른 날짜를 선택해주세요.');
+        return;
       }
     }
     // --- 날짜 유효성 검사 로직 끝 ---
@@ -115,13 +144,16 @@ const OrderPage = () => {
         contentId: searchParams.get('id'),
         userCouponKey: userCouponKey,
         totalPrice: calcTotalPrice(),
-        // 선택된 날짜 정보도 함께 보낼 수 있습니다 (필요하다면)
-        selectedDate: selectedDate.toISOString().split('T')[0], // YYYY-MM-DD 형식으로 전송
+        selectedDate: selectedDate.toISOString().split('T')[0],
       };
 
       try {
         await axiosInstance.post(`${API_BASE_URL}${ORDER}/insert`, body);
-        alert(searchParams.get('title') + '이 결제되었습니다.');
+        alert(searchParams.get('title') + '이(가) 결제되었습니다.');
+        // 결제 성공 후 로컬 스토리지에서 쿠폰 정보 제거
+        localStorage.removeItem('userCoupon');
+        localStorage.removeItem('discount');
+        localStorage.removeItem('percent');
         navi('/');
       } catch (error) {
         console.error('주문 실패:', error);
@@ -149,6 +181,7 @@ const OrderPage = () => {
   return (
     <div className={style['order-page']}>
       <div className={style['order-container']}>
+        {/* 사이드바 영역 (기존과 동일) */}
         <div className={style.sidebar}>
           <div className={style['sidebar-section']}>
             <div className={style['section-title']}>개인예매</div>
@@ -202,21 +235,10 @@ const OrderPage = () => {
             <div className={style['calendar-wrapper']}>
               <Calendar
                 minDate={new Date()}
-                // maxDate 설정: 전시 종료일까지만 선택 가능하도록
                 maxDate={exhibitionEndDate}
-                formatDay={(locale, date) => {
-                  const day = date.getDate();
-                  const isDateHoliday = isHoliday(date);
-                  return (
-                    <div className={isDateHoliday ? style['is-holiday'] : ''}>
-                      {day}
-                      {isDateHoliday && <div className={style['holiday-text']}>휴관</div>}
-                    </div>
-                  );
-                }}
+
                 calendarType='gregory'
                 onChange={(date) => {
-                  console.log('선택한 날짜:', date);
                   setSelectedDate(date);
                 }}
                 value={selectedDate}
@@ -233,19 +255,13 @@ const OrderPage = () => {
                   ) {
                     classes.push(style['selected-date']);
                   }
-                  if (isHoliday(date)) {
-                    classes.push(style['is-holiday']);
-                  }
-                  // 전시 종료일 이후의 날짜는 비활성화된 것처럼 보이도록 추가
                   if (exhibitionEndDate) {
-                    // 날짜만 비교하기 위해 시간 부분을 자정으로 만듦
                     const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
                     const exhibitionEndDateOnly = new Date(exhibitionEndDate.getFullYear(), exhibitionEndDate.getMonth(), exhibitionEndDate.getDate());
                     if (dateOnly.getTime() > exhibitionEndDateOnly.getTime()) {
                       classes.push(style['after-exhibition-end']);
                     }
                   }
-
                   return classes.join(' ');
                 }}
               />
@@ -254,10 +270,6 @@ const OrderPage = () => {
               <div><span className={`${style['legend-box']} ${style['legend-available']}`}></span> 예매 가능일</div>
               <div><span className={`${style['legend-box']} ${style['legend-selected']}`}></span> 예매 선택일</div>
             </div>
-          </div>
-
-          <div className={style['time-select-section']}>
-            <div className={style['section-title']}>시간 선택</div>
           </div>
 
           <div
@@ -278,13 +290,77 @@ const OrderPage = () => {
             </div>
           </div>
 
+          {/* ⭐ 쿠폰 적용 섹션 추가 ⭐ */}
+          <div className={style['coupon-section']}>
+            <div className={style['section-title']}>쿠폰</div>
+            <div className={style['coupon-status-group']}>
+              {userCouponKey && (couponInfo.discount !== null || couponInfo.percent !== null) ? (
+                <>
+                  <span className={style['applied-coupon-text']}>
+                    현재 적용된 쿠폰:
+                    {couponInfo.discount ? ` ${couponInfo.discount}원 할인` : ''}
+                    {couponInfo.percent ? ` ${couponInfo.percent}% 할인` : ''}
+                  </span>
+                  <Button
+                    onClick={handleCancelCoupon}
+                    className={style['coupon-cancel-button']}
+                  >
+                    취소
+                  </Button>
+                </>
+              ) : (
+                <span className={style['no-coupon-text']}>적용된 쿠폰 없음</span>
+              )}
+              <Button
+                onClick={couponButtonClickHandler}
+                className={style['coupon-apply-button']}
+                sx={{
+                  backgroundColor: '#15202b', // 검정색 배경
+                  color: '#fff', // 흰색 텍스트
+                  padding: '10px 20px',
+                  fontSize: '0.9rem',
+                  fontWeight: 'bold',
+                  borderRadius: '4px',
+                  '&:hover': {
+                    backgroundColor: '#0a1016',
+                  },
+                }}
+              >
+                쿠폰 적용하기
+              </Button>
+            </div>
+          </div>
+
+
           <div className={style['total-price-section']}>
             <div>총 금액</div>
-            <div className={style['total-price-value']}>{calcTotalPrice()}원</div>
+            <div className={style['total-price-value']}>
+              {calcTotalPrice().toLocaleString()}원 {/* 금액 포맷팅 */}
+              {userCouponKey && (couponInfo.discount || couponInfo.percent) && (
+                <span className={style['original-price']}>
+                  (할인 전 { (Number(searchParams.get('charge')) * Number(humanCount)).toLocaleString() }원)
+                </span>
+              )}
+            </div>
           </div>
 
           <div className={style['submit-button-container']}>
-            <Button className={style['submit-button']} onClick={orderButtonClickHandler}>
+            <Button
+              className={style['submit-button']}
+              onClick={orderButtonClickHandler}
+              sx={{
+                backgroundColor: '#15202b', // 검정색 배경
+                color: '#fff', // 흰색 텍스트
+                padding: '15px 30px', // 패딩 조정
+                fontSize: '1.2rem', // 폰트 크기
+                fontWeight: 'bold', // 폰트 굵게
+                borderRadius: '8px', // 둥근 모서리
+                width: '100%', // 너비 꽉 채움
+                '&:hover': {
+                  backgroundColor: '#0a1016', // 호버 시 좀 더 어둡게
+                },
+              }}
+            >
               예매하기
             </Button>
           </div>
