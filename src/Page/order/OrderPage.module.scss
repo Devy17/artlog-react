@@ -471,7 +471,9 @@ $color-holiday: #f0f0f0; // 캘린더 휴관일 배경 (연한 회색)
     padding: 20px;
   }
   .main-content {
+    flex-grow: 1;
     padding: 20px;
+     background-color: $color-white;
   }
   .top-header {
     flex-direction: column;

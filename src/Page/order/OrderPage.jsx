@@ -72,7 +72,7 @@ const OrderPage = () => {
     localStorage.removeItem('percent');
     console.log('전시 ID 변경 감지: 쿠폰 정보 초기화됨.');
   }, [searchParams.get('id')]); 
-  
+
   const handleApplyCoupon = ({ discount, percent, userCouponKey }) => {
     setCouponInfo({ discount, percent });
     setUserCouponKey(userCouponKey);
@@ -309,7 +309,7 @@ const OrderPage = () => {
                   </Button>
                 </>
               ) : (
-                <span className={style['no-coupon-text']}>적용된 쿠폰 없음</span>
+                <span className={style['no-coupon-text']}>적용된 쿠폰 없음 </span>
               )}
               <Button
                 onClick={couponButtonClickHandler}
