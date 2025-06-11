@@ -1,20 +1,28 @@
 import React, { useContext } from 'react';
 import AuthContext from '../context/UserContext';
 import { Navigate } from 'react-router-dom';
+import ModalContext from '../Modal/ModalContext';
 
 // 라우터 쪽에서 로그인 여부나 권한을 검사하는 기능을 담당하는 PrivateRouter 생성.
 const PrivateRouter = ({ element, requiredRole }) => {
   const { isLoggedIn, userRole, isInit } = useContext(AuthContext);
+  const { setModalType } = useContext(ModalContext);
+  const [redirectToHome, setRedirectToHome] = useState(false);
 
   // Context 데이터가 초기화되지 않았다면 밑에 로직이 실행되지 않게끔 로딩 페이지 먼저 리턴.
   // 초기화가 완료되면 PrivateRouter가 다시 렌더링 시도를 할 겁니다.
+  useEffect(() => {
+    if (!isLoggedIn) {
+      alert('회원만 이용가능한 페이지입니다. 로그인을 해주세요!');
+      setModalType('login');
+      setRedirectToHome(true); // navigate는 그 다음 단계에서
+    }
+  }, [isLoggedIn]);
+
   if (!isInit) return <div>Loading...</div>;
 
-  if (!isLoggedIn) {
-    alert('회원만 이용가능한 페이지입니다. 로그인을 해주세요!');
-    // to=보내고 싶은 페이지 렌더링 주소
-    // replace = 사용자가 뒤로가기 버튼을 눌러도 이전 페이지로 돌아가지 않게 됨.
-    return <Navigate to='/login' replace />;
+  if (redirectToHome) {
+    return <Navigate to='/' replace />;
   }
 
   if (requiredRole && userRole !== requiredRole) {
