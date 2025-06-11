@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaBars, FaSearch, FaTimes } from 'react-icons/fa';
 import styles from './Header.module.scss';
 import HeaderSearchModal from './HeaderSearch';
@@ -10,6 +10,21 @@ const Header = () => {
   const { isLoggedIn, onLogout } = useContext(AuthContext);
   const [openModalName, setOpenModalName] = useState(null); // 'login', 'search' 등
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // 회원가입 후 메인페이지에서 로그인 모달 띄우는 부분
+  useEffect(() => {
+    if (location.state?.showLoginModal) {
+      const timer = setTimeout(() => {
+        openModal('login');
+        navigate(location.pathname, { replace: true, state: null }); // state 초기화
+      }, 500);
+
+      return () => clearTimeout(timer); // 클린업
+    }
+  }, [location, navigate]);
 
   const handleLogout = () => {
     onLogout();
@@ -52,11 +67,15 @@ const Header = () => {
               <nav className={styles.header_navi}>
                 <ul>
                   <li>
-                    <Link to='/exhibitions'>전시 정보</Link>
+                    <Link to='/exhibitions' onClick={closeModal}>
+                      전시 정보
+                    </Link>
                   </li>
                   {isLoggedIn && (
                     <li>
-                      <Link to='/mypage'>마이페이지</Link>
+                      <Link to='/mypage' onClick={closeModal}>
+                        마이페이지
+                      </Link>
                     </li>
                   )}
                 </ul>
@@ -74,7 +93,9 @@ const Header = () => {
                         LOGIN
                       </button>
                       <span className={styles.divider}>|</span>
-                      <Link to='/signup'>SIGNUP</Link>
+                      <Link to='/signup' onClick={closeModal}>
+                        SIGNUP
+                      </Link>
                     </>
                   )}
                 </div>
