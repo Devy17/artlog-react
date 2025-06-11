@@ -15,7 +15,10 @@ import MyReviewsPage from '../Page/user/MyReviewsPage';
 import OrderPage from '../Page/order/OrderPage';
 import MainPage from '../Component/main/MainPage/MainPage';
 
-const AppRouter = () => {
+// 관리자용
+import AdminDashboard from '../Page/admin/AdminDashboard';
+
+function AppRouter() {
   return (
     <Routes>
       <Route path='/' element={<MainPage />} />
@@ -41,8 +44,16 @@ const AppRouter = () => {
       <Route path='/contentDetail' element={<ContentDetailPage />} />
       <Route path='/MyReviewsPage' element={<MyReviewsPage />} />
       <Route path='/order' element={<OrderPage />} />
+
+      {/* 관리자 전용 페이지 */}
+      <Route
+        path='/admin'
+        element={
+          <PrivateRouter element={<AdminDashboard />} requiredRole='ADMIN' />
+        }
+      />
     </Routes>
   );
-};
+}
 
 export default AppRouter;

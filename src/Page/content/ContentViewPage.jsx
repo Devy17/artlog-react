@@ -56,7 +56,6 @@ const ContentViewPage = () => {
   return (
     <div className={styles['content-view-page']}>
       <h2 className={styles['page-title']}>전시 정보</h2>
-      <div className={styles['filter-sort-area']}>최신순</div>
       <div className={styles['card-grid']}>
         {loading ? (
           apiData.map((data) => (
