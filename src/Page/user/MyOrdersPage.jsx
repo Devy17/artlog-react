@@ -40,7 +40,23 @@ const MyOrdersPage = () => {
   console.log(token, userKey);
   
 
+   useEffect(() => {
+    const getData = async () => {
+      const response = await axiosInstance.get(
+        `${API_BASE_URL}${API}/selectByUserKeyPaging?userKey=${userKey}&pageNo=${page}&numOfRows=10`,
+      );
 
+      const data = response.data.result;
+      console.log(data);
+
+      console.log(data[0].contentThumbnail);
+      return data;
+    };
+
+    getData().then((response) => {
+      setApiData((prev) => [...prev, ...response]);
+    });
+  } ,[userKey, page]); // page와 userKey가 변경될 때마다 API 호출
 
  const contentClickHandler = (contentId) => {
   const orderData = orderList.find((item) => item.contentId === contentId);
