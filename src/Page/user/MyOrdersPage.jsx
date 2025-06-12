@@ -10,7 +10,6 @@ import { useNavigate, useSearchParams, createSearchParams } from 'react-router-d
 import AuthContext from '../../context/UserContext';
 import { API_BASE_URL, ORDER, API } from '../../Axios/host-config';
 import styles from './MyOrdersPage.module.scss';
-import axios from "axios"; 
 import ModalContext from '../../Modal/ModalContext';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 
@@ -41,23 +40,7 @@ const MyOrdersPage = () => {
   console.log(token, userKey);
   
 
-   useEffect(() => {
-    const getData = async () => {
-      const response = await axiosInstance.get(
-        `${API_BASE_URL}${API}/selectByUserKeyPaging?userKey=${userKey}&pageNo=${page}&numOfRows=10`,
-      );
 
-      const data = response.data.result;
-      console.log(data);
-
-      console.log(data[0].contentThumbnail);
-      return data;
-    };
-
-    getData().then((response) => {
-      setApiData((prev) => [...prev, ...response]);
-    });
-  });
 
  const contentClickHandler = (contentId) => {
   const orderData = orderList.find((item) => item.contentId === contentId);
@@ -99,7 +82,7 @@ const MyOrdersPage = () => {
     setError(null);
 
     try {
-      const response = await axios.get( 
+      const response = await axiosInstance.get( 
         `${API_BASE_URL}${API}/selectByUserKeyPaging?userKey=${userKey}&pageNo=${page}&numOfRows=${rowsPerPage}`,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -180,8 +163,8 @@ const MyOrdersPage = () => {
     setError(null);
 
     try {
-      // axios 대신 axiosInstance 사용이 일관성 있고 좋습니다.
-      const response = await axios.delete( // ✅ axiosInstance 사용 권장
+      const response = await axiosInstance.delete( 
+        
         `${API_BASE_URL}${ORDER}/cancel/${orderId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -222,17 +205,12 @@ const MyOrdersPage = () => {
 
 
 
-  // 리뷰 작성 버튼 핸들러
   const handleWriteReviewClick = (contentId) => {
-    // TODO: 리뷰 작성 페이지 또는 모달로 이동하는 실제 로직 구현
     alert(`"${contentId}" 콘텐츠에 대한 리뷰 작성 페이지로 이동 (아직 기능 없음)`);
     console.log(`리뷰 작성 클릭: 콘텐츠 ID ${contentId}`);
   };
 
-  // 리뷰 관리 버튼 핸들러 (MyReviewsPage로 이동 등)
   const handleManageReviewClick = (contentId) => {
-    // TODO: 해당 콘텐츠에 대한 리뷰 관리 페이지로 이동하는 실제 로직 구현
-    // 예: navigate(`/my-reviews?contentId=${contentId}`); 와 같이 특정 콘텐츠 필터링
     alert(`"${contentId}" 콘텐츠에 대한 리뷰 관리 페이지로 이동 (아직 기능 없음)`);
     console.log(`리뷰 관리 클릭: 콘텐츠 ID ${contentId}`);
   };
@@ -276,7 +254,6 @@ const MyOrdersPage = () => {
       <div className={styles['orders-container']}>
         <h2>예매한 콘텐츠</h2>
 
-        {/* ... (필터/정렬 UI) ... */}
         <div className={styles['filter-sort-container']}>
           <div className={styles['search-box']}>
             <input
@@ -313,7 +290,7 @@ const MyOrdersPage = () => {
           <>
           <ul className={styles['orders-list']}>
             {filteredAndSortedOrders.map(order => (
-              // ✅ 예매 항목 클릭 이벤트 추가
+              
               <li
                 key={order.id}
                 className={`${styles['order-item']} ${styles['clickable-order-item']}`} // 클릭 가능 스타일 클래스 추가
@@ -379,6 +356,8 @@ const MyOrdersPage = () => {
               count={totalPages}
               page={page}
               onChange={(e, value) => setPage(value)}
+              siblingCount={2}       
+              boundaryCount={2}
               color="primary"
               />
               </div>
