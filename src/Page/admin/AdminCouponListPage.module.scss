@@ -1,0 +1,118 @@
+// 페이지 전체 wrapper 스타일
+.wrapper {
+  padding: 30px;
+  margin-top: 50px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+// 페이지 제목
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #333;
+  margin-top: 30px;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 300px;
+}
+
+.registerBtn {
+  padding: 17px 20px 15px 20px;
+  margin-right: 300px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 400;
+  background-color: #ff5a78;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.registerBtn:hover {
+  background-color: #e1435f;
+}
+
+// 테이블 전체 스타일
+.table {
+  width: 80%;
+  margin: 0 auto; // 가운데 정렬
+  border-collapse: collapse;
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 6px;
+  overflow: hidden;
+  outline: 1px solid #c4c4c4;
+
+  th,
+  td {
+    padding: 10px; // 셀 간 간격 줄이기
+    font-size: 24px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid #ccc; // 셀 구분용 선
+    outline: 0.3px solid #ececec;
+  }
+
+  th:last-child,
+  td:last-child {
+    border-right: none; // 마지막 열은 선 제거
+  }
+
+  th {
+    background-color: #f2f4f6;
+    font-weight: 600;
+    color: #333;
+  }
+
+  td {
+    color: #444;
+  }
+
+  .emptyMessage {
+    padding: 20px 0;
+    font-size: 24px;
+    color: #777;
+    background-color: #fff;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+// 각 열 별 너비 지정
+.colId {
+  width: 15%;
+}
+
+.colSerial {
+  width: 18%;
+}
+
+.colTitle {
+  width: 15%;
+}
+
+.colPeriod {
+  width: 10%;
+}
+
+.colCount {
+  width: 8%;
+}
+
+.colRegist {
+  width: 10%;
+}
+
+.colUpdate {
+  width: 10%;
+}
