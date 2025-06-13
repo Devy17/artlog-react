@@ -108,6 +108,7 @@ const AdminCouponRegisterPage = () => {
             selectsRange
             dateFormat='yyyy.MM.dd'
             formatWeekDay={(dayName) => dayName.substr(0, 3)}
+            minDate={new Date()} //
           />
         </label>
 

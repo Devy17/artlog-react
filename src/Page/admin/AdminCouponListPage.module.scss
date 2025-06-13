@@ -86,6 +86,27 @@ h1 {
   tr:last-child td {
     border-bottom: none;
   }
+
+  input[type='text'],
+  input[type='number'],
+  .react-datepicker__input-container input {
+    font-size: 22px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: auto;
+    min-width: 180px;
+    text-align: center;
+  }
+
+  button {
+    font-size: 20px;
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #f5f5f5;
+  }
 }
 
 .colId {
@@ -98,7 +119,7 @@ h1 {
   width: 15%;
 }
 .colPeriod {
-  width: 10%;
+  width: 16%;
 }
 .colCount {
   width: 8%;
@@ -108,4 +129,49 @@ h1 {
 }
 .colUpdate {
   width: 10%;
+}
+
+.colStatus {
+  width: 8%;
+  font-weight: bold;
+  color: #d9534f;
+}
+
+:global(.react-datepicker) {
+  width: 330px !important;
+  font-size: 16px;
+  padding: 16px;
+  z-index: 10;
+}
+
+:global(.react-datepicker__header) {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+:global(.react-datepicker__day--in-range),
+:global(.react-datepicker__day--in-selecting-range),
+:global(.react-datepicker__day--selected) {
+  background-color: #ff5a78;
+  color: white;
+  border-radius: 50%;
+}
+
+:global(.react-datepicker__day--outside-month) {
+  color: #ccc !important;
+  background-color: transparent !important;
+}
+
+:global(.react-datepicker__day--today) {
+  border: 1px solid #999;
+  font-weight: bold;
+}
+
+:global(.react-datepicker__navigation-icon::before) {
+  border-width: 6px 6px 0 0;
+}
+
+button {
+  cursor: pointer !important;
 }
