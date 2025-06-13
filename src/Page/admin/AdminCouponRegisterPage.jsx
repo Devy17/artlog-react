@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import 'react-datepicker/dist/react-datepicker.css'; // ① 기본 스타일
+import React, { useState, useEffect } from 'react'; // useEffect 추가
+import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import styles from './AdminCouponRegisterPage.module.scss';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API_BASE_URL, COUPON } from '../../Axios/host-config';
 
 const AdminCouponRegisterPage = () => {
+  const today = new Date();
   const [form, setForm] = useState({
     couponTitle: '',
     serialNumber: '',
@@ -13,22 +14,25 @@ const AdminCouponRegisterPage = () => {
     count: '',
     expireDate: null,
   });
-  const [startDate, setStartDate] = useState(null);
+  const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    // 시작일은 항상 오늘로 고정
+    setStartDate(today);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
 
-  const handleDateChange = (dates) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
-    if (start && end) {
-      const diff = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-      setForm({ ...form, expireDate: end, period: diff });
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+    if (date) {
+      const diff = Math.ceil((date - startDate) / (1000 * 60 * 60 * 24)) + 1;
+      setForm({ ...form, expireDate: date, period: diff });
     }
   };
 
@@ -49,15 +53,14 @@ const AdminCouponRegisterPage = () => {
         count: '',
         expireDate: null,
       });
-      setStartDate(null);
+      setStartDate(today);
       setEndDate(null);
     } catch (err) {
       console.error('등록 실패:', err);
-      if (err.response?.data?.message) {
-        setErrorMessage(err.response.data.message);
-      } else {
-        setErrorMessage('등록 중 알 수 없는 오류가 발생했습니다.');
-      }
+      setErrorMessage(
+        err.response?.data?.message ||
+          '등록 중 알 수 없는 오류가 발생했습니다.',
+      );
     }
   };
 
@@ -96,19 +99,27 @@ const AdminCouponRegisterPage = () => {
         </label>
 
         <label>
-          유효기간 선택
+          종료일 지정
           <DatePicker
             className={styles['custom-date-range']}
             calendarClassName={styles.calendar}
-            placeholderText='시작일 ~ 종료일 선택'
-            selected={startDate}
-            onChange={handleDateChange}
+            placeholderText='종료일 선택'
+            selected={endDate}
+            onChange={handleEndDateChange}
+            selectsEnd
             startDate={startDate}
             endDate={endDate}
-            selectsRange
+            minDate={today}
             dateFormat='yyyy.MM.dd'
             formatWeekDay={(dayName) => dayName.substr(0, 3)}
-            minDate={new Date()} //
+            value={
+              endDate
+                ? `${startDate.toISOString().slice(0, 10).replace(/-/g, '.')} - ${endDate
+                    .toISOString()
+                    .slice(0, 10)
+                    .replace(/-/g, '.')}`
+                : ''
+            }
           />
         </label>
 
