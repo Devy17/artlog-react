@@ -153,23 +153,41 @@
 }
 
 /* 주문 상세 정보 컨테이너 */
-.order-details {
-  flex-grow: 1; /* 남은 공간 차지 */
+.order-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 
-  p {
-    margin: 5px 0; /* 문단 간격 */
-    font-size: 1em;
-    color: #333;
+  .thumbnail {
+    flex-shrink: 0;
+    width: 120px;
+    height: 90px;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: #eee;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
-  strong {
-    color: #555;
+  .order-details {
+    flex-grow: 1;        // 남은 공간을 이쪽이 차지
+    margin-left: 20px;   // 썸네일과 텍스트 사이 여백
+    p {
+      margin: 4px 0;
+    }
   }
 
-  @media (max-width: 768px) {
-    width: 100%; /* 모바일에서 전체 너비 */
+  .order-status, .button-group {
+    flex-shrink: 0;      // 축소되지 않도록
+    margin-left: 20px;   // 텍스트 블럭과 적당한 간격
   }
 }
+
 
 /* 주문 상태 표시 */
 .order-status {

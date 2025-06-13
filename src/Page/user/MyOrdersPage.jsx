@@ -312,9 +312,19 @@ const MyOrdersPage = () => {
                 className={`${styles['order-item']} ${styles['clickable-order-item']}`} // 클릭 가능 스타일 클래스 추가
                 onClick={() => contentClickHandler(order.contentId)} // 클릭 핸들러 연결
               >
+                {/* 콘텐츠 썸네일 이미지 */}
+                
+                <div className={styles['thumbnail-wrapper']}>
+                  <img
+                    src={order.contentThumbnail || '/default-thumbnail.png'}
+                    alt={order.contentTitle || '콘텐츠 썸네일'}
+                    className={styles['thumbnail']}
+                  />
+                </div>
+                {/* 주문 상세 정보 */}
                 <div className={styles['order-details']}>
-                  {/* 콘텐츠 ID, 주문 ID 등 주문 정보 표시 */}
-                  <p><strong>콘텐츠 ID:</strong> {order.contentId}</p>
+                  <p><strong>ID:</strong> {order.contentId}</p>
+                  <p><strong>제목:</strong> {order.contentTitle}</p>
                   <p><strong>주문 ID:</strong> {order.id}</p>
                   <p><strong>총 가격:</strong> {order.totalPrice}원</p>
                   <p><strong>예매일:</strong> {new Date(order.registDate).toLocaleDateString('ko-KR')}</p>
@@ -372,8 +382,6 @@ const MyOrdersPage = () => {
               count={totalPages}
               page={page}
               onChange={(e, value) => setPage(value)}
-              siblingCount={2}       
-              boundaryCount={2}
               color="primary"
               />
               </div>
