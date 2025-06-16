@@ -12,6 +12,7 @@ const PrivateRouter = ({ element, requiredRole }) => {
   // Context 데이터가 초기화되지 않았다면 밑에 로직이 실행되지 않게끔 로딩 페이지 먼저 리턴.
   // 초기화가 완료되면 PrivateRouter가 다시 렌더링 시도를 할 겁니다.
   useEffect(() => {
+    if(!isInit) return;
 
     if (isInit && !isLoggedIn) {
       alert('회원만 이용가능한 페이지입니다. 로그인을 해주세요!');

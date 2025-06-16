@@ -311,7 +311,6 @@ const handleSaveEditedReview = async () => {
               // 데이터가 있을 때 리뷰 목록 표시
               <div className={styles['reviews-list']}> {/* 리뷰 목록을 감싸는 컨테이너 */}
                 {reviewData.map(review => (
-                  console.log("리뷰 데이터:", review), // 리뷰 데이터 로그
                  <div key={review.id} className={styles['review-item']}>
   {/* 이미지 */}
   <div className={styles['item-image-container']}>

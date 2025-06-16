@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import PrivateRouter from './PrivateRouter';
 
 import MainPage from '../Component/main/MainPage/MainPage';
+import PageTransition from '../Component/common/PageTransition';
 import MainVisual from '../Component/main/MainPage/MainVisual';
 
 import SignInPage from '../Page/user/SignInPage';
@@ -27,29 +28,31 @@ import AdminCouponRegisterPage from '../Page/admin/AdminCouponRegisterPage';
 const AppRouter = () => {
   return (
     <Routes>
-      <Route path='/' element={<MainPage />} />
-      <Route path='/login' element={<SignInPage />} />
-      <Route path='/signup' element={<SignUpPage />} />
+      <Route path='/' element={<PageTransition><MainPage /></PageTransition>} />
+      {/* <Route path='/' element={<ContentViewPage />} /> */}
+      {/* 로그인 토큰 테스트 */}
+      <Route path='/login' element={<PageTransition><SignInPage /></PageTransition>} />
+      <Route path='/signup' element={<PageTransition><SignUpPage /></PageTransition>} />
+      <Route path='/mypage' element={<PrivateRouter element={<PageTransition><MyPage /></PageTransition>} />} />
 
       <Route path='/mypage' element={<PrivateRouter element={<MyPage />} />} />
       <Route
         path='/updatePwPage'
-        element={<PrivateRouter element={<UpdatePasswordPage />} />}
+        element={<PrivateRouter element={<PageTransition><UpdatePasswordPage /></PageTransition>} />}
       />
       <Route
         path='/myOrdersPage'
-        element={<PrivateRouter element={<MyOrdersPage />} />}
+        element={<PrivateRouter element={<PageTransition><MyOrdersPage /></PageTransition>} />}
       />
       <Route
         path='/coupons'
-        element={<PrivateRouter element={<Coupons />} />}
+        element={<PrivateRouter element={<PageTransition><Coupons /></PageTransition>} />}
       />
-      <Route path='/MyReviewsPage' element={<MyReviewsPage />} />
-      <Route path='/exhibitions' element={<ContentViewPage />} />
-      <Route path='/contentDetail' element={<ContentDetailPage />} />
-      <Route path='/order' element={<OrderPage />} />
-
-      {/* ✅ 관리자 전용 라우팅 */}
+      <Route path='/exhibitions' element={<PageTransition><ContentViewPage /></PageTransition>} />
+      <Route path='/contentDetail' element={<PageTransition><ContentDetailPage /></PageTransition>} />
+      <Route path='/MyReviewsPage' element={<PageTransition><MyReviewsPage /></PageTransition>} />
+      <Route path='/order' element={<PageTransition><OrderPage /></PageTransition>} />
+       {/* ✅ 관리자 전용 라우팅 */}
       <Route
         path='/admin'
         element={
