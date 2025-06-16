@@ -29,7 +29,7 @@ const AdminCouponRegisterPage = () => {
   const handleEndDateChange = (date) => {
     if (date) {
       const endOfDay = new Date(date);
-      endOfDay.setHours(23, 59, 59, 999); // 날짜 끝으로 설정
+      endOfDay.setHours(23, 59, 59, 999);
       setEndDate(endOfDay);
       setForm({ ...form, expireDate: endOfDay });
     }
@@ -39,7 +39,6 @@ const AdminCouponRegisterPage = () => {
     e.preventDefault();
     setErrorMessage('');
 
-    // period를 계산하여 백엔드에 전달
     const period =
       endDate && startDate
         ? Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1
@@ -84,6 +83,13 @@ const AdminCouponRegisterPage = () => {
             value={form.couponTitle}
             onChange={handleChange}
           />
+          <p className={styles.guide}>
+            ** 쿠폰 이름 규칙 **
+            <br />
+            액수 할인의 경우: [금액]원 [이름] Ex) 1000원 가입할인쿠폰
+            <br />
+            퍼센트 할인의 경우: [할인율]% [이름] Ex) 10% 파격세일쿠폰
+          </p>
         </label>
 
         <label>

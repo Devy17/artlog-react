@@ -11,7 +11,6 @@ const AdminUserListPage = () => {
       const res = await axiosInstance.post(
         `${API_BASE_URL}${USER}/findAllUsers`,
       );
-      console.log(res);
       setUsers(res.data || []);
     } catch (err) {
       console.error('유저 전체 조회 실패:', err);
@@ -21,6 +20,28 @@ const AdminUserListPage = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const handleRoleChange = async (userId, newRole) => {
+    if (!window.confirm(`이 사용자의 권한을 ${newRole}로 변경하시겠습니까?`))
+      return;
+
+    try {
+      if (newRole === 'ADMIN') {
+        await axiosInstance.post(
+          `${API_BASE_URL}${USER}/convertAdmin/${userId}`,
+        );
+        alert('권한이 관리자(ADMIN)로 변경되었습니다.');
+      } else {
+        alert('현재는 ADMIN → USER 변경 기능이 없습니다.');
+        return;
+      }
+
+      fetchUsers();
+    } catch (err) {
+      console.error('권한 변경 실패:', err);
+      alert('권한 변경 중 오류가 발생했습니다.');
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -33,12 +54,13 @@ const AdminUserListPage = () => {
               <th>이메일</th>
               <th>이름</th>
               <th>권한</th>
+              <th>변경</th>
             </tr>
           </thead>
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td colSpan={4} className={styles.emptyMessage}>
+                <td colSpan={5} className={styles.emptyMessage}>
                   조회된 유저가 없습니다.
                 </td>
               </tr>
@@ -49,6 +71,17 @@ const AdminUserListPage = () => {
                   <td>{user.email}</td>
                   <td>{user.username}</td>
                   <td>{user.role}</td>
+                  <td>
+                    <select
+                      value={user.role}
+                      onChange={(e) =>
+                        handleRoleChange(user.id, e.target.value)
+                      }
+                    >
+                      <option value='USER'>USER</option>
+                      <option value='ADMIN'>ADMIN</option>
+                    </select>
+                  </td>
                 </tr>
               ))
             )}

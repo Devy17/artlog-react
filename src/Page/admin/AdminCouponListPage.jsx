@@ -16,7 +16,7 @@ const AdminCouponListPage = () => {
     try {
       const res = await axiosInstance.get(`${API_BASE_URL}${COUPON}/findByAll`);
       const all = res.data.result || [];
-      console.log('✅ 응답된 쿠폰 목록:', all);
+      console.log('응답된 쿠폰 목록:', all);
       setCouponList(all);
     } catch (err) {
       console.error('쿠폰 전체 조회 실패:', err);
