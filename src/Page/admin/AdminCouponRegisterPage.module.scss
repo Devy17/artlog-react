@@ -133,3 +133,7 @@
 :global(.react-datepicker__navigation-icon::before) {
   border-width: 6px 6px 0 0;
 }
+
+button {
+  cursor: pointer !important;
+}
