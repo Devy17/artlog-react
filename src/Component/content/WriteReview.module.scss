@@ -1,0 +1,73 @@
+/* 변수 정의 (필요시 전역 변수 파일에서 임포트) */
+$color-primary: #15202b; // 리움 메인 색상 (검정/어두운 남색)
+$color-white: #fff; // 흰색
+$color-border: #eee; // 테두리 색상
+$color-light-text: #666; // 보조 텍스트 색상
+
+.write-review-form {
+  display: flex;
+  // gap: 10px; // 융합되게 하려면 gap을 제거하거나 0으로 설정
+  margin-top: 30px;
+  align-items: stretch; // 중요: 자식 요소들이 컨테이너의 높이를 채우도록 함 (댓글창과 버튼의 높이 일치)
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.review-textarea {
+  flex-grow: 1;
+  padding: 12px 15px;
+  border: 1px solid $color-border;
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  font-size: 1rem;
+  font-family: inherit; /* ⭐ 이 줄을 추가하여 부모(body)의 폰트 설정을 상속받도록 합니다. */
+  min-height: 50px;
+  resize: vertical;
+  &:focus {
+    outline: none;
+    border-color: darken($color-border, 20%);
+    border-right-color: darken($color-border, 20%);
+  }
+  &::placeholder {
+    color: $color-light-text;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    border-right: 1px solid $color-border;
+    border-radius: 4px;
+  }
+}
+
+.submit-review-button {
+  background-color: $color-primary; // 검정색 배경
+  color: $color-white;
+  border: none;
+  // padding: 12px 25px; // height가 stretch로 설정되므로 패딩은 주로 내부 텍스트에 영향
+  padding: 0 25px; // 패딩을 좌우로만 주고, 높이는 stretch에 맡김
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 0 4px 4px 0; // 중요: 오른쪽만 둥글게, 왼쪽은 각지게
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-width: 80px; // 최소 너비
+  // height: 100%; // stretch와 함께 작동하여 높이를 채움 (선택적)
+  display: flex; // 텍스트 중앙 정렬을 위해 flex 사용
+  align-items: center; // 세로 중앙 정렬
+  justify-content: center; // 가로 중앙 정렬
+  text-align: center; // 구형 브라우저 대비
+
+  &:hover {
+    background-color: darken($color-primary, 10%);
+  }
+
+  &:disabled {
+    background-color: #cccccc; // 비활성화 시 회색 배경
+    color: #888888; // 비활성화 시 텍스트 색상
+    cursor: not-allowed;
+  }
+
+}

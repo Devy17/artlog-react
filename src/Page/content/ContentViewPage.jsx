@@ -1,4 +1,4 @@
-import { Card, CardMedia } from '@mui/material';
+import { Card, CardMedia, CircularProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API, API_BASE_URL } from '../../Axios/host-config';
@@ -9,6 +9,7 @@ const ContentViewPage = () => {
   const [apiData, setApiData] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, isLoading] = useState(false);
+  const [waiting, isWaiting] = useState(false);
   const navi = useNavigate();
 
   const numberOfContent = 9;
@@ -16,6 +17,7 @@ const ContentViewPage = () => {
   // ✅ 전체 데이터 한 번만 불러오기
   useEffect(() => {
     const getData = async () => {
+      isWaiting(true);
       const response = await axiosInstance.get(
         `${API_BASE_URL}${API}/select?numOfRows=${numberOfContent}&pageNo=${page}`,
       );
@@ -29,6 +31,7 @@ const ContentViewPage = () => {
     getData().then((response) => {
       setApiData((prev) => [...prev, ...response]); // 전체 저장
       isLoading(true); // 로딩 완료
+      isWaiting(false);
     });
   }, [page]);
 
@@ -90,12 +93,20 @@ const ContentViewPage = () => {
         )}
       </div>
 
-      <button
-        className={styles['load-more-button']}
-        onClick={() => setPage(page + 1)}
-      >
-        더보기
-      </button>
+      {waiting ? (
+        <div className={styles['load-circular-bar']}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <button
+          className={styles['load-more-button']}
+          onClick={() => {
+            setPage(page + 1);
+          }}
+        >
+          더보기
+        </button>
+      )}
     </div>
   );
 };

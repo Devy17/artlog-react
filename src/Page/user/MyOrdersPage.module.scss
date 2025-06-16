@@ -1,32 +1,26 @@
 /* src/pages/MyOrdersPage.module.scss */
 
-/* ✅ 페이지 전체 컨테이너 */
+/* ==============================
+   페이지 전체 컨테이너
+   ============================== */
 .my-orders-page-wrapper {
-  padding-top: 30px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 40px; // 하단 여백
-  background-color: #f8f8f8; // 페이지 배경색
-  min-height: 100vh; // 최소 높이
-  max-width: 1000px; // 페이지 최대 너비
-  margin: 0 auto; // 가운데 정렬
+
+  padding: 80px 20px 40px;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+  max-width: 1000px;
+  margin: 0 auto;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding-top: 70px; // 모바일 헤더 높이에 맞춰 조정
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 30px;
+    padding: 70px 15px 30px;
   }
 }
 
-/* orders-container: 페이지 중앙 내용부 컨테이너 */
+/* ==============================
+   내용부 컨테이너
+   ============================== */
 .orders-container {
-  // padding: 20px; /* 필요시 내부 여백 추가 */
-  // background-color: #fff; /* 필요시 배경색 */
-  // border-radius: 8px; /* 필요시 모서리 둥글게 */
-  // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* 필요시 그림자 */
-
   h2 {
     text-align: center;
     color: #333;
@@ -38,7 +32,11 @@
   }
 }
 
-/* 검색 및 정렬 필터 컨테이너 */
+/* ==============================
+   검색 및 정렬 필터
+   (컴포넌트에 적용하실 경우, 
+    JSX에 filter-sort-container, search-box, sort-box 추가)
+   ============================== */
 .filter-sort-container {
   display: flex;
   justify-content: space-between;
@@ -62,7 +60,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1em;
-  width: 200px; /* 필요시 너비 조정 */
+  width: 200px;
 
   @media (max-width: 600px) {
     width: 100%;
@@ -78,7 +76,9 @@
   cursor: pointer;
 }
 
-/* 정보/오류 메시지 스타일 */
+/* ==============================
+   정보/오류 메시지
+   ============================== */
 .info-message,
 .error-message {
   text-align: center;
@@ -92,14 +92,15 @@
   font-weight: bold;
 }
 
-/* 주문 목록 ul */
+/* ==============================
+   주문 목록
+   ============================== */
 .orders-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* 예매 항목 리스트 아이템 */
 .order-item {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -107,116 +108,159 @@
   padding: 20px;
   margin-bottom: 15px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  display: flex; /* 내부 요소를 가로로 배치 */
-  justify-content: space-between; /* 상세 정보와 버튼 그룹을 양 끝으로 */
-  align-items: center; /* 세로 중앙 정렬 */
-  flex-wrap: wrap; /* 작은 화면에서 요소들이 줄바꿈되도록 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 
-  // ✅ 클릭 가능한 항목에 대한 스타일 추가
   &.clickable-order-item {
-    cursor: pointer; // 마우스 오버 시 포인터 커서로 변경
-    transition: background-color 0.2s ease; // 호버 시 배경색 변경 애니메이션
-
+    cursor: pointer;
+    transition: background-color 0.2s ease;
     &:hover {
-      background-color: #f9f9f9; // 호버 시 살짝 밝은 배경색
+      background-color: #f9f9f9;
     }
   }
 
   @media (max-width: 768px) {
-    flex-direction: column; /* 모바일에서는 세로 배치 */
-    align-items: flex-start; /* 세로 배치 시 왼쪽 정렬 */
-    gap: 15px; /* 요소들 사이 간격 */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  /* 썸네일 래퍼 */
+  .thumbnail-wrapper {
+    flex-shrink: 0;
+    width: 120px;
+    height: 90px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #eee;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  /* 주문 상세 텍스트 */
+  .order-details {
+    flex-grow: 1;
+    margin-left: 20px;
+
+    p {
+      margin: 4px 0;
+    }
+  }
+
+  /* 상태 & 버튼 */
+  .order-status,
+  .button-group {
+    flex-shrink: 0;
+    margin-left: 20px;
   }
 }
 
-/* 주문 상세 정보 컨테이너 */
-.order-details {
-  flex-grow: 1; /* 남은 공간 차지 */
-
-  p {
-    margin: 5px 0; /* 문단 간격 */
-    font-size: 1em;
-    color: #333;
-  }
-
-  strong {
-    color: #555;
-  }
-
-  @media (max-width: 768px) {
-    width: 100%; /* 모바일에서 전체 너비 */
-  }
-}
-
-/* 주문 상태 표시 */
+/* ==============================
+   주문 상태 표시
+   ============================== */
 .order-status {
   font-size: 1em;
   margin: 5px 0;
-  flex-shrink: 0; /* 상태 텍스트가 줄어들지 않도록 */
+  flex-shrink: 0;
 
   @media (max-width: 768px) {
-    width: 100%; /* 모바일에서 전체 너비 */
-    text-align: left; /* 모바일에서 왼쪽 정렬 */
+    width: 100%;
+    text-align: left;
+  }
+
+  span {
+    font-weight: bold;
+
+    &.active {
+      color: #28a745;
+    }
+
+    &.cancelled {
+      color: #dc3545;
+    }
   }
 }
 
-.order-status span {
-  font-weight: bold;
-}
-
-.order-status .active {
-  color: #28a745; /* 예매 완료 시 녹색 */
-}
-
-.order-status .cancelled {
-  color: #dc3545; /* 취소됨 시 빨간색 */
-}
-
-/* 버튼 그룹 컨테이너 */
+/* ==============================
+   버튼 그룹 & 버튼 스타일
+   ============================== */
 .button-group {
   display: flex;
-  gap: 10px; /* 버튼 사이 간격 */
-  flex-shrink: 0; /* 버튼 그룹이 줄어들지 않도록 */
-  align-items: center; /* 버튼들 세로 중앙 정렬 */
+  gap: 10px;
+  flex-shrink: 0;
+  align-items: center;
 
   @media (max-width: 768px) {
-    width: 100%; /* 모바일에서 전체 너비 */
-    justify-content: flex-start; /* 모바일에서 왼쪽 정렬 */
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .cancel-button {
+    background-color: #ffc107;
+    color: #333;
+
+    &:hover:not(:disabled) {
+      background-color: #e0a800;
+    }
+  }
+
+  .write-review-button,
+  .manage-review-button {
+    background-color: #007bff;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
   }
 }
+.load-more-wrapper {
+  text-align: center;
+  margin-top: 20px;
 
-/* 버튼 스타일 */
-.button-group button {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition:
-    background-color 0.3s ease,
-    opacity 0.3s ease;
+  .load-more-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
+    &:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
 
-.cancel-button {
-  background-color: #ffc107; /* 노란색 계열 */
-  color: #333;
-
-  &:hover:not(:disabled) {
-    background-color: #e0a800;
-  }
-}
-
-.write-review-button,
-.manage-review-button {
-  background-color: #007bff; /* 파란색 계열 */
-  color: #fff;
-
-  &:hover:not(:disabled) {
-    background-color: #0056b3;
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 }
