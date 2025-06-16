@@ -99,26 +99,46 @@ const MyOrdersPage = () => {
 
     try {
       const response = await axiosInstance.get( 
-        `${API_BASE_URL}${API}/selectByUserKeyPaging?userKey=${userKey}&pageNo=${page}&numOfRows=${rowsPerPage}`,
+        `${API_BASE_URL}${API}/selectByUserKeyPaging`,
       {
+        params: {
+          userKey,
+          pageNo: 1,
+          numOfRows: 300,
+        },
         headers: { Authorization: `Bearer ${token}` },
       }
       );
+      const fullList = Array.isArray(response.data.result) ? response.data.result : [];
+      
+      console.log('📦 주문 목록:', fullList);
       console.log('📦 주문 응답:', response.data.result);
 
       if (response.data?.statusCode === 200) {
-        setOrderList(Array.isArray(response.data.result) ? response.data.result : []);
-        console.log('주문 목록 가져오기 성공:', response.data.statusMessage);
 
-        const result = Array.isArray(response.data.result) ? response.data.result : [];
-        setOrderList(result);
-        setNextPage(result.length === rowsPerPage);
-        if (result.length < rowsPerPage) {
-           setTotalPages(page);a
-        } else {
-          setTotalPages(page + 1);
+      const sorted = fullList.sort((a, b) => {
+        if (sortCriterion === 'registDate') {
+          const da = new Date(a.registDate);
+          const db = new Date(b.registDate);
+          return sortDirection === 'asc' ? da - db : db - da;
+        } else { // totalPrice
+          return sortDirection === 'asc'
+            ? a.totalPrice - b.totalPrice
+            : b.totalPrice - a.totalPrice;
         }
+      });
 
+      const total = sorted.length;
+      setTotalPages(Math.ceil(total / rowsPerPage));
+
+      const start = (page - 1) * rowsPerPage;
+      const paged = sorted.slice(start, start + rowsPerPage);
+
+      setOrderList(paged);
+      setNextPage(page < Math.ceil(total / rowsPerPage));
+    }
+      if (response.data?.statusCode === 200) {
+        console.log('주문 목록 가져오기 성공:', response.data.statusMessage);
 
       } else if (response.status === 404) { // ✅ 백엔드 CommonResDto의 statusCode를 확인하는 것이 더 정확
         console.log('주문 목록 없음:', response.data?.statusMessage || '');
@@ -156,7 +176,7 @@ const MyOrdersPage = () => {
       setLoading(false);
       setNextPage(false);
     }
-  }, [authCtx, navigate, token, userKey, setModalType, page]); // navigate 의존성은 불필요할 수 있습니다. fetch 함수에서는 사용 안함.
+  }, [authCtx, navigate, token, userKey, setModalType, page, sortCriterion, sortDirection, rowsPerPage]); // navigate 의존성은 불필요할 수 있습니다. fetch 함수에서는 사용 안함.
 
   useEffect(() => {
     if (!token || !userKey) {
@@ -334,7 +354,6 @@ const MyOrdersPage = () => {
                   >
                     주문 취소
                   </button>
-                    ))
                 </div>
               </li>
             ))}
