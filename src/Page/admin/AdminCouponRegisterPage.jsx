@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // useEffect 추가
+import React, { useState, useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import styles from './AdminCouponRegisterPage.module.scss';
@@ -10,7 +10,6 @@ const AdminCouponRegisterPage = () => {
   const [form, setForm] = useState({
     couponTitle: '',
     serialNumber: '',
-    period: '',
     count: '',
     expireDate: null,
   });
@@ -19,7 +18,6 @@ const AdminCouponRegisterPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    // 시작일은 항상 오늘로 고정
     setStartDate(today);
   }, []);
 
@@ -29,27 +27,36 @@ const AdminCouponRegisterPage = () => {
   };
 
   const handleEndDateChange = (date) => {
-    setEndDate(date);
     if (date) {
-      const diff = Math.ceil((date - startDate) / (1000 * 60 * 60 * 24)) + 1;
-      setForm({ ...form, expireDate: date, period: diff });
+      const endOfDay = new Date(date);
+      endOfDay.setHours(23, 59, 59, 999); // 날짜 끝으로 설정
+      setEndDate(endOfDay);
+      setForm({ ...form, expireDate: endOfDay });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
+
+    // period를 계산하여 백엔드에 전달
+    const period =
+      endDate && startDate
+        ? Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1
+        : null;
+
     const payload = {
       ...form,
+      period: period,
       expireDate: form.expireDate?.toISOString(),
     };
+
     try {
       await axiosInstance.post(`${API_BASE_URL}${COUPON}/insert`, payload);
       alert('쿠폰이 정상 등록되었습니다.');
       setForm({
         couponTitle: '',
         serialNumber: '',
-        period: '',
         count: '',
         expireDate: null,
       });
@@ -77,15 +84,6 @@ const AdminCouponRegisterPage = () => {
             value={form.couponTitle}
             onChange={handleChange}
           />
-          <p className={styles.guide}>
-            ** 쿠폰 이름 규칙 **
-            <br />
-            액수 할인일 때: &lt;금액&gt;원&lt;쿠폰 정보&gt; 예)
-            3000원회원가입할인쿠폰, 5000원 감사 쿠폰
-            <br />
-            퍼센트 할인일 때: &lt;할인율&gt;%&lt;쿠폰 정보&gt; 예) 10%파격세일,
-            30% 감사 쿠폰
-          </p>
         </label>
 
         <label>
@@ -111,7 +109,6 @@ const AdminCouponRegisterPage = () => {
             endDate={endDate}
             minDate={today}
             dateFormat='yyyy.MM.dd'
-            formatWeekDay={(dayName) => dayName.substr(0, 3)}
             value={
               endDate
                 ? `${startDate.toISOString().slice(0, 10).replace(/-/g, '.')} - ${endDate

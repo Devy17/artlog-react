@@ -16,12 +16,8 @@ const AdminCouponListPage = () => {
     try {
       const res = await axiosInstance.get(`${API_BASE_URL}${COUPON}/findByAll`);
       const all = res.data.result || [];
-
-      // active 필터는 백엔드가 active를 보내줄 때 주석 해제
-      // const filtered = all.filter((coupon) => coupon.active === 'Y');
-      // setCouponList(filtered);
-
-      setCouponList(all); // 지금은 전체 다 표시
+      console.log('✅ 응답된 쿠폰 목록:', all);
+      setCouponList(all);
     } catch (err) {
       console.error('쿠폰 전체 조회 실패:', err);
     }
@@ -34,28 +30,22 @@ const AdminCouponListPage = () => {
   const formatDate = (iso) =>
     new Date(iso).toISOString().split('T')[0].replace(/-/g, '.');
 
-  const getEndDate = (registDate, period) => {
-    const end = new Date(registDate);
-    end.setDate(end.getDate() + period);
-    return formatDate(end.toISOString());
+  const getEndDate = (expireDate) => {
+    return formatDate(expireDate);
   };
 
-  const checkIfExpired = (registDate, period) => {
-    const start = new Date(registDate);
-    const expireDate = new Date(start);
-    expireDate.setDate(start.getDate() + period);
-    const today = new Date();
-    return today > expireDate ? '만료' : '유효';
+  const getCouponStatus = (coupon) => {
+    return coupon.active === 'Y' || coupon.active === true ? '유효' : '만료';
   };
 
-  const handleDelete = async (couponId) => {
+  const handleDelete = async (serialNumber) => {
     if (window.confirm('정말 삭제하시겠습니까?')) {
       try {
-        await axiosInstance.put(
-          `${API_BASE_URL}${COUPON}/deactivate/${couponId}`,
+        await axiosInstance.delete(
+          `${API_BASE_URL}${COUPON}/delete/${serialNumber}`,
         );
         alert('쿠폰이 삭제(비활성화)되었습니다.');
-        findAllCoupons(); // 목록 갱신
+        findAllCoupons();
       } catch (err) {
         console.error('쿠폰 삭제 실패:', err);
       }
@@ -99,23 +89,19 @@ const AdminCouponListPage = () => {
                   <td>{coupon.serialNumber}</td>
                   <td>{coupon.couponTitle}</td>
                   <td>
-                    {`${formatDate(coupon.registDate)} - ${getEndDate(
-                      coupon.registDate,
-                      coupon.period,
-                    )}`}
+                    {`${formatDate(coupon.registDate)} - ${getEndDate(coupon.expireDate)}`}
                   </td>
                   <td>{coupon.count}</td>
                   <td>{formatDate(coupon.registDate)}</td>
                   <td className={styles.colStatus}>
-                    {coupon.count <= 0 ||
-                    checkIfExpired(coupon.registDate, coupon.period) === '만료'
-                      ? '만료'
-                      : '유효'}
+                    {getCouponStatus(coupon)}
                   </td>
                   <td>
-                    <button onClick={() => handleDelete(coupon.id)}>
-                      삭제
-                    </button>
+                    {getCouponStatus(coupon) === '유효' && (
+                      <button onClick={() => handleDelete(coupon.serialNumber)}>
+                        삭제
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))
