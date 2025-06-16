@@ -6,7 +6,7 @@ const axiosApi = () => {
   const instance = axios.create({
     baseURL: 'http://api.kcisa.kr/openapi/API_CCA_145/request',
     params: {
-      serviceKey: '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',
+      serviceKey: '50c4abb3-0b85-4348-809c-b1df4198f4ef',
       numOfRows: '100',
       pageNo: '1',
     },

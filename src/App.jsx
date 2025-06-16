@@ -16,11 +16,12 @@ function App() {
         <ScrollToTop /> {/* 페이지 이동 시 스크롤을 맨 위로 올려주는 컴포넌트 */}
         <div className='App'>
           <Header />
+          <div style={{ height: '90px' }} />;
           <div className='content-wrapper'>
             <AppRouter /> {/* 모든 라우팅은 여기서 처리 */}
           </div>
           <Footer />
-          <ModalController modalType={modalType} setModalType={setModalType}/>
+          <ModalController modalType={modalType} setModalType={setModalType} />
         </div>
       </ModalContext.Provider>
     </AuthContextProvider>

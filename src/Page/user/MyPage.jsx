@@ -34,6 +34,7 @@ const MyPage = () => {
     navigate('/coupons');
   };
 
+  // --- 회원 정보 가져오기 (GET /user/mypage/{userId}) ---
   useEffect(() => {
     const getUserInfo = async () => {
       const token = localStorage.getItem('ACCESS_TOKEN');

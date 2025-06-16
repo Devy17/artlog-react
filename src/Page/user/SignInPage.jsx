@@ -38,8 +38,16 @@ const SignInPage = ({ onClose }) => {
 
     try {
       const res = await axios.post(`${API_BASE_URL}${USER}/login`, loginData);
+      const { userId: id, role } = res.data.result;
+      localStorage.setItem('USER_ID', id);
+      localStorage.setItem('USER_ROLE', role);
       onLogin(res.data.result);
       onClose();
+      if (role === 'ADMIN') {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     } catch (e) {
       console.error(e);
       setErrorMessage('아이디 또는 비밀번호가 올바르지 않습니다.');
