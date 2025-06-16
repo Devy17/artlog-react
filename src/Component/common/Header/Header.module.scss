@@ -1,5 +1,3 @@
-/* src/components/Header.module.scss */
-
 /* --- 전체 헤더 컨테이너 (id="header") --- */
 .header {
   width: 100%;
@@ -20,22 +18,22 @@
 /* --- header_bottom (PC 메인 헤더) --- */
 .header_bottom {
   width: 100%;
-  height: 60px; /* 헤더 높이 */
+  height: 100px;
   display: flex;
   align-items: center;
-  justify-content: center; /* .cont_inner가 flex-grow를 가져 중앙 정렬 */
+  justify-content: center;
 }
 
 /* --- cont_inner (헤더 내용물 가운데 정렬 및 최대 너비 제한) --- */
 .cont_inner {
-  max-width: 1280px; /* 하퍼스 바자 사이트의 최대 너비에 근접하게 설정 */
+  max-width: 1280px;
   width: 100%;
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
-  justify-content: space-between; /* 요소들 간 간격 벌리기 */
   align-items: center;
-  height: 100%; /* 부모 (.header_bottom) 높이에 맞춤 */
+  justify-content: space-between;
+  height: 100%;
 }
 
 /* --- 전체 메뉴 열기 버튼 (.btn_menu) --- */
@@ -44,40 +42,40 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  font-size: 24px; /* 아이콘 크기 */
-  color: #333; /* 아이콘 색상 */
+  font-size: 50px;
+  color: #333;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1; /* 아이콘 라인 높이 조정 */
+  line-height: 1;
 
-  // 포커스 시 기본 외곽선 제거 (접근성 고려)
   &:focus,
   &:active {
-    outline: none; // 예시: 키보드 포커스 시 외곽선 표시
+    outline: none;
     outline-offset: none;
   }
 }
 
 /* --- 로고 (.logo) --- */
 .logo {
-  margin: 0;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  flex: 1;
 
   a {
     display: block;
-    height: 100%; // 부모 (.logo) 높이에 맞춤
+    height: 100%;
 
     img {
-      max-height: 40px; /* 로고 이미지 최대 높이 */
-      width: auto; /* 비율 유지 */
+      max-height: 70px;
+      width: auto;
       object-fit: contain;
-      vertical-align: middle; // 세로 중앙 정렬
+      vertical-align: middle;
     }
-    // 로고 링크 포커스 시 기본 외곽선 제거 (접근성 고려)
+
     &:focus-visible {
-      outline: 2px solid #5f0080; // 예시: 키보드 포커스 시 외곽선 표시
+      outline: 2px solid #5f0080;
       outline-offset: 2px;
     }
   }
@@ -85,37 +83,40 @@
 
 /* --- 메인 네비게이션 (.header_navi) --- */
 .header_navi {
-  flex-grow: 1; /* 남은 공간을 모두 채우도록 설정 */
-  text-align: center; /* flex-grow 영역 내에서 텍스트 가운데 정렬 (ul에도 justify-content: center 적용) */
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  text-align: center;
 
   ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
-    justify-content: center; /* 메뉴 아이템들(li)을 가운데 정렬 */
-    gap: 30px; /* 메뉴 항목 간 간격 */
+    justify-content: center;
+    gap: 30px;
   }
 
   li {
     position: relative;
-    // 필요에 따라 하위 메뉴 관련 스타일 추가
   }
 
   li a {
-    text-decoration: none; // 기본 밑줄 제거
-    color: #000; // 검정색 글꼴
-    font-weight: 700; // 굵은 글꼴
-    font-size: 1rem; // 글자 크기
-    padding: 5px 0; // 상하 패딩 (클릭 영역 확보)
-    transition: color 0.3s ease; // 색상 변경 애니메이션
+    text-decoration: none;
+    color: #000;
+    font-weight: 600;
+    font-size: 30px;
+    padding: 5px 40px;
+    min-width: 170px;
+    transition: color 0.3s ease;
+    display: inline-block;
 
     &:hover {
-      color: #555; // 호버 시 색상 변경
+      color: #555;
     }
-    // 메뉴 링크 포커스 시 기본 외곽선 제거 (접근성 고려)
+
     &:focus-visible {
-      outline: 2px solid #5f0080; // 예시: 키보드 포커스 시 외곽선 표시
+      outline: 2px solid #5f0080;
       outline-offset: 2px;
     }
   }
@@ -123,85 +124,45 @@
 
 /* --- 유틸리티/보조 기능 영역 (.header_util) --- */
 .header_util {
+  flex: 1;
   display: flex;
-  align-items: center; // 자식 요소들을 세로 중앙 정렬
-  gap: 15px; /* 인증 링크 그룹과 검색 버튼 사이 간격 */
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
 }
 
 .auth_links {
   display: flex;
-  align-items: center; // 자식 요소들을 세로 중앙 정렬
-  gap: 10px; /* 로그인/로그아웃 링크 사이 간격 */
+  align-items: center;
+  gap: 10px;
 
-  // ★ LOGIN 버튼 (<button>)과 SIGNUP 링크 (<a>) 공통 스타일 ★
-  // .auth_links 안에 있는 button 태그와 a 태그 모두에게 이 스타일을 적용합니다.
   button,
   a {
-    // 기본 버튼 스타일 제거
-    background: none; // 배경색 없앰
-    border: none; // 테두리 없앰
-    padding: 0; // 내부 패딩 없앰
-    font: inherit; // 부모 요소로부터 글꼴 관련 스타일 (font-family, font-size, font-weight 등) 상속
-    cursor: pointer; // 마우스 오버 시 손가락 모양 (버튼과 링크 모두에 해당)
-
-    // 링크 스타일 (a 태그 기본 밑줄 제거 포함)
-    text-decoration: none; // 텍스트 밑줄 제거
-    color: #000; // 글자 색상 (검정색)
-    font-size: 0.9rem; // 글자 크기 (기존 .auth_links a와 동일)
-    font-weight: bold; // 글자 두께 (기존 .auth_links a와 동일)
-    transition: color 0.3s ease; // 색상 변경 시 부드러운 전환 효과
-    line-height: 1.5; // 라인 높이 조정 (필요에 따라)
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    color: #000;
+    font-size: 23px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    line-height: 1.5;
 
     &:hover {
-      color: #999; // 마우스 오버 시 글자 색상 변경
+      color: #999;
     }
 
-    // ★ 포커스 및 활성화 상태에서 기본 외곽선 제거 ★
-    // 클릭, 탭 키 이동 등으로 요소가 포커스를 받았을 때 적용되는 스타일
-    // .focus-visible을 사용하면 키보드 포커스 시에만 표시되어 접근성 향상
-    // 현재는 focus와 active 모두 outline: none 적용하여 완전히 제거
     &:focus,
     &:active {
-      outline: none; // 포커스/활성화 시 기본 외곽선 제거
+      outline: none;
     }
-    // 접근성 고려 시 focus 대신 focus-visible 사용 권장
-    // &:focus-visible { outline: 2px solid blue; outline-offset: 2px; }
   }
 
   .divider {
-    color: #ddd; /* 구분선 색상 */
-    font-size: 0.9rem; // 글자 크기 (구분선도 폰트 크기 영향을 받음)
-    vertical-align: middle; // 세로 중앙 정렬
+    color: #ddd;
+    font-size: 15px;
+    vertical-align: middle;
   }
-}
-
-/* --- 검색 버튼 (.btn_search) --- */
-.btn_search {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  font-size: 20px; /* 아이콘 크기 */
-  color: #333; /* 아이콘 색상 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  // 포커스 시 기본 외곽선 제거 (접근성 고려)
-  &:focus,
-  &:active {
-    outline: none; // 예시: 키보드 포커스 시 외곽선 표시
-    outline-offset: none;
-  }
-}
-
-/* --- .blind 클래스 (접근성을 위해 시각적으로 숨김) --- */
-.blind {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
 }

@@ -12,14 +12,15 @@ const PrivateRouter = ({ element, requiredRole }) => {
   // Context 데이터가 초기화되지 않았다면 밑에 로직이 실행되지 않게끔 로딩 페이지 먼저 리턴.
   // 초기화가 완료되면 PrivateRouter가 다시 렌더링 시도를 할 겁니다.
   useEffect(() => {
-    if(!isInit) return;
-    // 로그인 여부 확인
-    if (!isLoggedIn) {
+
+    if (isInit && !isLoggedIn) {
       alert('회원만 이용가능한 페이지입니다. 로그인을 해주세요!');
       setModalType('login');
       setRedirectToHome(true); // navigate는 그 다음 단계에서
     }
-  }, [isLoggedIn, isInit, setModalType]);
+
+  }, [isInit, isLoggedIn]);
+
 
   if (!isInit) return <div>Loading...</div>;
 
@@ -28,7 +29,11 @@ const PrivateRouter = ({ element, requiredRole }) => {
   }
 
   if (requiredRole && userRole !== requiredRole) {
-    alert('권한이 없습니다!');
+    if (requiredRole === 'ADMIN') {
+      alert('관리자만 접근 가능합니다!');
+    } else {
+      alert('권한이 없습니다!');
+    }
     return <Navigate to='/' replace />;
   }
 

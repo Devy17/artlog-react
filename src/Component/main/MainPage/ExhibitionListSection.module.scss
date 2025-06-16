@@ -1,173 +1,179 @@
 /* src/components/ExhibitionListSection.module.scss */
 
 .main_section {
-    padding: 60px 0;
-    background-color: #f8f8f8;
-    box-sizing: border-box;
-    position: relative;
-  }
-  
-  .ex_info {
-    /* 전시 정보 섹션 전용 스타일 */
-  }
-  
-  .cont_inner {
-    max-width: 1280px; /* 원본과 동일한 최대 너비 */
-    width: 100%;
-    margin: 0 auto; /* 중앙 정렬 */
-    padding: 0 20px; /* 좌우 패딩 */
-    box-sizing: border-box;
-  }
-  
-  .tit_wrap {
-    margin-bottom: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .tit_area {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-    width: 100%;
-  }
-  
-  .tit {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #333;
-    white-space: nowrap;
-  }
-  
-  .side {
-    margin-left: 20px;
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
-  
-  .btn_more {
-    display: inline-block;
-    text-decoration: none;
-    color: #000;
-    font-size: 0.9rem;
-    font-weight: bold;
-    position: relative;
-    padding-right: 15px;
-  
-    span {
-      position: relative;
-      &::after {
-        content: "";
-        position: absolute;
-        right: -15px;
-        top: 50%;
-        transform: translateY(-50%) rotate(45deg);
-        width: 8px;
-        height: 8px;
-        border-top: 2px solid #000;
-        border-right: 2px solid #000;
-      }
-    }
-  }
-  
-  .txt {
-    font-size: 1rem;
-    color: #777;
-    line-height: 1.5;
-    margin-top: -5px;
-    @media (max-width: 768px) {
-      font-size: 0.9rem;
-    }
-  }
-  
-  .mo_br {
+  padding: 60px 0;
+  background-color: #f8f8f8;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.ex_info {
+  /* 전시 정보 섹션 전용 스타일 */
+}
+
+.cont_inner {
+  max-width: 1280px; /* 원본과 동일한 최대 너비 */
+  width: 100%;
+  margin: 0 auto; /* 중앙 정렬 */
+  padding: 0 20px; /* 좌우 패딩 */
+  box-sizing: border-box;
+}
+
+.tit_wrap {
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.tit_area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  margin-top: 55px;
+  height: 20px;
+  width: 100%;
+}
+
+.tit {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  // white-space: nowrap;
+}
+
+.side {
+  margin-left: 20px;
+  margin-bottom: 50px;
+  @media (max-width: 768px) {
     display: none;
-    @media (max-width: 768px) {
-      display: block;
-    }
   }
-  
-  .swiper_pc_3_mo_auto {
+}
+
+.btn_more {
+  display: inline-block;
+  text-decoration: none;
+  color: #000;
+  font-size: 0.9rem;
+  font-weight: bold;
+  position: relative;
+  padding-right: 15px;
+
+  span {
     position: relative;
-    /* max-width는 .cont_inner에서 제어 */
-    margin: 0 auto; /* .cont_inner 내에서 중앙 정렬 */
-    width: 100%; /* 부모(.cont_inner)의 너비를 따름 */
-  }
-  
-  .swiper {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-  }
-  
-  .swiper_wrapper {
-    display: flex;
-    /* 실제 슬라이더 기능이 없으므로, 그리드 레이아웃으로 변경하여 정렬 */
-    /* display: grid; */ /* Swiper wrapper는 flex로 유지 */
-    /* grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); */
-    /* gap: 30px; */ /* gap은 swiper-slide margin-right로 대체 */
-  }
-  
-  .swiper_slide {
-    flex-shrink: 0;
-    width: calc(100% / 3 - 40px * 2 / 3); /* PC: 3개 노출, 간격 40px */
-    margin-right: 40px; /* 슬라이드 간 간격 */
-  
-    &:last-child {
-      margin-right: 0;
+    &::after {
+      content: '';
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
+      width: 8px;
+      height: 8px;
+      border-top: 2px solid #000;
+      border-right: 2px solid #000;
     }
-  
-    @media (max-width: 1280px) {
-        /* 1280px 이하에서는 cont_inner 패딩 고려하여 조정 */
-        width: calc((100% - 40px) / 3); /* cont_inner 좌우 패딩 20px * 2 = 40px 제외 */
-    }
-  
-    @media (max-width: 768px) {
-      width: auto; /* 모바일에서는 내용에 맞게 자동 너비 (스와이퍼처럼) */
-      margin-right: 20px; /* 모바일 간격 */
-    }
+  }
+}
+
+.txt {
+  font-size: 1rem;
+  color: #777;
+  line-height: 1.5;
+  margin-top: -5px;
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+}
+
+.mo_br {
+  display: none;
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+.swiper_pc_3_mo_auto {
+  position: relative;
+  /* max-width는 .cont_inner에서 제어 */
+  margin: 0 auto; /* .cont_inner 내에서 중앙 정렬 */
+  width: 100%; /* 부모(.cont_inner)의 너비를 따름 */
+}
+
+.swiper {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+
+.swiper_wrapper {
+  display: flex;
+  /* 실제 슬라이더 기능이 없으므로, 그리드 레이아웃으로 변경하여 정렬 */
+  /* display: grid; */ /* Swiper wrapper는 flex로 유지 */
+  /* grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); */
+  /* gap: 30px; */ /* gap은 swiper-slide margin-right로 대체 */
+}
+
+.swiper_slide {
+  flex-shrink: 0;
+  width: calc(100% / 3 - 40px * 2 / 3); /* PC: 3개 노출, 간격 40px */
+  margin-right: 40px; /* 슬라이드 간 간격 */
+
+  &:last-child {
+    margin-right: 0;
   }
 
-  .comm_ex_list {
-    /* ExhibitionCard 컴포넌트에 적용되는 스타일 */
+  @media (max-width: 1280px) {
+    /* 1280px 이하에서는 cont_inner 패딩 고려하여 조정 */
+    width: calc(
+      (100% - 40px) / 3
+    ); /* cont_inner 좌우 패딩 20px * 2 = 40px 제외 */
   }
 
-  .btn_move {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none; /* 버튼 기본 테두리 제거 */
-  
-    svg {
-      font-size: 24px;
-      color: #333;
-    }
+  @media (max-width: 768px) {
+    width: auto; /* 모바일에서는 내용에 맞게 자동 너비 (스와이퍼처럼) */
+    margin-right: 20px; /* 모바일 간격 */
   }
-  
-  .button_next {
-    right: -20px; /* .cont_inner 기준 밖으로 */
-    @media (max-width: 1320px) { /* cont_inner + 버튼 너비 고려 */
-      right: 0px; /* 화면 끝에 붙도록 */
-    }
+}
+
+.comm_ex_list {
+  /* ExhibitionCard 컴포넌트에 적용되는 스타일 */
+}
+
+.btn_move {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none; /* 버튼 기본 테두리 제거 */
+
+  svg {
+    font-size: 24px;
+    color: #333;
   }
-  
-  .button_prev {
-    left: -20px; /* .cont_inner 기준 밖으로 */
-     @media (max-width: 1320px) { /* cont_inner + 버튼 너비 고려 */
-      left: 0px; /* 화면 끝에 붙도록 */
-    }
+}
+
+.button_next {
+  right: -20px; /* .cont_inner 기준 밖으로 */
+  @media (max-width: 1320px) {
+    /* cont_inner + 버튼 너비 고려 */
+    right: 0px; /* 화면 끝에 붙도록 */
   }
-  
+}
+
+.button_prev {
+  left: -20px; /* .cont_inner 기준 밖으로 */
+  @media (max-width: 1320px) {
+    /* cont_inner + 버튼 너비 고려 */
+    left: 0px; /* 화면 끝에 붙도록 */
+  }
+}

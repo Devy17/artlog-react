@@ -14,11 +14,12 @@ function App() {
       <ModalContext.Provider value={{ setModalType }}>
         <div className='App'>
           <Header />
+          <div style={{ height: '90px' }} />;
           <div className='content-wrapper'>
             <AppRouter /> {/* 모든 라우팅은 여기서 처리 */}
           </div>
           <Footer />
-          <ModalController modalType={modalType} setModalType={setModalType}/>
+          <ModalController modalType={modalType} setModalType={setModalType} />
         </div>
       </ModalContext.Provider>
     </AuthContextProvider>
