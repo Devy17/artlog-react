@@ -105,29 +105,17 @@ const Header = () => {
                     </>
                   )}
                 </div>
-
-                {/* 관리자 아닐 경우에만 검색 버튼 표시 */}
-                {!isAdmin && (
-                  <button
-                    onClick={toggleSearchModal}
-                    type='button'
-                    className={styles.btn_search}
-                    aria-label='검색'
-                  >
-                    {isSearchOpen ? <FaTimes /> : <FaSearch />}
-                  </button>
-                )}
               </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* 검색 모달 */}
+      {/* 검색 모달
       <HeaderSearchModal
         isOpen={openModalName === 'search'}
         onClose={closeModal}
-      />
+      /> */}
 
       {/* 로그인 모달 */}
       {openModalName === 'login' && <SignInPage onClose={closeModal} />}

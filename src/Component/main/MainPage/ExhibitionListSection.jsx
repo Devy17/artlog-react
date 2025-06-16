@@ -17,10 +17,10 @@ function ExhibitionListSection() {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log('✅ useEffect 실행됨');
+      console.log('useEffect 실행됨');
       try {
         const response = await axiosInstance.get(
-          `${API_BASE_URL}${API}/select?numOfRows=15&pageNo=1`,
+          `${API_BASE_URL}${API}/select?numOfRows=18&pageNo=1`,
         );
         const data = response.data.result;
 
