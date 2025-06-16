@@ -114,7 +114,7 @@ const MyOrdersPage = () => {
         setOrderList(result);
         setNextPage(result.length === rowsPerPage);
         if (result.length < rowsPerPage) {
-           setTotalPages(page);
+           setTotalPages(page);a
         } else {
           setTotalPages(page + 1);
         }
@@ -215,20 +215,6 @@ const MyOrdersPage = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-
-
-
-
-  const handleWriteReviewClick = (contentId) => {
-    alert(`"${contentId}" 콘텐츠에 대한 리뷰 작성 페이지로 이동 (아직 기능 없음)`);
-    console.log(`리뷰 작성 클릭: 콘텐츠 ID ${contentId}`);
-  };
-
-  const handleManageReviewClick = (contentId) => {
-    alert(`"${contentId}" 콘텐츠에 대한 리뷰 관리 페이지로 이동 (아직 기능 없음)`);
-    console.log(`리뷰 관리 클릭: 콘텐츠 ID ${contentId}`);
   };
 
   const filteredOrders = useMemo(() => {
@@ -348,31 +334,7 @@ const MyOrdersPage = () => {
                   >
                     주문 취소
                   </button>
-                  {/* 예매 완료 상태일 때만 리뷰 버튼 표시 */}
-                  {order.active === 1 && // ✅ true 대신 1 사용 (백엔드 응답 타입 확인)
-                    (order.isReviewed ? (
-                      // 리뷰 작성 완료 시 리뷰 관리 버튼
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation(); // 리스트 항목 클릭 이벤트 버블링 방지
-                          handleManageReviewClick(order.contentId);
-                        }}
-                        className={styles['manage-review-button']}
-                      >
-                        리뷰 관리
-                      </button>
-                    ) : (
-                      // 리뷰 작성 전 리뷰 작성 버튼
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation(); // 리스트 항목 클릭 이벤트 버블링 방지
-                          handleWriteReviewClick(order.contentId);
-                        }}
-                        className={styles['write-review-button']}
-                      >
-                        리뷰 작성
-                      </button>
-                    ))}
+                    ))
                 </div>
               </li>
             ))}
