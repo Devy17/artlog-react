@@ -188,7 +188,7 @@ const AdminCouponListPage = () => {
                   <td className={styles.colStatus}>
                     {getCouponStatus(coupon)}
                   </td>
-                  <td>
+                  <td className={styles.colActions}>
                     {editCouponId === coupon.id ? (
                       <>
                         <button onClick={() => saveEdit(coupon.id)}>
@@ -197,14 +197,14 @@ const AdminCouponListPage = () => {
                         <button onClick={cancelEdit}>취소</button>
                       </>
                     ) : getCouponStatus(coupon) === '유효' ? (
-                      <>
+                      <div className={styles.buttonGroup}>
                         <button
                           onClick={() => handleDelete(coupon.serialNumber)}
                         >
                           삭제
                         </button>
                         <button onClick={() => startEdit(coupon)}>수정</button>
-                      </>
+                      </div>
                     ) : (
                       <button onClick={() => startEdit(coupon)}>활성화</button>
                     )}

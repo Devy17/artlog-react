@@ -102,6 +102,12 @@ h1 {
   }
 }
 
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 15px; // 👈 삭제 & 수정 버튼 간 간격 설정
+}
+
 /* 컬럼 너비 조절 */
 .colId {
   width: 15%;
@@ -120,6 +126,10 @@ h1 {
 }
 .colRegist {
   width: 10%;
+}
+
+.colActions {
+  width: 12%;
 }
 
 .colStatus {
