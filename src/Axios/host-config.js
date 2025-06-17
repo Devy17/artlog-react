@@ -6,7 +6,7 @@ if (clientHostName === 'localhost') {
   backendHostName = 'http://localhost:8000';
 } else {
   // 배포해서 현재 서비스 중
-  backendHostName = 'http://52.79.234.211:8000';
+  backendHostName = 'https://api.artlog.shop';
 }
 
 export const API_BASE_URL = backendHostName;
