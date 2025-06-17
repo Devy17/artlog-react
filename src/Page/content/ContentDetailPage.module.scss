@@ -166,7 +166,7 @@ body {
   max-width: 300px; // 최대 너비 설정
 
   &:hover {
-    background-color: darken($color-primary, 10%); // 호버 시 색상을 10% 더 어둡게
+    background-color: #251327 
   }
   &:active {
       background-color: darken($color-primary, 15%); // 클릭 시 더 어둡게
