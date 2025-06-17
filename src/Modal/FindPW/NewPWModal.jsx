@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styles from './NewPWModal.module.scss';
 import ModalContext from '../ModalContext';
 import { API_BASE_URL, USER } from '../../Axios/host-config';
@@ -27,9 +27,6 @@ const NewPWModal = ({ onClose }) => {
       setError('비밀번호가 일치하지 않습니다.');
       return;
     }
-
-    const userId = localStorage.getItem('pwResetUserId');
-    console.log('userId:', userId);
 
     if (!userId) {
       setError('비정상적인 접근입니다. 다시 시도해주세요.');
@@ -77,9 +74,19 @@ const NewPWModal = ({ onClose }) => {
     } catch (err) {
       console.error('서버에러: ', err);
       setError('서버 오류가 발생했습니다.');
-      return;
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter' && !success) {
+        e.preventDefault();
+        handleChangePW();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [newPw, checkPw, success]);
 
   return (
     <div className={styles.overlay}>

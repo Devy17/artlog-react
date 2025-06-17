@@ -5,6 +5,13 @@ import styles from './AdminCouponRegisterPage.module.scss';
 import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API_BASE_URL, COUPON } from '../../Axios/host-config';
 
+// KST 기준 ISO 문자열 생성 함수
+const toKSTISOString = (date) => {
+  const pad = (n) => (n < 10 ? '0' + n : n);
+  const kst = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return `${kst.getFullYear()}-${pad(kst.getMonth() + 1)}-${pad(kst.getDate())}T${pad(kst.getHours())}:${pad(kst.getMinutes())}:${pad(kst.getSeconds())}`;
+};
+
 const AdminCouponRegisterPage = () => {
   const today = new Date();
   const [form, setForm] = useState({
@@ -39,6 +46,26 @@ const AdminCouponRegisterPage = () => {
     e.preventDefault();
     setErrorMessage('');
 
+    if (
+      !form.couponTitle ||
+      !form.serialNumber ||
+      !form.count ||
+      !form.expireDate
+    ) {
+      setErrorMessage('모든 항목을 입력해 주세요.');
+      return;
+    }
+
+    if (parseInt(form.count) <= 0) {
+      setErrorMessage('쿠폰 수량은 1개 이상이어야 합니다.');
+      return;
+    }
+
+    if (form.expireDate < new Date()) {
+      setErrorMessage('쿠폰 종료일은 오늘 이후여야 합니다.');
+      return;
+    }
+
     const period =
       endDate && startDate
         ? Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1
@@ -47,7 +74,7 @@ const AdminCouponRegisterPage = () => {
     const payload = {
       ...form,
       period: period,
-      expireDate: form.expireDate?.toISOString(),
+      expireDate: toKSTISOString(form.expireDate),
     };
 
     try {
@@ -113,7 +140,7 @@ const AdminCouponRegisterPage = () => {
             selectsEnd
             startDate={startDate}
             endDate={endDate}
-            minDate={today}
+            minDate={new Date(new Date().setHours(0, 0, 0, 0))}
             dateFormat='yyyy.MM.dd'
             value={
               endDate

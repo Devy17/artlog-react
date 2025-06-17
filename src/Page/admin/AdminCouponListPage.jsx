@@ -77,7 +77,7 @@ const AdminCouponListPage = () => {
       await axiosInstance.post(`${API_BASE_URL}${COUPON}/update`, {
         id,
         count: editedData.count,
-        expireDate: toKSTISOString(editedData.expireDate), // 👈 여기 수정
+        expireDate: toKSTISOString(editedData.expireDate),
       });
       alert('수정 완료');
       setEditCouponId(null);
@@ -185,10 +185,17 @@ const AdminCouponListPage = () => {
                     )}
                   </td>
                   <td>{formatDate(coupon.registDate)}</td>
-                  <td className={styles.colStatus}>
+                  <td
+                    className={`${styles.colStatus} ${
+                      coupon.active === 'Y' || coupon.active === true
+                        ? styles.valid
+                        : styles.expired
+                    }`}
+                  >
                     {getCouponStatus(coupon)}
                   </td>
-                  <td>
+
+                  <td className={styles.colActions}>
                     {editCouponId === coupon.id ? (
                       <>
                         <button onClick={() => saveEdit(coupon.id)}>
@@ -197,14 +204,14 @@ const AdminCouponListPage = () => {
                         <button onClick={cancelEdit}>취소</button>
                       </>
                     ) : getCouponStatus(coupon) === '유효' ? (
-                      <>
+                      <div className={styles.buttonGroup}>
                         <button
                           onClick={() => handleDelete(coupon.serialNumber)}
                         >
                           삭제
                         </button>
                         <button onClick={() => startEdit(coupon)}>수정</button>
-                      </>
+                      </div>
                     ) : (
                       <button onClick={() => startEdit(coupon)}>활성화</button>
                     )}

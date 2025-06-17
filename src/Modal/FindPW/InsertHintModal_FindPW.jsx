@@ -55,8 +55,8 @@ const InsertHintModal_FindPW = ({ onClose }) => {
       const data = await res.json();
 
       if (res.status === 200 && data.statusCode === 200) {
-        localStorage.setItem('pwResetUserId', data.result); // id 저장
-        setModalType('resetPW'); // 비밀번호 재설정 모달로 이동
+        localStorage.setItem('pwResetUserId', data.result);
+        setModalType('resetPW');
       } else {
         setError(data.statusMessage || '정답이 일치하지 않습니다.');
       }
@@ -65,6 +65,17 @@ const InsertHintModal_FindPW = ({ onClose }) => {
       setError('서버 오류가 발생했습니다.');
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSubmit();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedHintKey, answer]);
 
   return (
     <div className={styles.overlay}>

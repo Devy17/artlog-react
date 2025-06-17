@@ -102,6 +102,12 @@ h1 {
   }
 }
 
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 15px; // 삭제 & 수정 버튼 간 간격 설정
+}
+
 /* 컬럼 너비 조절 */
 .colId {
   width: 15%;
@@ -122,10 +128,21 @@ h1 {
   width: 10%;
 }
 
+.colActions {
+  width: 12%;
+}
+
 .colStatus {
   width: 8%;
-  font-weight: bold;
-  color: #d9534f;
+  font-weight: 550;
+}
+
+.expired {
+  color: rgb(208, 14, 14) !important;
+}
+
+.valid {
+  color: green !important;
 }
 
 /* input 수정 필드 */
