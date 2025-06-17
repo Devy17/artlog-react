@@ -169,7 +169,7 @@ body {
     background-color: #251327 
   }
   &:active {
-      background-color: darken($color-primary, 15%); // 클릭 시 더 어둡게
+      background-color: #1f2713; // 클릭 시 더 어둡게
   }
 
   // 예매 불가능할 때 (endDate가 오늘 또는 과거인 경우) 스타일 추가

@@ -116,7 +116,7 @@ $color-holiday: #f0f0f0;
 
   &:hover {
     border-color: $color-border-medium; // 호버 시 테두리 진해짐
-    background-color: darken($color-off-white, 2%); // 호버 시 배경 살짝 어둡게
+    background-color: #251327; // 호버 시 배경 살짝 어둡게
   }
 
   .coupon-title {
@@ -144,10 +144,10 @@ $color-holiday: #f0f0f0;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: darken($color-dark-gray, 10%);
+      background-color: #251327;
     }
     &:active {
-      background-color: darken($color-dark-gray, 15%);
+      background-color: #251327;
     }
   }
 
@@ -188,10 +188,10 @@ $color-holiday: #f0f0f0;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: darken($color-light-gray, 5%);
+      background-color: #251327;
     }
     &:active {
-        background-color: darken($color-light-gray, 10%);
+        background-color: #1f2713;
     }
   }
 }

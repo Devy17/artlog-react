@@ -1,11 +1,13 @@
 // src/Component/content/WriteReview.jsx
 import React, { useState } from 'react';
 import axiosInstance from '../../Axios/AxiosBackConfig';
-import { API_BASE_URL, REVIEW } from '../../Axios/host-config';
+import { API_BASE_URL, REVIEW, ORDER } from '../../Axios/host-config';
 import style from './WriteReview.module.scss'; // SCSS 파일 임포트
 
 const WriteReview = ({ contentId, onSubmit }) => {
   const [input, setInput] = useState('');
+
+  const token = localStorage.getItem('ACCESS_TOKEN');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +27,10 @@ const WriteReview = ({ contentId, onSubmit }) => {
       if (onSubmit) onSubmit();
     } catch (e) {
       console.error('리뷰 등록 실패:', e);
-      alert('리뷰 등록에 실패했습니다. 다시 시도해주세요.');
+      if(token === null) {
+        alert('로그인이 필요합니다. 로그인 후 다시 시도해주세요.');
+      }
+      else alert('리뷰 등록에 실패했습니다. 다시 시도해주세요.');
     }
   };
 

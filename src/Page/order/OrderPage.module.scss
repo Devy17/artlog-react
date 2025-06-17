@@ -413,10 +413,10 @@ $color-holiday: #f0f0f0; // 캘린더 휴관일 배경 (연한 회색)
       transition: background-color 0.3s ease; // 호버 애니메이션 추가
 
       &:hover {
-        background-color: darken(#15202b, 10%); // 호버 시 색상을 10% 더 어둡게
+        background-color: #251327; // 호버 시 색상을 10% 더 어둡게
       }
       &:active {
-          background-color: darken(#15202b, 15%); // 클릭 시 더 어둡게
+          background-color: #1f2713; // 클릭 시 더 어둡게
       }
     }
   }
