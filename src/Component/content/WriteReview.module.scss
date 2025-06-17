@@ -28,8 +28,8 @@ $color-light-text: #666; // 보조 텍스트 색상
   resize: vertical;
   &:focus {
     outline: none;
-    border-color: darken($color-border, 20%);
-    border-right-color: darken($color-border, 20%);
+    border-color: #251327;
+    border-right-color: #1f2713;
   }
   &::placeholder {
     color: $color-light-text;
