@@ -3,9 +3,13 @@ import axiosInstance from '../../Axios/AxiosBackConfig';
 import { API_BASE_URL, COUPON } from '../../Axios/host-config';
 import styles from './AdminCouponListPage.module.scss';
 import { useNavigate } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const AdminCouponListPage = () => {
   const [couponList, setCouponList] = useState([]);
+  const [editCouponId, setEditCouponId] = useState(null);
+  const [editedData, setEditedData] = useState({});
   const navigate = useNavigate();
 
   const handleRegisterClick = () => {
@@ -16,7 +20,6 @@ const AdminCouponListPage = () => {
     try {
       const res = await axiosInstance.get(`${API_BASE_URL}${COUPON}/findByAll`);
       const all = res.data.result || [];
-      console.log('응답된 쿠폰 목록:', all);
       setCouponList(all);
     } catch (err) {
       console.error('쿠폰 전체 조회 실패:', err);
@@ -30,13 +33,10 @@ const AdminCouponListPage = () => {
   const formatDate = (iso) =>
     new Date(iso).toISOString().split('T')[0].replace(/-/g, '.');
 
-  const getEndDate = (expireDate) => {
-    return formatDate(expireDate);
-  };
+  const getEndDate = (expireDate) => formatDate(expireDate);
 
-  const getCouponStatus = (coupon) => {
-    return coupon.active === 'Y' || coupon.active === true ? '유효' : '만료';
-  };
+  const getCouponStatus = (coupon) =>
+    coupon.active === 'Y' || coupon.active === true ? '유효' : '만료';
 
   const handleDelete = async (serialNumber) => {
     if (window.confirm('정말 삭제하시겠습니까?')) {
@@ -49,6 +49,43 @@ const AdminCouponListPage = () => {
       } catch (err) {
         console.error('쿠폰 삭제 실패:', err);
       }
+    }
+  };
+
+  const startEdit = (coupon) => {
+    setEditCouponId(coupon.id);
+    setEditedData({
+      count: coupon.count,
+      expireDate: new Date(coupon.expireDate),
+    });
+  };
+
+  const cancelEdit = () => {
+    setEditCouponId(null);
+    setEditedData({});
+  };
+
+  const saveEdit = async (id) => {
+    try {
+      await axiosInstance.post(`${API_BASE_URL}${COUPON}/update`, {
+        id,
+        count: editedData.count,
+        expireDate: editedData.expireDate,
+      });
+      alert('수정 완료');
+      setEditCouponId(null);
+      setEditedData({});
+      findAllCoupons();
+    } catch (err) {
+      console.error('쿠폰 수정 실패:', err);
+      alert('수정 실패');
+    }
+  };
+
+  const handleKeyDown = (e, couponId) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // 폼 제출 방지
+      saveEdit(couponId);
     }
   };
 
@@ -89,19 +126,77 @@ const AdminCouponListPage = () => {
                   <td>{coupon.serialNumber}</td>
                   <td>{coupon.couponTitle}</td>
                   <td>
-                    {`${formatDate(coupon.registDate)} - ${getEndDate(coupon.expireDate)}`}
+                    {editCouponId === coupon.id ? (
+                      <DatePicker
+                        className={styles['custom-date-range']}
+                        selected={editedData.expireDate}
+                        onChange={(date) => {
+                          const endOfDay = new Date(date);
+                          endOfDay.setHours(23, 59, 59, 999);
+                          setEditedData((prev) => ({
+                            ...prev,
+                            expireDate: endOfDay,
+                          }));
+                        }}
+                        minDate={new Date()}
+                        dateFormat='yyyy.MM.dd'
+                        value={`${formatDate(
+                          coupon.registDate,
+                        )} - ${editedData.expireDate ? formatDate(editedData.expireDate) : ''}`}
+                        onKeyDown={(e) => handleKeyDown(e, coupon.id)}
+                      />
+                    ) : (
+                      `${formatDate(coupon.registDate)} - ${getEndDate(coupon.expireDate)}`
+                    )}
                   </td>
-                  <td>{coupon.count}</td>
+                  <td>
+                    {editCouponId === coupon.id ? (
+                      <input
+                        type='number'
+                        value={editedData.count}
+                        onChange={(e) => {
+                          const inputVal = e.target.value;
+                          setEditedData((prev) => ({
+                            ...prev,
+                            count: inputVal === '' ? '' : Number(inputVal),
+                          }));
+                        }}
+                        onBlur={() => {
+                          if (editedData.count === '') {
+                            setEditedData((prev) => ({
+                              ...prev,
+                              count: 0,
+                            }));
+                          }
+                        }}
+                        onKeyDown={(e) => handleKeyDown(e, coupon.id)}
+                      />
+                    ) : (
+                      coupon.count
+                    )}
+                  </td>
                   <td>{formatDate(coupon.registDate)}</td>
                   <td className={styles.colStatus}>
                     {getCouponStatus(coupon)}
                   </td>
                   <td>
-                    {getCouponStatus(coupon) === '유효' && (
-                      <button onClick={() => handleDelete(coupon.serialNumber)}>
-                        삭제
-                      </button>
-                    )}
+                    {editCouponId === coupon.id ? (
+                      <>
+                        <button onClick={() => saveEdit(coupon.id)}>
+                          저장
+                        </button>
+                        <button onClick={cancelEdit}>취소</button>
+                      </>
+                    ) : getCouponStatus(coupon) === '유효' ? (
+                      <>
+                        <button
+                          onClick={() => handleDelete(coupon.serialNumber)}
+                        >
+                          삭제
+                        </button>
+                        <button onClick={() => startEdit(coupon)}>수정</button>
+                      </>
+                    ) : null}
                   </td>
                 </tr>
               ))

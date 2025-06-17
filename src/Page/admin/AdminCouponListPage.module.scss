@@ -37,10 +37,10 @@ h1 {
   transition: background-color 0.2s ease;
   margin-top: 15px;
   margin-bottom: 35px;
-}
 
-.registerBtn:hover {
-  background-color: #e1435f;
+  &:hover {
+    background-color: #e1435f;
+  }
 }
 
 .table {
@@ -77,15 +77,15 @@ h1 {
     color: #444;
   }
 
+  tr:last-child td {
+    border-bottom: none;
+  }
+
   .emptyMessage {
     padding: 20px 0;
     font-size: 24px;
     color: #777;
     background-color: #fff;
-  }
-
-  tr:last-child td {
-    border-bottom: none;
   }
 
   button {
@@ -95,9 +95,14 @@ h1 {
     border-radius: 6px;
     cursor: pointer;
     background-color: #f5f5f5;
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
   }
 }
 
+/* 컬럼 너비 조절 */
 .colId {
   width: 15%;
 }
@@ -123,6 +128,36 @@ h1 {
   color: #d9534f;
 }
 
+/* input 수정 필드 */
+td input[type='number'] {
+  width: 90px;
+  padding: 6px 8px;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  text-align: center;
+  appearance: auto;
+}
+
+td input[type='number']::-webkit-inner-spin-button,
+td input[type='number']::-webkit-outer-spin-button {
+  opacity: 1; /* 항상 보이게 */
+  -webkit-appearance: inner-spin-button;
+}
+
+/* react-datepicker 필드 */
+.custom-date-range {
+  padding: 6px 10px;
+  font-size: 25px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  text-align: center;
+  background-color: white;
+  cursor: pointer;
+}
+
+/* 전역적으로 버튼 커서 설정 */
 button {
   cursor: pointer !important;
 }

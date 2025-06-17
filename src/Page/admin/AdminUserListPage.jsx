@@ -31,9 +31,11 @@ const AdminUserListPage = () => {
           `${API_BASE_URL}${USER}/convertAdmin/${userId}`,
         );
         alert('권한이 관리자(ADMIN)로 변경되었습니다.');
-      } else {
-        alert('현재는 ADMIN → USER 변경 기능이 없습니다.');
-        return;
+      } else if (newRole === 'USER') {
+        await axiosInstance.post(
+          `${API_BASE_URL}${USER}/convertUser/${userId}`,
+        );
+        alert('권한이 일반 사용자(USER)로 변경되었습니다.');
       }
 
       fetchUsers();
