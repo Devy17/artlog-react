@@ -41,7 +41,7 @@
 }
 
 .body {
-  margin-top: 45px;
+  margin-top: 15px;
   margin-bottom: 35px;
   display: flex;
   flex-direction: column;
@@ -53,35 +53,37 @@
   font-size: 25px;
   color: #555;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   line-height: 1.4;
 }
 
 .inputGroup {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 15px;
   width: 100%;
   max-width: 500px;
 }
 
 .inputGroup label {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 400;
+  margin-left: 10px;
+  margin-top: 5px;
 }
 
 .selectBox {
   height: 60px;
-  padding: 8px;
-  font-size: 20px;
+  padding-left: 10px;
+  font-size: 22px;
   border: 1px solid #ccc;
   border-radius: 0;
 }
 
 .input {
-  height: 45px;
-  padding: 8px;
-  font-size: 20px;
+  height: 55px;
+  padding-left: 20px;
+  font-size: 25px;
   border: 1px solid #ccc;
   border-radius: 0;
 }
@@ -96,11 +98,12 @@
   border: none;
   border-radius: 0;
   cursor: pointer;
-  margin-top: 40px;
+  margin-top: 345px;
+  position: fixed;
 }
 
 .error {
   color: red;
-  font-size: 16px;
-  margin-top: -10px;
+  font-size: 19px;
+  margin-top: -5px;
 }

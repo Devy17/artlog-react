@@ -68,6 +68,13 @@ const InsertHintModal_FindID = ({ onClose }) => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -108,6 +115,7 @@ const InsertHintModal_FindID = ({ onClose }) => {
               placeholder='정답 입력'
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
+              onKeyDown={handleKeyDown}
               className={styles.input}
             />
           </div>
