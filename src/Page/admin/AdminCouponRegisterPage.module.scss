@@ -58,6 +58,13 @@
   }
 }
 
+.error {
+  color: red;
+  font-size: 20px;
+  margin-top: -10px;
+  margin-left: 5px;
+}
+
 /* ===== 📌 달력 전체 스타일 (전역 적용) ===== */
 :global(.react-datepicker) {
   width: 350px !important;
