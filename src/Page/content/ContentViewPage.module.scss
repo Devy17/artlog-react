@@ -1,5 +1,5 @@
 .content-view-page {
-  padding: 60px 20px;
+  padding: 10px 20px 20px;
   background-color: #f8f8f8;
   max-width: 1800px;
   margin: 0 auto;
@@ -7,14 +7,14 @@
 }
 
 .page-title {
-  margin-top: 40px;
+  margin-top: 20px;
   text-align: center;
   color: #333;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   font-size: 2.2em;
   font-weight: bold;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #eee;
+  padding-bottom: 30px;
+  border-bottom: 5px solid #eee;
 }
 
 .filter-sort-area {
@@ -106,4 +106,9 @@
     opacity: 0.6;
     cursor: not-allowed;
   }
+}
+
+.load-circular-bar {
+  text-align: center;
+  margin: 50px 0 0;
 }

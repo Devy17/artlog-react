@@ -38,8 +38,16 @@ const SignInPage = ({ onClose }) => {
 
     try {
       const res = await axios.post(`${API_BASE_URL}${USER}/login`, loginData);
+      const { userId: id, role } = res.data.result;
+      localStorage.setItem('USER_ID', id);
+      localStorage.setItem('USER_ROLE', role);
       onLogin(res.data.result);
       onClose();
+      if (role === 'ADMIN') {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     } catch (e) {
       console.error(e);
       setErrorMessage('아이디 또는 비밀번호가 올바르지 않습니다.');
@@ -47,8 +55,14 @@ const SignInPage = ({ onClose }) => {
   };
 
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
+    <div 
+      className={styles.overlay}
+      onClick={onClose}
+    >
+      <div 
+        className={styles.modal}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className={styles.header}>
           <h2 className={styles.title}>로그인</h2>
           <button type='button' className={styles.closeBtn} onClick={onClose}>

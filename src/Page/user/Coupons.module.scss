@@ -1,8 +1,6 @@
 /* src/pages/Coupons.module.scss */
 
 .wrap {
-  // 헤더 높이만큼 상단 패딩 (실제 헤더 높이에 맞게 이 값 조정 필요)
-  padding-top: 80px;
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
@@ -56,9 +54,10 @@ h2 {
   text-align: center;
   color: #333;
   margin-bottom: 20px;
-  font-size: 1.5em;
+  font-size: 27px;
   font-weight: bold;
-  padding-bottom: 10px;
+  padding-bottom: 25px;
+  margin-bottom: 25px;
   border-bottom: 1px solid #eee;
 }
 
@@ -68,7 +67,7 @@ h2 {
     margin-top: 15px;
 
     .tit {
-      font-size: 1em;
+      font-size: 22px;
       color: #555;
       margin-bottom: 10px;
       font-weight: bold;
@@ -86,10 +85,10 @@ h2 {
 
         input[type='text'] {
           flex-grow: 1;
-          padding: 10px 12px;
+          padding: 20px 12px;
           border: 1px solid #ccc;
           border-radius: 4px;
-          font-size: 1em;
+          font-size: 15px;
           outline: none;
           transition:
             border-color 0.3s ease,
@@ -110,7 +109,7 @@ h2 {
           color: #fff;
           border-radius: 4px;
           cursor: pointer;
-          font-size: 1em;
+          font-size: 20px;
           font-weight: bold;
           transition: background-color 0.3s ease;
           min-width: 80px; // 버튼 최소 너비
@@ -176,19 +175,20 @@ h2 {
         }
 
         h3 {
-          font-size: 1.3em;
+          font-size: 27px;
           margin: 0;
-          font-weight: bold;
+          // font-weight: bold;
         }
 
         .serialNumber {
-          font-size: 0.9em;
-          margin: 0;
+          font-size: 20px;
+          margin-top: 5px;
+          margin-bottom: 5px;
           color: rgba(255, 255, 255, 0.8);
         }
 
         .data {
-          font-size: 0.9em;
+          font-size: 23px;
           margin: 0;
           color: rgba(255, 255, 255, 0.8);
         }
