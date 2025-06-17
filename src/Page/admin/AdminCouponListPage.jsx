@@ -6,6 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+// KST 기준 ISO 문자열 생성 함수
+const toKSTISOString = (date) => {
+  const pad = (n) => (n < 10 ? '0' + n : n);
+  const kst = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return `${kst.getFullYear()}-${pad(kst.getMonth() + 1)}-${pad(kst.getDate())}T${pad(kst.getHours())}:${pad(kst.getMinutes())}:${pad(kst.getSeconds())}`;
+};
+
 const AdminCouponListPage = () => {
   const [couponList, setCouponList] = useState([]);
   const [editCouponId, setEditCouponId] = useState(null);
@@ -70,7 +77,7 @@ const AdminCouponListPage = () => {
       await axiosInstance.post(`${API_BASE_URL}${COUPON}/update`, {
         id,
         count: editedData.count,
-        expireDate: editedData.expireDate,
+        expireDate: toKSTISOString(editedData.expireDate), // 👈 여기 수정
       });
       alert('수정 완료');
       setEditCouponId(null);
@@ -84,7 +91,7 @@ const AdminCouponListPage = () => {
 
   const handleKeyDown = (e, couponId) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // 폼 제출 방지
+      e.preventDefault();
       saveEdit(couponId);
     }
   };
@@ -140,9 +147,11 @@ const AdminCouponListPage = () => {
                         }}
                         minDate={new Date()}
                         dateFormat='yyyy.MM.dd'
-                        value={`${formatDate(
-                          coupon.registDate,
-                        )} - ${editedData.expireDate ? formatDate(editedData.expireDate) : ''}`}
+                        value={`${formatDate(coupon.registDate)} - ${
+                          editedData.expireDate
+                            ? formatDate(editedData.expireDate)
+                            : ''
+                        }`}
                         onKeyDown={(e) => handleKeyDown(e, coupon.id)}
                       />
                     ) : (
@@ -196,7 +205,9 @@ const AdminCouponListPage = () => {
                         </button>
                         <button onClick={() => startEdit(coupon)}>수정</button>
                       </>
-                    ) : null}
+                    ) : (
+                      <button onClick={() => startEdit(coupon)}>활성화</button>
+                    )}
                   </td>
                 </tr>
               ))
