@@ -6,6 +6,7 @@ import { API_BASE_URL, REVIEW } from '../../Axios/host-config'; // API 엔드포
 import AuthContext from '../../context/UserContext'; // ✅ AuthContext import
 import styles from './MyReviewsPage.module.scss'; // ✅ 스타일 SCSS 모듈
 import ModalContext from '../../Modal/ModalContext';
+import { useNavigate, createSearchParams } from 'react-router-dom';
 
 const MyReviewsPage = () => {
   // ✅ AuthContext 사용 및 필요한 상태/정보 구조 분해 할당
@@ -20,6 +21,9 @@ const MyReviewsPage = () => {
   const [reviewData, setReviewData] = useState([]);
   const [error, setError] = useState(null); // 오류 상태
 
+  const navigate = useNavigate();
+  const [displayList, setDisplayList] = useState([]);
+
   // ✅ 페이지네이션 관련 상태
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -27,6 +31,26 @@ const MyReviewsPage = () => {
 
   const displayedReviews = reviewData.slice(0, currentPage * itemsPerPage);
   const totalPages = Math.ceil(reviewData.length / itemsPerPage);
+
+       // 4) 콘텐츠 상세로 이동
+      const contentClickHandler = (review) => {
+        const params = {
+          id: review.contentId,
+          title: review.contentTitle,
+          venue: review.contentVenue,
+          charge: review.contentCharge,
+          period: review.contentPeriod,
+          thumbnail: review.contentThumbnail,
+          url: review.contentUrl,
+          startDate: review.startDate,
+          endDate: review.endDate,
+        };
+        navigate({
+          pathname: '/contentDetail',
+          search: '?' + createSearchParams(params).toString(),
+        });
+      };
+
 
   const fetchMyReviews = useCallback(async () => {
     if (!isLoggedIn || !currentUserKey || !token) {
@@ -209,6 +233,8 @@ const MyReviewsPage = () => {
       return;
     }
 
+   
+
     try {
       // ✅ 리뷰 삭제 API 호출 (DELETE /review/delete/{id})
       // 컨트롤러 명세에 따라 엔드포인트 수정
@@ -298,12 +324,16 @@ const MyReviewsPage = () => {
               {displayedReviews.length > 0 ? (
                 <div className={styles['reviews-list']}>
                   {displayedReviews.map((review) => (
-                    <div key={review.id} className={styles['review-item']}>
-                      {/* 이미지 */}
+                    <div key={review.id} 
+                    className={styles['review-item']}
+                    onClick={() => contentClickHandler(review)}
+                    style={{ cursor: 'pointer' }}
+                    >
+                    
                       <div className={styles['item-image-container']}>
                         <img
                           src={
-                            review.picUrl ||
+                            review.contentThumbnail ||
                             'https://img.icons8.com/?size=100&id=y-ATLB0FBoe1&format=png&color=000000'
                           }
                           className={styles['item-image']}
@@ -400,8 +430,8 @@ const MyReviewsPage = () => {
                     onClick={() => setCurrentPage((p) => p + 1)}
                     className={styles['load-more-button']}
                   >
-                    더보기 ({currentPage + 1}/
-                    {Math.ceil(reviewData.length / itemsPerPage)})
+                    더보기
+                    
                   </button>
                 </div>
               )}
