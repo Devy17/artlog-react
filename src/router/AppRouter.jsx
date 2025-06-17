@@ -51,7 +51,7 @@ const AppRouter = () => {
       <Route path='/exhibitions' element={<PageTransition><ContentViewPage /></PageTransition>} />
       <Route path='/contentDetail' element={<PageTransition><ContentDetailPage /></PageTransition>} />
       <Route path='/MyReviewsPage' element={<PageTransition><MyReviewsPage /></PageTransition>} />
-      <Route path='/order' element={<PageTransition><OrderPage /></PageTransition>} />
+      <Route path='/order' element={<PrivateRouter element={<PageTransition><OrderPage /></PageTransition>}/>}/>
        {/* ✅ 관리자 전용 라우팅 */}
       <Route
         path='/admin'
