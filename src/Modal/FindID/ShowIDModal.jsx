@@ -12,6 +12,16 @@ const ShowIDModal = ({ onClose }) => {
     setUserId(userId);
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        setModalType('login');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>

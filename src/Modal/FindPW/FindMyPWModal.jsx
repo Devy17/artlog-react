@@ -1,5 +1,4 @@
-// src/Modal/FindMyPWModal.jsx
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styles from './FindMyPWModal.module.scss';
 import ModalContext from '../ModalContext';
 import { API_BASE_URL, USER } from '../../Axios/host-config';
@@ -39,6 +38,17 @@ const FindMyPWModal = ({ onClose }) => {
       setError('서버 오류가 발생했습니다.');
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleFindPW();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [userId, email]);
 
   return (
     <div className={styles.overlay}>

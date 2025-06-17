@@ -41,7 +41,7 @@
 }
 
 .body {
-  margin-top: 30px;
+  margin-top: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,10 +51,10 @@
 }
 
 .question {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   line-height: 1;
 }
 
@@ -80,7 +80,7 @@
   font-size: 18px;
   font-weight: 350;
   margin-left: 15px;
-  margin-bottom: 5px;
+  // margin-bottom: 5px;
 }
 
 .emailGroup {
@@ -89,21 +89,22 @@
   gap: 8px;
   width: 100%;
   max-width: 450px;
-  margin-bottom: 55px;
-  margin-top: 5px;
+  margin-bottom: 35px;
+  margin-top: 10px;
 }
 
 .emailGroup label {
   font-size: 18px;
   font-weight: 350;
   margin-left: 15px;
-  margin-bottom: 5px;
+  // margin-bottom: 5px;
 }
 
 .input {
   height: 50px;
-  padding: 10px;
-  font-size: 20px;
+  padding: 3px;
+  padding-left: 15px;
+  font-size: 24px;
   border: 1px solid #ccc;
   border-radius: 0;
 }
@@ -116,16 +117,14 @@
   color: white;
   font-size: 30px;
   border: none;
-  border-radius: 0;
+  border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
-  position: fixed;
-  bottom: 300px;
 }
 
 .error {
-  font-size: 16px;
+  font-size: 20px;
   color: red;
-  margin-top: -20px;
+  margin-top: 430px;
+  position: fixed;
   text-align: center;
 }

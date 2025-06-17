@@ -41,7 +41,7 @@
 }
 
 .body {
-  margin-top: 45px;
+  margin-top: 20px;
   margin-bottom: 35px;
   display: flex;
   flex-direction: column;
@@ -68,6 +68,8 @@
 .inputGroup label {
   font-size: 20px;
   font-weight: 400;
+  padding-left: 10px;
+  padding-bottom: 5px;
 }
 
 .selectBox {
@@ -81,20 +83,21 @@
 .input {
   height: 45px;
   padding: 8px;
+  padding-left: 15px;
   font-size: 20px;
   border: 1px solid #ccc;
   border-radius: 0;
 }
 
 .confirmBtn {
-  height: 65px;
+  height: 70px;
   width: 100%;
   max-width: 450px;
   background-color: #400099;
   color: white;
   font-size: 25px;
   border: none;
-  border-radius: 0;
+  border-radius: 5px;
   cursor: pointer;
   margin-top: 40px;
 }

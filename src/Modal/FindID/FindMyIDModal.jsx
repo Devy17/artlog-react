@@ -39,6 +39,13 @@ const FindMyIDModal = ({ onClose }) => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleFindID();
+    }
+  };
+
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -63,6 +70,7 @@ const FindMyIDModal = ({ onClose }) => {
               placeholder='이메일 주소 입력'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={handleKeyDown}
               className={styles.input}
             />
           </div>
