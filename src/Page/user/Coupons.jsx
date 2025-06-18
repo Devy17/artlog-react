@@ -91,7 +91,7 @@ const Coupons = () => {
         <div className={styles.coupon_find_all}>
           {/* ✅ styles.coupon_inner 적용 */}
           <div className={styles.coupon_inner}>
-            <h2>쿠폰 조회</h2>
+            <h3>쿠폰 조회</h3>
             {/* ✅ styles.coupon_list 적용 */}
             <div className={styles.coupon_list}>
               {/* 목록 없음 메시지 */}
