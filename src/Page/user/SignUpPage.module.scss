@@ -42,7 +42,6 @@
 // 이 값은 버튼의 최소 너비를 결정하며, 다른 입력 필드의 100% 너비와 함께 전체 정렬을 만듭니다.
 $check-button-width: 100px; // 예시 값, 필요에 따라 조정하세요.
 
-
 // --- 각 폼 그룹 스타일 ---
 // 라벨과 입력 필드 또는 그룹을 세로로 쌓고 왼쪽 정렬합니다.
 .form-group {
@@ -61,10 +60,10 @@ $check-button-width: 100px; // 예시 값, 필요에 따라 조정하세요.
   // ✅ .form-group의 직계 자식인 대부분의 입력 필드와 select 박스 스타일
   // (User ID 입력 필드처럼 .input-with-button 안에 있는 경우는 제외)
   // ✅ 너비를 100%로 설정하여 폼 그룹 전체 너비를 사용하게 합니다.
-  > input[type="text"],
-  > input[type="email"],
-  > input[type="password"],
-  > input[type="tel"],
+  > input[type='text'],
+  > input[type='email'],
+  > input[type='password'],
+  > input[type='tel'],
   > select {
     width: 100%; // ✅ 너비를 100%로 설정하여 폼 그룹 전체 너비를 채웁니다.
     padding: 12px 15px; // 내부 패딩
@@ -73,7 +72,8 @@ $check-button-width: 100px; // 예시 값, 필요에 따라 조정하세요.
     box-sizing: border-box; // 패딩, 테두리 포함 크기
     font-size: 1em;
 
-    &:focus { // 포커스 시 스타일
+    &:focus {
+      // 포커스 시 스타일
       border-color: #007bff;
       outline: none;
       box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
@@ -86,7 +86,8 @@ $check-button-width: 100px; // 예시 값, 필요에 따라 조정하세요.
     display: flex; // 자식 요소(input, button)를 가로 방향으로 배치
     width: 100%; // 이 컨테이너도 부모(.form-group)의 너비 100% 사용
 
-    input { // User ID 입력 필드 (.input-with-button의 자식)
+    input {
+      // User ID 입력 필드 (.input-with-button의 자식)
       flex-grow: 1; // ✅ 남은 공간을 모두 차지하도록 합니다.
       // 이 입력 필드의 너비는 (부모(.input-with-button)의 너비 - 버튼의 너비)가 됩니다.
       // 다른 입력 필드는 폼 그룹의 100% 너비이고, 이 그룹도 폼 그룹의 100% 너비이므로 전체적인 가로 정렬이 맞습니다.
@@ -95,7 +96,9 @@ $check-button-width: 100px; // 예시 값, 필요에 따라 조정하세요.
       border-radius: 4px; // 모서리 둥글게 유지
       box-sizing: border-box; // box-sizing: border-box 유지
       font-size: 1em;
-      &:focus { /* ... */ }
+      &:focus {
+        /* ... */
+      }
       border-top-right-radius: 0; // 버튼과 연결되는 오른쪽 모서리는 둥글게 하지 않음
       border-bottom-right-radius: 0;
       margin-right: -1px; // 테두리 겹침 방지
@@ -117,20 +120,20 @@ $check-button-width: 100px; // 예시 값, 필요에 따라 조정하세요.
       border-top-left-radius: 0; // 입력 필드와 연결되는 왼쪽 모서리는 둥글게 하지 않음
       border-bottom-left-radius: 0;
 
-      &:hover { // 마우스 오버 시 스타일
+      &:hover {
+        // 마우스 오버 시 스타일
         background-color: #0056b3; // 더 진한 파란색
         border-color: #004085;
       }
-      &:active { // 클릭 시 스타일
+      &:active {
+        // 클릭 시 스타일
         background-color: #003569; // 가장 진한 파란색
         border-color: #002752;
       }
     }
   }
-   // 비밀번호 확인 입력 필드는 .form-group의 직계 자식이므로 위의 > input 규칙이 적용됩니다.
-
+  // 비밀번호 확인 입력 필드는 .form-group의 직계 자식이므로 위의 > input 규칙이 적용됩니다.
 } // .form-group 끝
-
 
 // --- 비밀번호 오류 메시지 스타일 ---
 .password-error {
@@ -141,7 +144,6 @@ $check-button-width: 100px; // 예시 값, 필요에 따라 조정하세요.
   width: 100%; // 너비 설정 (정렬에 도움)
   text-align: left; // 왼쪽 정렬
 }
-
 
 // --- 제출 버튼 스타일 ---
 .submit-button {
@@ -157,10 +159,12 @@ $check-button-width: 100px; // 예시 값, 필요에 따라 조정하세요.
   transition: background-color 0.2s ease; // 배경색 애니메이션
   margin-top: 10px; // 위쪽 여백
 
-  &:hover { // 마우스 오버 시
+  &:hover {
+    // 마우스 오버 시
     background-color: #218838; // 더 진한 녹색
   }
-  &:active { // 클릭 시
+  &:active {
+    // 클릭 시
     background-color: #1e7e34; // 가장 진한 녹색
   }
 }

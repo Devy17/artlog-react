@@ -7,124 +7,160 @@
   background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 12vh;
   z-index: 999;
+
+  @media (max-width: 768px) {
+    align-items: flex-start;
+    padding-top: 10%;
+  }
+
+  @media (max-width: 500px) {
+    padding-top: 0;
+    align-items: flex-start;
+  }
 }
 
 .modal {
   background: white;
-  width: 800px;
-  height: 800px;
+  width: 40%;
+  height: 80%;
+  max-width: 800px;
   padding: 40px;
+  border: 1px solid black;
   border-radius: 0;
   box-sizing: border-box;
+  position: relative;
+
+  @media (max-width: 1024px) {
+    width: 60%;
+  }
+
+  @media (max-width: 768px) {
+    width: 90%;
+    padding: 5%;
+  }
+
+  @media (max-width: 500px) {
+    width: 100vw;
+    height: 100vh;
+    padding: 5%;
+    border-radius: 0;
+  }
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 35px;
+
+  @media (max-width: 768px) {
+    margin-top: 5%;
+  }
 }
 
-.title {
-  font-size: 24px;
-  font-weight: bold;
+.modal .title {
+  padding-bottom: 2% !important;
+  margin-bottom: 5.5% !important;
+  border-bottom: 2px solid #eee;
+  font-size: 20px;
 }
 
 .closeBtn {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
-  margin-top: -50px;
+  margin-top: -8%;
+  margin-right: 3%;
+
+  @media (max-width: 768px) {
+    margin-top: -4%;
+  }
 }
 
 .body {
-  margin-top: 5px;
+  margin-top: 1%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1px;
+  gap: 0.5%;
   position: relative;
-  top: 10px;
+  top: 1%;
 }
 
 .question {
-  font-size: 30px;
+  font-size: clamp(1rem, 1.3vw, 1.3rem);
   font-weight: 700;
   text-align: center;
-  margin-bottom: 15px;
-  line-height: 1;
+  margin-bottom: 2%;
+  line-height: 1.2;
 }
 
 .subtext {
-  font-size: 20px;
+  font-size: clamp(1rem, 1vw, 1rem);
   color: #555;
   text-align: center;
-  margin-bottom: 30px;
   line-height: 1.4;
+  margin-bottom: 6%;
 }
 
 .userIdGroup {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 100%;
+  gap: 2%;
+  width: 60%;
   max-width: 450px;
-  margin-bottom: 5px;
-  margin-top: 5px;
 }
 
 .userIdGroup label {
-  font-size: 18px;
+  font-size: clamp(0.8rem, 0.8vw, 0.8rem);
   font-weight: 350;
-  margin-left: 15px;
-  // margin-bottom: 5px;
+  margin-left: 3%;
+  margin-bottom: 3%;
 }
 
 .emailGroup {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 100%;
+  gap: 2%;
+  width: 60%;
   max-width: 450px;
-  margin-bottom: 35px;
-  margin-top: 10px;
+  margin-bottom: 3%;
 }
 
 .emailGroup label {
-  font-size: 18px;
+  font-size: clamp(0.8rem, 0.8vw, 0.8rem);
   font-weight: 350;
-  margin-left: 15px;
-  // margin-bottom: 5px;
+  margin-left: 3%;
+  margin-top: 3%;
+  margin-bottom: 3%;
 }
 
 .input {
-  height: 50px;
-  padding: 3px;
-  padding-left: 20px;
-  font-size: 24px;
+  height: 4vh;
+  padding: 1.5% 5%;
+  font-size: clamp(1rem, 1vw, 1.3rem);
   border: 1px solid #ccc;
   border-radius: 0;
 }
 
 .confirmBtn {
-  height: 70px;
-  width: 100%;
+  height: 35%;
+  width: 60%;
   max-width: 450px;
   background-color: #400099;
   color: white;
-  font-size: 30px;
+  font-size: clamp(1.3rem, 1vw, 1rem);
   border: none;
-  border-radius: 5px;
+  border-radius: 2px;
   cursor: pointer;
+  margin-top: 5%;
+  padding: 2%;
 }
 
 .error {
-  font-size: 20px;
   color: red;
-  margin-top: 430px;
-  position: fixed;
-  text-align: center;
+  font-size: clamp(0.5rem, 0.8vw, 0.8rem);
 }

@@ -48,7 +48,7 @@ const AdminUserListPage = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.tableContainer}>
-        <h1>전체 유저 조회</h1>
+        <h3>전체 유저 조회</h3>
         <table className={styles.table}>
           <thead>
             <tr>

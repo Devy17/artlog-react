@@ -7,19 +7,37 @@
   background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 12vh;
   z-index: 999;
+
+  @media (max-width: 500px) {
+    height: auto;
+    align-items: flex-start;
+    padding-top: 0;
+  }
 }
 
 .modal {
   background: white;
-  width: 800px;
-  height: 800px;
+  width: 40%;
+  height: 80%;
+  max-width: 800px;
   padding: 40px;
   border: 1px solid black;
   border-radius: 0;
   box-sizing: border-box;
   position: relative;
+
+  @media (max-width: 768px) {
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: 100vh;
+    padding: 20px;
+    border: none;
+    border-radius: 0;
+  }
 }
 
 .header {
@@ -28,11 +46,10 @@
   align-items: center;
 }
 
-.title {
-  font-size: 30px;
-  margin-left: 20px;
-  margin-top: 10px;
-  font-weight: bold;
+.modal .title {
+  padding-bottom: 2% !important;
+  margin-bottom: 6.5% !important;
+  border-bottom: 2px solid #eee;
 }
 
 .closeBtn {
@@ -40,99 +57,93 @@
   border: none;
   font-size: 24px;
   cursor: pointer;
-  margin-top: -25px;
-  margin-right: 5px;
+  margin-top: -10%;
+  margin-right: 2%;
 }
 
 .form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  margin-top: 50px;
+  margin-top: 4%;
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  width: 100%;
-  max-width: 450px;
-  margin-bottom: 5px;
-  margin-top: 5px;
+  gap: 0.5rem;
+  width: 65%;
+  max-width: 430px;
+  margin: 0.3rem 0;
 }
 
 .formGroup label {
-  font-size: 20px;
-  font-weight: 350;
-  margin-left: 5px;
-  margin-bottom: 10px;
+  font-size: clamp(0.5rem, 0.8vw, 0.9rem);
+  margin-left: 0.5rem;
 }
 
 .formGroup input {
-  height: 45px;
-  padding: 8px;
-  padding-left: 20px;
-  font-size: 20px;
+  height: 2.7rem;
+  font-size: 1rem;
+  padding-left: 3%;
   border: 1px solid #ccc;
   border-radius: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .helperGroup {
   display: flex;
   justify-content: flex-end;
-  gap: 15px;
-  margin-top: 10px;
-  margin-bottom: -10px;
-  width: 100%;
+  gap: 0.6rem;
+  margin: 0.5rem 0;
+  width: 65%;
   max-width: 450px;
+  margin-top: 6%;
+  margin-bottom: 2%;
 }
 
 .helperBtn {
+  font-size: clamp(0.8rem, 0.8vw, 0.8rem);
+  color: #666;
   background: none;
   border: none;
-  font-size: 20px;
-  color: #666;
   cursor: pointer;
-  text-decoration: none;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 2px;
 }
 
 .buttonGroup {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 1rem;
   align-items: center;
-  width: 100%;
+  width: 66%;
   max-width: 450px;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  height: 3rem;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  width: 100%;
+  cursor: pointer;
 }
 
 .primaryBtn {
   background-color: #400099;
   color: white;
-  height: 65px;
-  width: 100%;
-  font-size: 30px;
-  border: 1px solid black;
-  // border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
+  border: 2px solid #400099;
 }
 
 .secondaryBtn {
   background-color: #ccc;
   color: black;
-  height: 65px;
-  width: 100%;
-  font-size: 30px;
-  border: none;
-  // border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
+  border: 2px solid #ccc;
 }
 
 .errorMsg {
   color: red;
-  font-size: 18px;
+  font-size: clamp(0.85rem, 1vw, 1rem);
   text-align: center;
-  margin-top: 0px;
 }
