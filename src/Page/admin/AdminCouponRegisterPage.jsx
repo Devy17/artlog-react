@@ -102,10 +102,11 @@ const AdminCouponRegisterPage = () => {
       <form onSubmit={handleSubmit} className={styles.form}>
         <h1>쿠폰 등록</h1>
 
-        <label>
-          쿠폰명
+        <div className={styles.formGroup}>
+          <label htmlFor='couponTitle'>쿠폰명</label>
           <input
             type='text'
+            id='couponTitle'
             name='couponTitle'
             value={form.couponTitle}
             onChange={handleChange}
@@ -117,20 +118,21 @@ const AdminCouponRegisterPage = () => {
             <br />
             퍼센트 할인의 경우: [할인율]% [이름] Ex) 10% 파격세일쿠폰
           </p>
-        </label>
+        </div>
 
-        <label>
-          시리얼 번호
+        <div className={styles.formGroup}>
+          <label htmlFor='serialNumber'>시리얼 번호</label>
           <input
             type='text'
+            id='serialNumber'
             name='serialNumber'
             value={form.serialNumber}
             onChange={handleChange}
           />
-        </label>
+        </div>
 
-        <label>
-          종료일 지정
+        <div className={styles.formGroup}>
+          <label htmlFor='expireDate'>종료일 지정</label>
           <DatePicker
             className={styles['custom-date-range']}
             calendarClassName={styles.calendar}
@@ -142,6 +144,7 @@ const AdminCouponRegisterPage = () => {
             endDate={endDate}
             minDate={new Date(new Date().setHours(0, 0, 0, 0))}
             dateFormat='yyyy.MM.dd'
+            shouldCloseOnSelect={true} // ✅ 선택 시 자동 닫힘
             value={
               endDate
                 ? `${startDate.toISOString().slice(0, 10).replace(/-/g, '.')} - ${endDate
@@ -151,17 +154,18 @@ const AdminCouponRegisterPage = () => {
                 : ''
             }
           />
-        </label>
+        </div>
 
-        <label>
-          수량
+        <div className={styles.formGroup}>
+          <label htmlFor='count'>수량</label>
           <input
             type='number'
+            id='count'
             name='count'
             value={form.count}
             onChange={handleChange}
           />
-        </label>
+        </div>
 
         {errorMessage && <p className={styles.error}>{errorMessage}</p>}
 

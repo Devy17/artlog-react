@@ -1,42 +1,55 @@
 .wrapper {
-  padding: 30px;
-  margin-top: 50px;
-  background-color: #f9f9f9;
-  min-height: 85vh;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.8rem;
+  margin-top: 2%;
+  margin-bottom: 5%;
+  padding: 2%;
+
+  @media (max-width: 768px) {
+    gap: 1.2rem;
+    margin-top: 4%;
+    margin-bottom: 8%;
+    padding: 4%;
+  }
 }
 
 .tableContainer {
-  width: 60%;
-  margin: 0 auto;
+  width: 80%;
+  overflow-x: auto;
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 }
 
 .headerRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: -10px;
+  flex-wrap: wrap;
 }
 
-h1 {
-  font-size: 30px;
+h3 {
+  font-size: clamp(1.1rem, 2.3vw, 1.6rem);
   font-weight: bold;
   color: #333;
-  margin-top: 15px;
-  margin-left: 10px;
+  margin-top: 1rem;
+  margin-left: 0.5rem;
 }
 
 .registerBtn {
-  padding: 17px 20px 15px 20px;
-  font-size: 20px;
+  padding: 0.6rem 1rem;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
   font-weight: 400;
   background-color: #ff5a78;
-  color: rgb(255, 255, 255);
+  color: white;
   border: none;
   border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin-top: 15px;
-  margin-bottom: 35px;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 
   &:hover {
     background-color: #e1435f;
@@ -47,15 +60,16 @@ h1 {
   width: 100%;
   border-collapse: collapse;
   background-color: #fff;
-  border: 2px solid #000;
+  border: 1.5px solid #000;
   border-radius: 6px;
   overflow: hidden;
   outline: 1px solid #c4c4c4;
+  font-size: clamp(0.85rem, 1.8vw, 1rem);
 
   th,
   td {
-    padding: 10px;
-    font-size: 24px;
+    padding: 0.5rem;
+    font-size: clamp(0.8rem, 1.8vw, 1.05rem);
     text-align: center;
     border-bottom: 1px solid #eee;
     border-right: 1px solid #ccc;
@@ -82,15 +96,15 @@ h1 {
   }
 
   .emptyMessage {
-    padding: 20px 0;
-    font-size: 24px;
+    padding: 1.2rem 0;
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
     color: #777;
     background-color: #fff;
   }
 
   button {
-    font-size: 20px;
-    padding: 8px 16px;
+    font-size: clamp(0.85rem, 1.6vw, 1rem);
+    padding: 0.1rem 0.5rem;
     border: 1px solid #ccc;
     border-radius: 6px;
     cursor: pointer;
@@ -105,35 +119,22 @@ h1 {
 .buttonGroup {
   display: flex;
   justify-content: center;
-  gap: 15px; // 삭제 & 수정 버튼 간 간격 설정
+  gap: 12px;
 }
 
-/* 컬럼 너비 조절 */
-.colId {
-  width: 15%;
-}
-.colSerial {
-  width: 18%;
-}
-.colTitle {
-  width: 15%;
-}
-.colPeriod {
-  width: 16%;
-}
-.colCount {
-  width: 8%;
-}
-.colRegist {
-  width: 10%;
-}
-
-.colActions {
-  width: 12%;
+.colId,
+.colSerial,
+.colTitle,
+.colPeriod,
+.colCount,
+.colRegist,
+.colActions,
+.colStatus {
+  width: auto;
+  min-width: 70px; // 최소 보장
 }
 
 .colStatus {
-  width: 8%;
   font-weight: 550;
 }
 
@@ -145,11 +146,11 @@ h1 {
   color: green !important;
 }
 
-/* input 수정 필드 */
+/* 숫자 input 필드 */
 td input[type='number'] {
-  width: 90px;
-  padding: 6px 8px;
-  font-size: 20px;
+  width: 70px;
+  padding: 0.4rem 0.5rem;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
   border: 1px solid #ccc;
   border-radius: 6px;
   text-align: center;
@@ -158,15 +159,16 @@ td input[type='number'] {
 
 td input[type='number']::-webkit-inner-spin-button,
 td input[type='number']::-webkit-outer-spin-button {
-  opacity: 1; /* 항상 보이게 */
+  opacity: 1;
   -webkit-appearance: inner-spin-button;
 }
 
 /* react-datepicker 필드 */
 .custom-date-range {
-  padding: 6px 10px;
-  font-size: 25px;
-  width: 300px;
+  padding: 0.5rem 0.8rem;
+  font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+  width: 100%;
+  max-width: 250px;
   border: 1px solid #ccc;
   border-radius: 6px;
   text-align: center;
@@ -174,7 +176,7 @@ td input[type='number']::-webkit-outer-spin-button {
   cursor: pointer;
 }
 
-/* 전역적으로 버튼 커서 설정 */
+/* 전역 버튼 커서 */
 button {
   cursor: pointer !important;
 }

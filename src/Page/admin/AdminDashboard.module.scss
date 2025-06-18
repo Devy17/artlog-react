@@ -1,20 +1,21 @@
 // src/Page/admin/AdminDashboard.module.scss
 .wrapper {
+  height: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 5rem;
-  margin-top: 200px;
-  margin-bottom: 150px;
+  gap: 3.5rem;
+  margin-top: 5%;
+  margin-bottom: 6%;
 }
 
 .card {
-  width: 700px;
-  height: 100px;
+  width: 25%;
+  padding: 1.5%;
   border: 2px solid;
   border-radius: 20px;
-  font-size: 40px;
+  font-size: clamp(1.5rem, 1vw, 1rem);
   font-weight: 400;
   display: flex;
   justify-content: center;

@@ -100,7 +100,7 @@ const AdminCouponListPage = () => {
     <div className={styles.wrapper}>
       <div className={styles.tableContainer}>
         <div className={styles.headerRow}>
-          <h1>전체 쿠폰 조회</h1>
+          <h3>전체 쿠폰 조회</h3>
           <button onClick={handleRegisterClick} className={styles.registerBtn}>
             + Add New Coupon
           </button>
