@@ -1,13 +1,12 @@
 // src/Page/admin/AdminDashboard.module.scss
 .wrapper {
-  height: 500px;
+  height: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   gap: 3.5rem;
-  margin-top: 5%;
-  margin-bottom: 6%;
+  margin-bottom: 30px;
 }
 
 .card {

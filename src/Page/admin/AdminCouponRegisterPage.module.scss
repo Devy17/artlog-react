@@ -5,7 +5,7 @@
   max-width: 500px;
   min-height: 65vh;
   width: 90%;
-  margin: 5% auto;
+  margin: 2% auto;
 
   h1 {
     font-size: clamp(1.5rem, 1.5vw, 2rem);
@@ -50,6 +50,7 @@
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    margin-bottom: 50px;
 
     &:hover {
       background-color: #e1435f;
