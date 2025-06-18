@@ -62,16 +62,16 @@
   text-align: center;
 }
 
-.comm_ex_item:hover .ex_img_fig figcaption {
+.comm_ex_item .comm_ex_item:hover .ex_img_fig figcaption {
   opacity: 1;
 }
 
 .ex_guide {
   /* 전시 정보: 텍스트 및 정보 영역 스타일 */
-  padding: 16px;
+  padding: 10px;
+  padding-left: 15px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
 .ex_sbj {
@@ -109,6 +109,7 @@
   color: #bbb;
   display: flex;
   gap: 8px;
+  padding-bottom: 8px;
 }
 
 .ex_date,

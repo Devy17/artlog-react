@@ -23,7 +23,9 @@ $color-holiday: #f0f0f0;
   justify-content: center;
   align-items: center;
   z-index: 999;
-  font-family: 'Noto Sans KR', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-family:
+    'Noto Sans KR', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
   color: $color-dark-gray;
 }
 
@@ -151,7 +153,8 @@ $color-holiday: #f0f0f0;
     }
   }
 
-  .disabled-button { // 적용 불가능한 쿠폰 버튼 스타일 (예: 무료 전시)
+  .disabled-button {
+    // 적용 불가능한 쿠폰 버튼 스타일 (예: 무료 전시)
     background-color: $color-light-gray;
     color: $color-medium-gray;
     cursor: not-allowed;
@@ -191,7 +194,7 @@ $color-holiday: #f0f0f0;
       background-color: #251327;
     }
     &:active {
-        background-color: #1f2713;
+      background-color: #1f2713;
     }
   }
 }
@@ -230,7 +233,7 @@ $color-holiday: #f0f0f0;
   .bottom-buttons {
     flex-direction: column;
     .close-modal-button {
-        width: 100%;
+      width: 100%;
     }
   }
 }
