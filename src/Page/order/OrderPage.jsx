@@ -17,7 +17,7 @@ const OrderPage = () => {
   const [humanCount, setHumanCount] = useState(1);
   const { setModalType } = useContext(ModalContext);
   const [userCouponKey, setUserCouponKey] = useState(
-    localStorage.getItem('userCoupon')
+    localStorage.getItem('userCoupon'),
   );
   const { isLoggedIn } = useContext(AuthContext);
 
@@ -36,9 +36,9 @@ const OrderPage = () => {
   const [activeStartDate, setActiveStartDate] = useState(new Date());
 
   const exhibitionEndDateStr = searchParams.get('endDate');
-  const exhibitionEndDate = exhibitionEndDateStr ?
-    new Date(exhibitionEndDateStr.replace(/\./g, '-')) :
-    null;
+  const exhibitionEndDate = exhibitionEndDateStr
+    ? new Date(exhibitionEndDateStr.replace(/\./g, '-'))
+    : null;
 
   const calcTotalPrice = () => {
     const charge = Number(searchParams.get('charge'));
@@ -51,10 +51,10 @@ const OrderPage = () => {
     const originTotal = charge * count;
     const { discount, percent } = couponInfo;
 
-    if (discount !== null) { 
+    if (discount !== null) {
       const result = originTotal - discount;
       return result > 0 ? result : 0;
-    } else if (percent !== null) { 
+    } else if (percent !== null) {
       const result = originTotal * (1 - percent / 100);
       return result > 0 ? Math.floor(result) : 0;
     }
@@ -62,13 +62,13 @@ const OrderPage = () => {
     return originTotal;
   };
 
-   useEffect(() => {
+  useEffect(() => {
     setCouponInfo({ discount: null, percent: null });
     setUserCouponKey(null);
     localStorage.removeItem('userCoupon');
     localStorage.removeItem('discount');
     localStorage.removeItem('percent');
-  }, [searchParams.get('id')]); 
+  }, [searchParams.get('id')]);
 
   const handleApplyCoupon = ({ discount, percent, userCouponKey }) => {
     setCouponInfo({ discount, percent });
@@ -76,7 +76,7 @@ const OrderPage = () => {
 
     localStorage.setItem('userCoupon', userCouponKey);
     localStorage.setItem('discount', discount !== null ? discount : ''); // null일 경우 빈 문자열 저장
-    localStorage.setItem('percent', percent !== null ? percent : '');     // null일 경우 빈 문자열 저장
+    localStorage.setItem('percent', percent !== null ? percent : ''); // null일 경우 빈 문자열 저장
 
     setModalOpen(false);
     alert('쿠폰이 적용되었습니다.');
@@ -94,40 +94,54 @@ const OrderPage = () => {
   const couponButtonClickHandler = () => {
     const charge = Number(searchParams.get('charge'));
     const count = Number(humanCount);
-    const originalTotalPrice = isNaN(charge) || isNaN(count) || charge <= 0 || count <= 0 ? 0 : charge * count;
+    const originalTotalPrice =
+      isNaN(charge) || isNaN(count) || charge <= 0 || count <= 0
+        ? 0
+        : charge * count;
 
     if (originalTotalPrice === 0) {
-        alert('무료 전시에는 쿠폰을 적용할 수 없습니다.');
-        return;
+      alert('무료 전시에는 쿠폰을 적용할 수 없습니다.');
+      return;
     }
 
     setModalOpen(true);
-    localStorage.setItem('totalPrice', originalTotalPrice); 
+    localStorage.setItem('totalPrice', originalTotalPrice);
   };
 
   const orderButtonClickHandler = () => {
     if (!isLoggedIn) {
       alert('로그인 후 진행해주세요!');
-      navi('/login'); 
+      navi('/login');
       return;
     }
 
     if (exhibitionEndDate) {
-      const selectedDateOnly = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-      const exhibitionEndDateOnly = new Date(exhibitionEndDate.getFullYear(), exhibitionEndDate.getMonth(), exhibitionEndDate.getDate());
+      const selectedDateOnly = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate(),
+      );
+      const exhibitionEndDateOnly = new Date(
+        exhibitionEndDate.getFullYear(),
+        exhibitionEndDate.getMonth(),
+        exhibitionEndDate.getDate(),
+      );
 
       if (selectedDateOnly.getTime() > exhibitionEndDateOnly.getTime()) {
-        alert('선택하신 날짜는 전시 기간이 종료되었습니다. 다른 날짜를 선택해주세요.');
+        alert(
+          '선택하신 날짜는 전시 기간이 종료되었습니다. 다른 날짜를 선택해주세요.',
+        );
         return;
       }
       const today = new Date();
-      today.setHours(0,0,0,0); // 오늘 날짜의 자정
+      today.setHours(0, 0, 0, 0); // 오늘 날짜의 자정
       if (selectedDateOnly.getTime() < today.getTime()) {
-        alert('선택하신 날짜는 이미 지난 날짜입니다. 다른 날짜를 선택해주세요.');
+        alert(
+          '선택하신 날짜는 이미 지난 날짜입니다. 다른 날짜를 선택해주세요.',
+        );
         return;
       }
     }
-
 
     const getData = async () => {
       const body = {
@@ -137,22 +151,22 @@ const OrderPage = () => {
       };
 
       try {
-         await axiosInstance
-        .post(`${API_BASE_URL}${ORDER}/insert`, body)
-        .then((res) => {
-          console.log(res.data.result);
-        });
+        await axiosInstance
+          .post(`${API_BASE_URL}${ORDER}/insert`, body)
+          .then((res) => {
+            console.log(res.data.result);
+          });
 
         alert(searchParams.get('title') + '이(가) 결제되었습니다.');
         localStorage.removeItem('userCoupon');
         localStorage.removeItem('discount');
         localStorage.removeItem('percent');
-                console.log(body);
+        console.log(body);
         navi('/');
       } catch (error) {
         console.error('주문 실패:', error);
         console.log(body);
-        
+
         alert('주문에 실패했습니다. 다시 시도해주세요.');
       }
     };
@@ -161,11 +175,15 @@ const OrderPage = () => {
   };
 
   const handlePrevMonth = () => {
-    setActiveStartDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+    setActiveStartDate(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1),
+    );
   };
 
   const handleNextMonth = () => {
-    setActiveStartDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+    setActiveStartDate(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1),
+    );
   };
 
   const handleCalendarActiveStartDateChange = ({ activeStartDate, view }) => {
@@ -182,11 +200,13 @@ const OrderPage = () => {
             <div className={style['section-title']}>개인예매</div>
             <div className={style['exhibition-info']}>
               <div className={style['thumbnail-box']}>
-                <img src={searchParams.get('thumbnail')} alt="전시 썸네일" className={style['thumbnail-image']} />
+                <img
+                  src={searchParams.get('thumbnail')}
+                  alt='전시 썸네일'
+                  className={style['thumbnail-image']}
+                />
               </div>
-              <div className={style['exhibition-details']}>
-                ARTLOG
-              </div>
+              <div className={style['exhibition-details']}>ARTLOG</div>
               <div className={style['exhibition-sub-details']}>
                 {searchParams.get('title')}
               </div>
@@ -195,7 +215,9 @@ const OrderPage = () => {
 
           <div className={style['info-section']}>
             <div className={style['info-label']}>장소</div>
-            <div className={style['info-value']}>{searchParams.get('venue')}</div>
+            <div className={style['info-value']}>
+              {searchParams.get('venue')}
+            </div>
           </div>
 
           <div className={style['info-section']}>
@@ -222,7 +244,8 @@ const OrderPage = () => {
             <div className={style['calendar-header']}>
               <Button onClick={handlePrevMonth}>{'<'}</Button>
               <div className={style['current-month']}>
-                {activeStartDate.getFullYear()}년 {activeStartDate.getMonth() + 1}월
+                {activeStartDate.getFullYear()}년{' '}
+                {activeStartDate.getMonth() + 1}월
               </div>
               <Button onClick={handleNextMonth}>{'>'}</Button>
             </div>
@@ -231,7 +254,6 @@ const OrderPage = () => {
               <Calendar
                 minDate={new Date()}
                 maxDate={exhibitionEndDate}
-
                 calendarType='gregory'
                 onChange={(date) => {
                   setSelectedDate(date);
@@ -240,7 +262,6 @@ const OrderPage = () => {
                 activeStartDate={activeStartDate}
                 onActiveStartDateChange={handleCalendarActiveStartDateChange}
                 locale='ko-KR'
-
                 tileClassName={({ date, view }) => {
                   const classes = [];
                   if (
@@ -251,8 +272,16 @@ const OrderPage = () => {
                     classes.push(style['selected-date']);
                   }
                   if (exhibitionEndDate) {
-                    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-                    const exhibitionEndDateOnly = new Date(exhibitionEndDate.getFullYear(), exhibitionEndDate.getMonth(), exhibitionEndDate.getDate());
+                    const dateOnly = new Date(
+                      date.getFullYear(),
+                      date.getMonth(),
+                      date.getDate(),
+                    );
+                    const exhibitionEndDateOnly = new Date(
+                      exhibitionEndDate.getFullYear(),
+                      exhibitionEndDate.getMonth(),
+                      exhibitionEndDate.getDate(),
+                    );
                     if (dateOnly.getTime() > exhibitionEndDateOnly.getTime()) {
                       classes.push(style['after-exhibition-end']);
                     }
@@ -262,8 +291,18 @@ const OrderPage = () => {
               />
             </div>
             <div className={style['calendar-legend']}>
-              <div><span className={`${style['legend-box']} ${style['legend-available']}`}></span> 예매 가능일</div>
-              <div><span className={`${style['legend-box']} ${style['legend-selected']}`}></span> 예매 선택일</div>
+              <div>
+                <span
+                  className={`${style['legend-box']} ${style['legend-available']}`}
+                ></span>{' '}
+                예매 가능일
+              </div>
+              <div>
+                <span
+                  className={`${style['legend-box']} ${style['legend-selected']}`}
+                ></span>{' '}
+                예매 선택일
+              </div>
             </div>
           </div>
 
@@ -281,17 +320,22 @@ const OrderPage = () => {
                 -
               </Button>
               <div className={style['human-count-display']}>{humanCount}</div>
-              <Button onClick={() => setHumanCount((prev) => prev + 1)}>+</Button>
+              <Button onClick={() => setHumanCount((prev) => prev + 1)}>
+                +
+              </Button>
             </div>
           </div>
           <div className={style['coupon-section']}>
             <div className={style['section-title']}>쿠폰</div>
             <div className={style['coupon-status-group']}>
-              {userCouponKey && (couponInfo.discount !== null || couponInfo.percent !== null) ? (
+              {userCouponKey &&
+              (couponInfo.discount !== null || couponInfo.percent !== null) ? (
                 <>
                   <span className={style['applied-coupon-text']}>
                     현재 적용된 쿠폰:
-                    {couponInfo.discount ? ` ${couponInfo.discount}원 할인` : ''}
+                    {couponInfo.discount
+                      ? ` ${couponInfo.discount}원 할인`
+                      : ''}
                     {couponInfo.percent ? ` ${couponInfo.percent}% 할인` : ''}
                   </span>
                   <Button
@@ -302,14 +346,16 @@ const OrderPage = () => {
                   </Button>
                 </>
               ) : (
-                <span className={style['no-coupon-text']}>적용된 쿠폰 없음 </span>
+                <span className={style['no-coupon-text']}>
+                  적용된 쿠폰 없음{' '}
+                </span>
               )}
               <Button
                 onClick={couponButtonClickHandler}
                 className={style['coupon-apply-button']}
                 sx={{
-                  backgroundColor: '#15202b', 
-                  color: '#fff', 
+                  backgroundColor: '#15202b',
+                  color: '#fff',
                   padding: '10px 20px',
                   fontSize: '0.9rem',
                   fontWeight: 'bold',
@@ -324,14 +370,17 @@ const OrderPage = () => {
             </div>
           </div>
 
-
           <div className={style['total-price-section']}>
             <div>총 금액</div>
             <div className={style['total-price-value']}>
               {calcTotalPrice().toLocaleString()}원 {/* 금액 포맷팅 */}
               {userCouponKey && (couponInfo.discount || couponInfo.percent) && (
                 <span className={style['original-price']}>
-                  (할인 전 { (Number(searchParams.get('charge')) * Number(humanCount)).toLocaleString() }원)
+                  (할인 전{' '}
+                  {(
+                    Number(searchParams.get('charge')) * Number(humanCount)
+                  ).toLocaleString()}
+                  원)
                 </span>
               )}
             </div>
