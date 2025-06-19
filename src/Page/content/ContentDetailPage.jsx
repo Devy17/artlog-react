@@ -36,7 +36,6 @@ const ContentDetailPage = () => {
     });
   };
 
-
   console.log('ContentDetailPage searchParams:', searchParams.get('charge'));
 
   return (
@@ -98,9 +97,9 @@ const ContentDetailPage = () => {
                       href={searchParams.get('url')} // URL 주소
                       target='_blank' // 새 탭에서 열기
                       rel='noopener noreferrer' // 보안 속성
-                      className={style['detail-link']} // ✅ 링크 SCSS 클래스 적용 (SCSS 파일에 정의 필요)
+                      className={style['detail-link']}
                     >
-                      바로가기 
+                      바로가기
                     </a>
                   ) : (
                     '링크 정보 없음'
@@ -118,7 +117,7 @@ const ContentDetailPage = () => {
         </div>
         <div className={style['reviews-section']}>
           {' '}
-           <WriteReview
+          <WriteReview
             contentId={searchParams.get('id')}
             onSubmit={handleReviewSubmit} // ✅ 콜백 함수 전달 (prop 이름 일관성 유지)
           />

@@ -3,7 +3,8 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  // height: 100vh;
+  aspect-ratio: 1 / 1;
   background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
@@ -12,7 +13,8 @@
   z-index: 999;
 
   @media (max-width: 500px) {
-    height: auto;
+    height: 500px;
+    aspect-ratio: 1 / 1;
     align-items: flex-start;
     padding-top: 0;
   }
@@ -20,9 +22,8 @@
 
 .modal {
   background: white;
-  width: 40%;
-  height: 80%;
-  max-width: 800px;
+  width: 600px;
+  aspect-ratio: 1 / 1;
   padding: 40px;
   border: 1px solid black;
   border-radius: 0;
@@ -30,10 +31,10 @@
   position: relative;
 
   @media (max-width: 768px) {
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    max-height: 100vh;
+    width: 450px;
+    height: 450px;
+    // max-width: none;
+    // max-height: 100vh;
     padding: 20px;
     border: none;
     border-radius: 0;

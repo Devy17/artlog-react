@@ -8,31 +8,68 @@ import styles from './ContentViewPage.module.scss';
 const ContentViewPage = () => {
   const [apiData, setApiData] = useState([]);
   const [page, setPage] = useState(1);
-  const [loading, isLoading] = useState(false);
-  const [waiting, isWaiting] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [waiting, setWaiting] = useState(false);
+  const [isLast, setIsLast] = useState(false);
+  const [canLoadMore, setCanLoadMore] = useState(true);
   const navi = useNavigate();
 
   const numberOfContent = 9;
 
-  // ✅ 전체 데이터 한 번만 불러오기
+  // 다음 페이지에 데이터 있는지 미리 확인
+  const peekNextPage = async (nextPage) => {
+    try {
+      const res = await axiosInstance.get(
+        `${API_BASE_URL}${API}/select?numOfRows=1&pageNo=${nextPage}`,
+      );
+      const length = res.data?.result?.length ?? 0;
+      console.log(`peekNextPage: ${nextPage}페이지에 ${length}개 존재`);
+      return length > 0;
+    } catch (e) {
+      console.warn(`peekNextPage 실패 (400 예상됨):`, e);
+      return false;
+    }
+  };
+
   useEffect(() => {
     const getData = async () => {
-      isWaiting(true);
-      const response = await axiosInstance.get(
-        `${API_BASE_URL}${API}/select?numOfRows=${numberOfContent}&pageNo=${page}`,
-      );
-      const data = response.data.result;
-      console.log(data);
+      setWaiting(true);
+      try {
+        const response = await axiosInstance.get(
+          `${API_BASE_URL}${API}/select?numOfRows=${numberOfContent}&pageNo=${page}`,
+        );
+        const data = response.data.result;
+        console.log(`page ${page} → 받아온 데이터 수: ${data.length}`);
 
-      console.log(data[0].contentThumbnail);
-      return data;
+        if (!data || data.length === 0) {
+          setIsLast(true);
+          setCanLoadMore(false);
+          alert('마지막입니다.');
+          return;
+        }
+
+        setApiData((prev) => [...prev, ...data]);
+        setLoading(true);
+
+        // 다음 페이지 미리 확인 → 즉시 상태 갱신
+        const hasNext = await peekNextPage(page + 1);
+        setCanLoadMore(hasNext);
+        if (!hasNext) {
+          setIsLast(true);
+        }
+      } catch (error) {
+        console.error('데이터 요청 실패', error);
+        setIsLast(true);
+        setCanLoadMore(false);
+        alert('마지막입니다.');
+      } finally {
+        setWaiting(false);
+      }
     };
 
-    getData().then((response) => {
-      setApiData((prev) => [...prev, ...response]); // 전체 저장
-      isLoading(true); // 로딩 완료
-      isWaiting(false);
-    });
+    if (!isLast) {
+      getData();
+    }
   }, [page]);
 
   const contentClickHandler = (data) => {
@@ -53,17 +90,13 @@ const ContentViewPage = () => {
     });
   };
 
-  // ✅ 페이지 수만큼 자른 데이터
-  const visibleData = apiData.slice(0, numberOfContent * page);
-
   return (
     <div className={styles['content-view-page']}>
-      {/* <h2 className={styles['page-title']}>전시 정보</h2> */}
       <div className={styles['card-grid']}>
         {loading ? (
-          apiData.map((data) => (
+          apiData.map((data, index) => (
             <div
-              key={data.contentId}
+              key={`${data.contentId}-${index}`}
               className={styles['content-item']}
               onClick={() => contentClickHandler(data)}
             >
@@ -93,20 +126,24 @@ const ContentViewPage = () => {
         )}
       </div>
 
-      {waiting ? (
-        <div className={styles['load-circular-bar']}>
-          <CircularProgress />
-        </div>
-      ) : (
-        <button
-          className={styles['load-more-button']}
-          onClick={() => {
-            setPage(page + 1);
-          }}
-        >
-          더보기
-        </button>
-      )}
+      <div className={styles['button-section']}>
+        {waiting ? (
+          <div className={styles['load-circular-bar']}>
+            <CircularProgress />
+          </div>
+        ) : (
+          canLoadMore && (
+            <button
+              className={styles['load-more-button']}
+              onClick={() => {
+                setPage((prev) => prev + 1);
+              }}
+            >
+              더보기
+            </button>
+          )
+        )}
+      </div>
     </div>
   );
 };
