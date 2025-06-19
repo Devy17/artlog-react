@@ -27,18 +27,19 @@ const WriteReview = ({ contentId, onSubmit }) => {
       if (onSubmit) onSubmit();
     } catch (e) {
       console.error('리뷰 등록 실패:', e);
-      if(token === null) {
+      if (token === null) {
         alert('로그인이 필요합니다. 로그인 후 다시 시도해주세요.');
-      }
-      else alert('리뷰 등록에 실패했습니다. 다시 시도해주세요.');
+      } else alert('관람 후 댓글 등록이 가능합니다.');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className={style['write-review-form']}> {/* SCSS 클래스 적용 */}
+    <form onSubmit={handleSubmit} className={style['write-review-form']}>
+      {' '}
+      {/* SCSS 클래스 적용 */}
       <textarea
         className={style['review-textarea']} // SCSS 클래스 적용
-        placeholder="댓글을 입력하세요"
+        placeholder='댓글을 입력하세요'
         value={input}
         onChange={(e) => setInput(e.target.value)}
         rows={3} // 높이 조절을 위해 rows 속성 추가 (SCSS로도 조절 가능)
